@@ -1,0 +1,265 @@
+import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
+import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(bodyPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(radius: 24, backgroundImage: AssetImage('assets/images/profile-sample.jpg')),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Ahmad Azarnia', style: Theme
+                          .of(context)
+                          .textTheme
+                          .labelLarge),
+                      SizedBox(height: 6),
+                      Text(
+                        'ahmad@gmail.com',
+                        style: Theme
+                            .of(
+                          context,
+                        )
+                            .textTheme
+                            .labelMedium!
+                            .copyWith(color: Theme
+                            .of(context)
+                            .colorScheme
+                            .primary),
+                      ),
+                    ],
+                  ),
+                ),
+                InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () {
+
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SvgPicture.asset('assets/icons/edit.svg', color: Theme
+                        .of(context)
+                        .colorScheme
+                        .onSurface),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 32),
+            Text('account'.tr, style: Theme
+                .of(context)
+                .textTheme
+                .titleMedium),
+            SizedBox(height: 8),
+            Container(
+              decoration: BoxDecoration(
+                  border: BoxBorder.all(color: Theme
+                      .of(context)
+                      .dividerColor, width: 1),
+                  borderRadius: BorderRadius.circular(12)
+              ),
+              child: Column(
+                children: [
+                  InkWell(
+                    onTap: () {},
+                    borderRadius: BorderRadius.circular(12),
+                    child: Padding(
+                      padding: const EdgeInsets.all(profileItemPadding),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset('assets/icons/lock.svg', color: Color(0xFFF6353D),),
+                          SizedBox(width: 12),
+                          Expanded(child: Text('change_password'.tr, style: Theme
+                              .of(context)
+                              .textTheme
+                              .labelMedium)),
+                          SvgPicture.asset('assets/icons/arrow-right.svg', color: Theme
+                              .of(context)
+                              .disabledColor,),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Divider(height: 1, color: Theme
+                      .of(context)
+                      .dividerColor,indent: profileItemPadding,endIndent: profileItemPadding,),
+                  InkWell(
+                    onTap: () {},
+                    borderRadius: BorderRadius.circular(12),
+                    child: Padding(
+                      padding: const EdgeInsets.all(profileItemPadding),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset('assets/icons/calendar.svg', color: Color(0xFFF99234),),
+                          SizedBox(width: 12),
+                          Expanded(child: Text('leave_request'.tr, style: Theme
+                              .of(context)
+                              .textTheme
+                              .labelMedium)),
+                          SvgPicture.asset('assets/icons/arrow-right.svg', color: Theme
+                              .of(context)
+                              .disabledColor,),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Divider(height: 1, color: Theme
+                      .of(context)
+                      .dividerColor,indent: profileItemPadding,endIndent: profileItemPadding,),
+                  InkWell(
+                    onTap: () {},
+                    borderRadius: BorderRadius.circular(12),
+                    child: Padding(
+                      padding: const EdgeInsets.all(profileItemPadding),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset('assets/icons/time-square.svg', color: Color(0xFF59BBB4),),
+                          SizedBox(width: 12),
+                          Expanded(child: Text('timesheet'.tr, style: Theme
+                              .of(context)
+                              .textTheme
+                              .labelMedium)),
+                          SvgPicture.asset('assets/icons/arrow-right.svg', color: Theme
+                              .of(context)
+                              .disabledColor,),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Divider(height: 1, color: Theme
+                      .of(context)
+                      .dividerColor,indent: profileItemPadding,endIndent: profileItemPadding,),
+                  InkWell(
+                    onTap: () {},
+                    borderRadius: BorderRadius.circular(12),
+                    child: Padding(
+                      padding: const EdgeInsets.all(profileItemPadding),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset('assets/icons/money-send.svg', color: Color(0xFF56B8E4),),
+                          SizedBox(width: 12),
+                          Expanded(child: Text('payroll'.tr, style: Theme
+                              .of(context)
+                              .textTheme
+                              .labelMedium)),
+                          SvgPicture.asset('assets/icons/arrow-right.svg', color: Theme
+                              .of(context)
+                              .disabledColor,),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 24),
+            Text('more'.tr, style: Theme
+                .of(context)
+                .textTheme
+                .titleMedium),
+            SizedBox(height: 8),
+            Container(
+              decoration: BoxDecoration(
+                  border: BoxBorder.all(color: Theme
+                      .of(context)
+                      .dividerColor, width: 1),
+                  borderRadius: BorderRadius.circular(12)
+              ),
+              child: Column(
+                children: [
+                  InkWell(
+                    onTap: () {},
+                    borderRadius: BorderRadius.circular(12),
+                    child: Padding(
+                      padding: const EdgeInsets.all(profileItemPadding),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset('assets/icons/language.svg', color: Color(0xFF4798F0),),
+                          SizedBox(width: 12),
+                          Expanded(child: Text('change_language'.tr, style: Theme
+                              .of(context)
+                              .textTheme
+                              .labelMedium)),
+                          SvgPicture.asset('assets/icons/arrow-right.svg', color: Theme
+                              .of(context)
+                              .disabledColor,),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Divider(height: 1, color: Theme
+                      .of(context)
+                      .dividerColor,indent: profileItemPadding,endIndent: profileItemPadding,),
+                  InkWell(
+                    onTap: () {},
+                    borderRadius: BorderRadius.circular(12),
+                    child: Padding(
+                      padding: const EdgeInsets.all(profileItemPadding),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset('assets/icons/calendar.svg', color: Color(0xFFB744D4),),
+                          SizedBox(width: 12),
+                          Expanded(child: Text('sos'.tr, style: Theme
+                              .of(context)
+                              .textTheme
+                              .labelMedium)),
+                          SvgPicture.asset('assets/icons/arrow-right.svg', color: Theme
+                              .of(context)
+                              .disabledColor,),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 32),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: (){},
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 32,right: 32, top: 12.0, bottom: 12),
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      children: [
+                        SvgPicture.asset('assets/icons/logout.svg', color: AppColors.red,),
+                        SizedBox(width: 16),
+                        Text('logout', style: Theme
+                            .of(context)
+                            .textTheme
+                            .labelMedium!
+                            .copyWith(color: AppColors.red),)
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

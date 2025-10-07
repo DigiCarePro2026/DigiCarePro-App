@@ -21,6 +21,7 @@ dependencies:
   internet_connection_checker:
   logger: ^2.6.1
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

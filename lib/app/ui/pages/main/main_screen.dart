@@ -1,3 +1,4 @@
+import 'package:digi_care_pro/app/ui/pages/main/home_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/profile_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/missions_screen.dart';
 import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
@@ -8,7 +9,7 @@ import 'package:get/get.dart';
 class MainScreen extends StatefulWidget {
   int currentPage = 0;
 
-  final List<Widget> _pages = [MissionsScreen(), MissionsScreen(), ProfileScreen()];
+  final List<Widget> _pages = [HomeScreen(), MissionsScreen(), ProfileScreen()];
 
   MainScreen({super.key});
 

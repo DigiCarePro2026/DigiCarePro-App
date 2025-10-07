@@ -46,4 +46,8 @@ class AppColors {
   static const red = Color(0xFFF5454A);
   static const green = Color(0xFF45B19D);
 
+  static const missionNew = Color(0xFF4C7BE6);
+  static const missionInProgress = Color(0xFFDA72F9);
+  static const missionDone = Color(0xFF45B19D);
+
 }

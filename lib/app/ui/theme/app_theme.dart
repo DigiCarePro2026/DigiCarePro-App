@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
+import 'app_dimens.dart';
 
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
@@ -23,6 +24,13 @@ class AppTheme {
         fontFamily: 'NotoSans',
       ),
     ),
+    cardTheme: CardThemeData(
+      color: Colors.white,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(cardRadius),
+      ),
+    ),
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: AppColors.bottomNavBarBackgroundLight,
       indicatorColor: Colors.transparent,
@@ -41,7 +49,7 @@ class AppTheme {
       bodySmall: TextStyle(fontSize: 12, color: AppColors.textSecondaryLight),
       labelLarge: TextStyle(fontSize: 16, color: AppColors.textPrimaryLight),
       labelMedium: TextStyle(fontSize: 14, color: AppColors.textPrimaryLight),
-      labelSmall: TextStyle(fontSize: 12, color: AppColors.textSecondaryLight),
+      labelSmall: TextStyle(fontSize: 12, color: AppColors.textPrimaryLight),
       titleLarge: TextStyle(fontSize: 16, color: AppColors.textSecondaryLight),
       titleMedium: TextStyle(fontSize: 14, color: AppColors.textSecondaryLight),
       titleSmall: TextStyle(fontSize: 12, color: AppColors.textSecondaryLight),

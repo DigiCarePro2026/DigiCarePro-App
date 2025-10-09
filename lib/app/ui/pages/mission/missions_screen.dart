@@ -89,13 +89,34 @@ class _MissionsScreenState extends State<MissionsScreen> {
               Row(
                 children: [
                   Expanded(child: Text('Mostafa Babaie', style: Theme.of(context).textTheme.labelLarge)),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(24),
-                    onTap: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset('assets/icons/more-hor.svg'),
-                    ),
+                  PopupMenuButton(
+                    icon: SvgPicture.asset('assets/icons/more-hor.svg'),
+                    onSelected: (value) {
+                      // عمل مورد نظر برای هر آیتم
+                      if (value == 'edit') {
+                        print('Edit selected');
+                      } else if (value == 'delete') {
+                        print('Delete selected');
+                      } else if (value == 'share') {
+                        print('Share selected');
+                      }
+                    },
+                    itemBuilder: (ctx) {
+                      return [
+                        const PopupMenuItem(
+                          value: 'info',
+                          child: Text('Customer info'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'routing',
+                          child: Text('Routing'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'add_mission',
+                          child: Text('Add mission'),
+                        ),
+                      ];
+                    },
                   ),
                 ],
               ),
@@ -112,15 +133,36 @@ class _MissionsScreenState extends State<MissionsScreen> {
                 ],
               ),
               Divider(height: 12, thickness: 0.5, color: Theme.of(context).dividerColor),
-
               Row(
                 children: [
-                  if (index % 3 == 1) Expanded(child: Text('Todo', style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionNew))),
-                  if (index % 3 == 2) Expanded(child: Text('In progress', style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionInProgress))),
-                  if (index % 3 == 0) Expanded(child: Text('Done', style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionDone))),
-                  SvgPicture.asset('assets/icons/arrow-right.svg', color: Theme.of(context).disabledColor),
+                  if (index % 3 == 1)
+                    Expanded(
+                      child: Text(
+                        'Todo',
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionNew),
+                      ),
+                    ),
+                  if (index % 3 == 2)
+                    Expanded(
+                      child: Text(
+                        'In progress',
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionInProgress),
+                      ),
+                    ),
+                  if (index % 3 == 0)
+                    Expanded(
+                      child: Text(
+                        'Done',
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionDone),
+                      ),
+                    ),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(24),
+                    onTap: () {},
+                    child: SvgPicture.asset('assets/icons/arrow-right.svg', color: Theme.of(context).disabledColor),
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -165,7 +207,7 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
         },
         child: Container(
           decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).colorScheme.primary.withAlpha(150), width: 0.5),
+            border: Border.all(color: Theme.of(context).colorScheme.primary.withAlpha(200), width: 0.75),
             borderRadius: BorderRadius.circular(24),
             color: selectedMissionType == missionType
                 ? Theme.of(context).colorScheme.primary

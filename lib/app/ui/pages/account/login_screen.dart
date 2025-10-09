@@ -123,9 +123,9 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                       ),
                       SizedBox(height: 16),
                       PrimaryButton(label: 'login'.tr, onPressed: () {
-                        // logic.login(email: _emailController.text, password: _passwordController.text);
+                        logic.login(email: _emailController.text, password: _passwordController.text);
 
-                        Get.offAllNamed(Routes.HOME);
+                        // Get.offAllNamed(Routes.HOME);
                       }),
                     ],
                   ),

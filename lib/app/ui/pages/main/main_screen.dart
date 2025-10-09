@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 class MainScreen extends StatefulWidget {
   int currentPage = 0;
 
-  final List<Widget> _pages = [HomeScreen(), MissionsScreen(), ProfileScreen()];
+  final List<Widget> _pages = [/*HomeScreen(),*/ MissionsScreen(), ProfileScreen()];
 
   MainScreen({super.key});
 
@@ -78,11 +78,11 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
         destinations: [
-          NavigationDestination(
+         /* NavigationDestination(
             icon: SvgPicture.asset('assets/icons/dashboard.svg', color: Theme.of(context).colorScheme.onSurface),
             selectedIcon: SvgPicture.asset('assets/icons/dashboard.svg', color: Theme.of(context).colorScheme.primary),
             label: 'dashboard'.tr,
-          ),
+          ),*/
           NavigationDestination(
             icon: SvgPicture.asset('assets/icons/missions.svg', color: Theme.of(context).colorScheme.onSurface),
             selectedIcon: SvgPicture.asset('assets/icons/missions.svg', color: Theme.of(context).colorScheme.primary),
@@ -100,13 +100,13 @@ class _MainScreenState extends State<MainScreen> {
 
   _appBarTitle() {
     switch (widget.currentPage) {
-      case 0:
-        return Text('dashboard'.tr);
+    /*  case 0:
+        return Text('dashboard'.tr);*/
 
-      case 1:
+      case 0:
         return Text('missions'.tr);
 
-      case 2:
+      case 1:
         return Text('profile'.tr);
     }
   }

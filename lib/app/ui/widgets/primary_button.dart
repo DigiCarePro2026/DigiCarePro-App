@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
-  const PrimaryButton({
-    super.key,
-    required this.label,
-    required this.onPressed,
-  });
+  const PrimaryButton({super.key, required this.label, required this.onPressed});
 
   final String label;
   final VoidCallback? onPressed;
@@ -18,7 +14,10 @@ class PrimaryButton extends StatelessWidget {
       width: double.infinity, // پر کردن عرض
       child: ElevatedButton(
         onPressed: onPressed,
-        child: Text(label),
+        child: Text(
+          label,
+          style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+        ),
       ),
     );
   }

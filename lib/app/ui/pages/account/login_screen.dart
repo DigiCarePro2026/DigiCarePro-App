@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
   LoginLogic logic = LoginLogic();
   bool _isKeyboardVisible = false;
 
-  final _emailController = TextEditingController(text: 'admin@digicarepro.d');
+  final _emailController = TextEditingController(text: 'admin@digicarepro.com');
   final _passwordController = TextEditingController(text: '123456');
 
 
@@ -124,8 +124,6 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                       SizedBox(height: 16),
                       PrimaryButton(label: 'login'.tr, onPressed: () {
                         logic.login(email: _emailController.text, password: _passwordController.text);
-
-                        // Get.offAllNamed(Routes.HOME);
                       }),
                     ],
                   ),

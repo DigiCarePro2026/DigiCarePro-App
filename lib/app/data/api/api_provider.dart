@@ -1,10 +1,13 @@
-
 import 'package:dartz/dartz.dart';
+import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
+import 'package:digi_care_pro/app/data/constants/pref_key.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/pref.dart';
 import 'package:digi_care_pro/app/utils/globals.dart';
+import 'package:digi_care_pro/app/utils/dialog_handler.dart';
 import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart' as getX;
 
 class ApiProvider {
@@ -23,7 +26,7 @@ class ApiProvider {
   ApiProvider._() {
     dio.options.headers['locale'] = 'fa';
 
-    final token = Pref.getString(Pref.token);
+    final token = Pref.getString(PrefKey.token);
     if (token != null) {
       dio.options.headers['Authorization'] = 'Bearer $token';
     }
@@ -36,29 +39,34 @@ class ApiProvider {
   }
 
   _addInterceptors() {
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) async {
-        bool netAvailable = await isNetworkAvailable();
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          bool netAvailable = await isNetworkAvailable();
 
-        if (netAvailable) {
-          logger.i('onRequest: ${options.path}\n${options.data.toString()}');
+          if (netAvailable) {
+            logger.i('onRequest: ${options.path}\n${options.data.toString()}');
 
-          return handler.next(options);
-        } else {
-          logger.i('you are offline!!!');
+            return handler.next(options);
+          } else {
+            logger.i('you are offline!!!');
 
-          // getX.Get.to(OfflineScreen());
-        }
-      },
-      onResponse: (response, handler) {
-        logger.i('onResponse : ${response.data}');
+            // getX.Get.to(OfflineScreen());
+          }
+        },
+        onResponse: (response, handler) {
+          getX.Get.back();
 
-        return handler.next(response);
-      },
-      onError: (error, handler) {
-        // Handle errors globally
+          logger.i('onResponse : ${response.data}');
 
-/*        switch (error.response?.statusCode) {
+          return handler.next(response);
+        },
+        onError: (error, handler) {
+          getX.Get.back();
+
+          // Handle errors globally
+
+          /*        switch (error.response?.statusCode) {
           case 401:
             logger.e('Unauthorized error, redirecting to login...');
             break;
@@ -71,22 +79,28 @@ class ApiProvider {
           // Handle other errors
         }*/
 
-        // _handleError(error);
+          // _handleError(error);
 
-        logger.e('Error occurred: ${error.message}');
+          logger.e('Error occurred: ${error.message}');
 
-        return handler.next(error); // Continue to the next interceptor or error
-      },
-    ));
+          logger.e('خطااااااااا');
+
+          return handler.next(error); // Continue to the next interceptor or error
+        },
+      ),
+    );
   }
 
-  Future<Either<ApiError,T>> get<T>({
+  Future<Either<ApiError, AppResponse<T>>> get<T>({
     required String path,
     Map<String, dynamic>? headers,
     dynamic body,
     dynamic queryParameters,
     required T Function(dynamic) fromJson,
+    String? loadingMessage,
   }) async {
+    DialogHandler.showLoading(loadingMessage ?? 'loading_default_message'.tr);
+
     try {
       Response response = await dio.get(
         path,
@@ -100,25 +114,29 @@ class ApiProvider {
     }
   }
 
-  Future<Either<ApiError,T>> post<T>({
+  Future<Either<ApiError, AppResponse<T>>> post<T>({
     required String path,
     Map<String, dynamic>? headers,
     required dynamic body,
     T Function(dynamic)? fromJson,
+    String? loadingMessage,
   }) async {
+    DialogHandler.showLoading(loadingMessage ?? 'loading_default_message'.tr);
+
     try {
       Response response = await dio.post(
         path,
         data: body,
         options: Options(headers: headers),
       );
+
       return _handleResponse(response, fromJson);
     } catch (e) {
       return _handleError(e);
     }
   }
 
-  Future<Either<ApiError,T>> patch<T>({
+  Future<Either<ApiError, AppResponse<T>>> patch<T>({
     required String path,
     Map<String, dynamic>? headers,
     int? pathParameter,
@@ -137,40 +155,40 @@ class ApiProvider {
     }
   }
 
-  Future<Either<ApiError,T>> delete<T>({
+  Future<Either<ApiError, AppResponse<T>>> delete<T>({
     required String path,
     Map<String, dynamic>? headers,
     required int pathParameter,
     T Function(dynamic)? fromJson,
   }) async {
     try {
-      Response response =
-          await dio.delete('$path/$pathParameter', options: Options(headers: headers));
+      Response response = await dio.delete('$path/$pathParameter', options: Options(headers: headers));
+
       return _handleResponse(response, fromJson);
     } catch (e) {
       return _handleError(e);
     }
   }
 
-  Future<Either<ApiError,T>> _handleResponse<T>(
-    Response response,
-    T Function(dynamic)? fromJson,
-  ) async {
+  Future<Either<ApiError, AppResponse<T>>> _handleResponse<T>(Response response, T Function(dynamic)? fromJson) async {
     if (!response.data['isSuccess']) {
       return Left(ApiError(code: response.statusCode!, message: response.data['message']));
     }
 
     T? data;
-    if (fromJson != null && response.data['data'] != null) {
-      data = fromJson(response.data['data']);
+
+    if (fromJson != null) {
+      if (response.data['data'] != null) {
+        data = fromJson(response.data['data']);
+      }
+    } else {
+      data = response.data['data'] as T;
     }
 
-    data ??= response.data['message'];
-
-    return Right(data as T);
+    return Right(AppResponse(data: data, message: response.data['message']));
   }
 
-  Future<Either<ApiError,T>> _handleError<T>(dynamic e) async {
+  Future<Either<ApiError, T>> _handleError<T>(dynamic e) async {
     if (e is DioError && e.response != null) {
       switch (e.response!.statusCode) {
         case 403:
@@ -184,8 +202,7 @@ class ApiProvider {
           break;
       }
 
-      ApiError error =
-          ApiError(code: e.response!.statusCode!, message: e.response!.data['message']);
+      ApiError error = ApiError(code: e.response!.statusCode!, message: e.response!.data['message']);
       return Left(error);
     } else {
       // Handle other types of errors if needed

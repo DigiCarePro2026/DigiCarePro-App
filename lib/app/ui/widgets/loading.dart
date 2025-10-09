@@ -22,7 +22,12 @@ class LoadingScreen extends StatelessWidget {
             children: [
               const CupertinoActivityIndicator(radius: 15),
               const SizedBox(height: 16),
-              Text(message, style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface)),
+              Text(
+                message,
+                style: Theme.of(
+                  context,
+                ).textTheme.labelMedium!.copyWith(color: Theme.of(context).colorScheme.onSurface),
+              ),
             ],
           ),
         ),

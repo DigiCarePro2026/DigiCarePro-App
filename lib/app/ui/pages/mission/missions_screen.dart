@@ -1,10 +1,12 @@
 import 'package:digi_care_pro/app/data/enum/mission_type.dart';
+import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:digi_care_pro/app/ui/widgets/animated_search_bar.dart';
 import 'package:digi_care_pro/app/ui/widgets/calendar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class MissionsScreen extends StatefulWidget {
   const MissionsScreen({super.key});
@@ -81,89 +83,95 @@ class _MissionsScreenState extends State<MissionsScreen> {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
       child: Card.filled(
-        child: Padding(
-          padding: const EdgeInsets.all(cardPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Expanded(child: Text('Mostafa Babaie', style: Theme.of(context).textTheme.labelLarge)),
-                  PopupMenuButton(
-                    icon: SvgPicture.asset('assets/icons/more-hor.svg'),
-                    onSelected: (value) {
-                      // عمل مورد نظر برای هر آیتم
-                      if (value == 'edit') {
-                        print('Edit selected');
-                      } else if (value == 'delete') {
-                        print('Delete selected');
-                      } else if (value == 'share') {
-                        print('Share selected');
-                      }
-                    },
-                    itemBuilder: (ctx) {
-                      return [
-                        const PopupMenuItem(
-                          value: 'info',
-                          child: Text('Customer info'),
-                        ),
-                        const PopupMenuItem(
-                          value: 'routing',
-                          child: Text('Routing'),
-                        ),
-                        const PopupMenuItem(
-                          value: 'add_mission',
-                          child: Text('Add mission'),
-                        ),
-                      ];
-                    },
-                  ),
-                ],
-              ),
-              Text('Max Mustermann Musterstraße 12', style: Theme.of(context).textTheme.titleMedium),
-              Row(
-                children: [
-                  Text('2025/07/10', style: Theme.of(context).textTheme.titleMedium),
-                  SizedBox(width: 12),
-                  Text('14:00', style: Theme.of(context).textTheme.titleMedium),
-                  SizedBox(width: 4),
-                  SvgPicture.asset('assets/icons/arrow-long-right.svg', color: Theme.of(context).disabledColor),
-                  SizedBox(width: 4),
-                  Text('15:30', style: Theme.of(context).textTheme.titleMedium),
-                ],
-              ),
-              Divider(height: 12, thickness: 0.5, color: Theme.of(context).dividerColor),
-              Row(
-                children: [
-                  if (index % 3 == 1)
-                    Expanded(
-                      child: Text(
-                        'Todo',
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionNew),
-                      ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(cardRadius),
+          onTap: (){
+            Get.toNamed(Routes.MISSION_DETAILS);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(cardPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: Text('Mostafa Babaie', style: Theme.of(context).textTheme.labelLarge)),
+                    PopupMenuButton(
+                      icon: SvgPicture.asset('assets/icons/more-hor.svg'),
+                      onSelected: (value) {
+                        // عمل مورد نظر برای هر آیتم
+                        if (value == 'edit') {
+                          print('Edit selected');
+                        } else if (value == 'delete') {
+                          print('Delete selected');
+                        } else if (value == 'share') {
+                          print('Share selected');
+                        }
+                      },
+                      itemBuilder: (ctx) {
+                        return [
+                          const PopupMenuItem(
+                            value: 'info',
+                            child: Text('Customer info'),
+                          ),
+                          const PopupMenuItem(
+                            value: 'routing',
+                            child: Text('Routing'),
+                          ),
+                          const PopupMenuItem(
+                            value: 'add_mission',
+                            child: Text('Add mission'),
+                          ),
+                        ];
+                      },
                     ),
-                  if (index % 3 == 2)
-                    Expanded(
-                      child: Text(
-                        'In progress',
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionInProgress),
+                  ],
+                ),
+                Text('Max Mustermann Musterstraße 12', style: Theme.of(context).textTheme.titleMedium),
+                Row(
+                  children: [
+                    Text('2025/07/10', style: Theme.of(context).textTheme.titleMedium),
+                    SizedBox(width: 12),
+                    Text('14:00', style: Theme.of(context).textTheme.titleMedium),
+                    SizedBox(width: 4),
+                    SvgPicture.asset('assets/icons/arrow-long-right.svg', color: Theme.of(context).disabledColor),
+                    SizedBox(width: 4),
+                    Text('15:30', style: Theme.of(context).textTheme.titleMedium),
+                  ],
+                ),
+                Divider(height: 12, thickness: 0.5, color: Theme.of(context).dividerColor),
+                Row(
+                  children: [
+                    if (index % 3 == 1)
+                      Expanded(
+                        child: Text(
+                          'Todo',
+                          style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionNew),
+                        ),
                       ),
-                    ),
-                  if (index % 3 == 0)
-                    Expanded(
-                      child: Text(
-                        'Done',
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionDone),
+                    if (index % 3 == 2)
+                      Expanded(
+                        child: Text(
+                          'In progress',
+                          style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionInProgress),
+                        ),
                       ),
+                    if (index % 3 == 0)
+                      Expanded(
+                        child: Text(
+                          'Done',
+                          style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionDone),
+                        ),
+                      ),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(24),
+                      onTap: () {},
+                      child: SvgPicture.asset('assets/icons/arrow-right.svg', color: Theme.of(context).disabledColor),
                     ),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(24),
-                    onTap: () {},
-                    child: SvgPicture.asset('assets/icons/arrow-right.svg', color: Theme.of(context).disabledColor),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

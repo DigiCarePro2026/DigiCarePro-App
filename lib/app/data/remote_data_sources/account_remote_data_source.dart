@@ -1,10 +1,11 @@
 import 'package:dartz/dartz.dart';
+import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
+import 'package:digi_care_pro/app/data/api/api_models/get_profile.dart';
 import 'package:digi_care_pro/app/data/api/api_models/login.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/remote_data_sources/base_remote_data_source.dart';
 
 class AccountRemoteDataSource extends BaseRemoteDataSource {
-
   static AccountRemoteDataSource? _instance;
 
   static AccountRemoteDataSource get() {
@@ -13,6 +14,13 @@ class AccountRemoteDataSource extends BaseRemoteDataSource {
     return _instance!;
   }
 
-  Future<Either<ApiError,LoginResponse>> login(LoginRequest request) async =>
-      api.post<LoginResponse>(path: '/auth/login', body: request.toJson());
+  Future<Either<ApiError, AppResponse<String>>> login(LoginRequest request, {String? loadingMessage}) async =>
+      api.post<String>(path: '/auth/login', body: request.toJson(), loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse<GetProfileResponse>>> getProfile({String? loadingMessage}) async =>
+      api.get<GetProfileResponse>(
+        path: '/auth/getProfile',
+        loadingMessage: loadingMessage,
+        fromJson: (json) => GetProfileResponse.fromJson(json),
+      );
 }

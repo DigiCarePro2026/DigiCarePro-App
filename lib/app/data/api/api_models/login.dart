@@ -12,7 +12,3 @@ class LoginRequest{
     };
   }
 }
-
-class LoginResponse{
-
-}

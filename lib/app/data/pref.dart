@@ -29,8 +29,4 @@ class Pref {
   static getInt(String key) {
     return _prefs!.getInt(key);
   }
-
-  static const theme = 'theme';
-  static const token = 'token';
-  static const profile = 'profile';
 }

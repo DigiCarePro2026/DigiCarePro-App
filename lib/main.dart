@@ -1,3 +1,4 @@
+import 'package:digi_care_pro/app/data/constants/pref_key.dart';
 import 'package:digi_care_pro/app/ui/theme/app_theme.dart';
 import 'package:digi_care_pro/config/translations/app_translations.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
 
         return child!;
       },
-      initialRoute: Routes.LOGIN,
+      initialRoute: Pref.getString(PrefKey.token) == null ? Routes.LOGIN : Routes.HOME,
       getPages: AppPages.pages,
     );
   }

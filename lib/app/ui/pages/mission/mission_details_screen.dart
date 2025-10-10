@@ -1,3 +1,4 @@
+import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,6 +12,17 @@ class MissionDetailsScreen extends StatefulWidget {
 }
 
 class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
+  List<MenuModel> menu = [
+    MenuModel(title: 'routing'.tr, icon: 'assets/icons/routing.svg', color: AppColors.routingColor),
+    MenuModel(title: 'call'.tr, icon: 'assets/icons/call.svg', color: AppColors.callColor),
+    MenuModel(title: 'upload_document'.tr, icon: 'assets/icons/upload.svg', color: AppColors.uploadColor),
+    MenuModel(title: 'add_mission'.tr, icon: 'assets/icons/add-mission.svg', color: AppColors.addMissionColor),
+    MenuModel(title: 'customer_signature'.tr, icon: 'assets/icons/signature.svg', color: AppColors.signatureColor),
+    MenuModel(title: 'submit_report'.tr, icon: 'assets/icons/report.svg', color: AppColors.reportColor),
+    MenuModel(title: 'delay_report'.tr, icon: 'assets/icons/delay-report.svg', color: AppColors.delayReportColor),
+
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +42,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
           ),
           Column(
             children: [
-              SizedBox(height: 70),
+              SizedBox(height: Get.width < 400 ? 40 : 70),
               Stack(
                 alignment: AlignmentDirectional.centerStart,
                 children: [
@@ -64,7 +76,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
           ),
           Column(
             children: [
-              SizedBox(height: 130),
+              SizedBox(height: Get.width < 400 ? 100 : 130),
               Padding(
                 padding: const EdgeInsets.only(left: 24, right: 24),
                 child: SizedBox(
@@ -140,10 +152,57 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                   ),
                 ),
               ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: GridView.builder(
+                    itemCount: menu.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3, // 👈 سه ستون
+                      mainAxisSpacing: 8, // فاصله عمودی بین آیتم‌ها
+                      crossAxisSpacing: 0, // فاصله افقی بین آیتم‌ها
+                      childAspectRatio: 1, // نسبت عرض به ارتفاع آیتم‌ها
+                    ),
+                    itemBuilder: (ctx, index) => _buildItem(menu[index]),
+                  ),
+                ),
+              ),
             ],
           ),
         ],
       ),
     );
   }
+
+  _buildItem(MenuModel menu) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(cardRadius),
+      onTap: () {},
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: menu.color.withAlpha(30),
+              borderRadius: BorderRadius.circular(cardRadius),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: SvgPicture.asset(menu.icon, color: menu.color, width: 32),
+            ),
+          ),
+          SizedBox(height: 12),
+          Text(menu.title, style: Theme.of(context).textTheme.labelMedium),
+          SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
+}
+
+class MenuModel {
+  final String title;
+  final String icon;
+  final Color color;
+
+  MenuModel({required this.title, required this.icon, required this.color});
 }

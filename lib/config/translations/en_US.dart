@@ -32,4 +32,9 @@ const Map<String, String> enUS = {
   'call': 'Call',
   'add_mission': 'Add Mission',
   'employee_list_search_hint': 'Search employees ...',
+  'routing': 'Routing',
+  'upload_document': 'Upload',
+  'customer_signature': 'Signature',
+  'submit_report': 'Submit Report',
+  'delay_report': 'Delay Report',
 };

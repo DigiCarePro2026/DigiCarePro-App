@@ -50,4 +50,14 @@ class AppColors {
   static const missionInProgress = Color(0xFFDA72F9);
   static const missionDone = Color(0xFF45B19D);
 
+  static const routingColor = Color(0xFFFBB52F);
+  static const callColor = Color(0xFFF06404);
+  static const uploadColor = Color(0xFFE54BAC);
+  static const addMissionColor = Color(0xFF00A20F);
+  static const signatureColor = Color(0xFF93308E);
+  static const reportColor = Color(0xFF00ABD3);
+  static const delayReportColor = Color(0xFFD2323D);
+
+
+
 }

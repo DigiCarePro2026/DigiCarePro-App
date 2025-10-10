@@ -244,10 +244,10 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 64.0; // Adjust based on chip height + padding
+  double get maxExtent => Get.width < 400 ? 63 : 64; // Adjust based on chip height + padding
 
   @override
-  double get minExtent => 64.0; // Same as maxExtent to prevent shrinking
+  double get minExtent => Get.width < 400 ? 63 : 64;  // Same as maxExtent to prevent shrinking
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {

@@ -83,9 +83,7 @@ class ApiProvider {
 
           logger.e('Error occurred: ${error.message}');
 
-          logger.e('خطااااااااا');
-
-          return handler.next(error); // Continue to the next interceptor or error
+          return handler.next(DioException.connectionError(requestOptions: error.requestOptions, reason: 'Connection failed')); // Continue to the next interceptor or error
         },
       ),
     );

@@ -95,7 +95,13 @@ class _MissionsScreenState extends State<MissionsScreen> {
               children: [
                 Row(
                   children: [
-                    Expanded(child: Text('Mostafa Babaie', style: Theme.of(context).textTheme.labelLarge)),
+                    Expanded(child: Row(
+                      children: [
+                        CircleAvatar(radius: 16, backgroundImage: AssetImage('assets/images/profile-sample.jpg')),
+                        SizedBox(width: 12),
+                        Text('Mostafa Babaie', style: Theme.of(context).textTheme.labelLarge),
+                      ],
+                    )),
                     PopupMenuButton(
                       icon: SvgPicture.asset('assets/icons/more-hor.svg'),
                       onSelected: (value) {

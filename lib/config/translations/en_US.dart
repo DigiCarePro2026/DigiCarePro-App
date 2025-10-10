@@ -28,4 +28,8 @@ const Map<String, String> enUS = {
   'customer_list': 'Customer list',
   'employee_list': 'Employee list',
   'mission_details': 'Mission details',
+  'customer_list_search_hint': 'Search customers ...',
+  'call': 'Call',
+  'add_mission': 'Add Mission',
+  'employee_list_search_hint': 'Search employees ...',
 };

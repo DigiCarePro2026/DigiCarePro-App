@@ -1,5 +1,7 @@
 import 'package:digi_care_pro/app/ui/pages/account/login_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/main/main_screen.dart';
+import 'package:digi_care_pro/app/ui/pages/menu/customer_list_screen.dart';
+import 'package:digi_care_pro/app/ui/pages/menu/employee_list_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/mission_details_screen.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
@@ -18,6 +20,14 @@ class AppPages {
     GetPage(
       name: Routes.MISSION_DETAILS,
       page: () => const MissionDetailsScreen(),
+    ),
+    GetPage(
+      name: Routes.CUSTOMER_LIST,
+      page: () => const CustomerListScreen(),
+    ),
+    GetPage(
+      name: Routes.EMPLOYEE_LIST,
+      page: () => const EmployeeListScreen(),
     ),
   ];
 }

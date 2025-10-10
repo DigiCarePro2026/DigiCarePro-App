@@ -70,8 +70,9 @@ class FrostedGlassDialog extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(28),
           onTap: () {
-            buttonModel.onTap.call();
             Navigator.of(context).pop();
+
+            buttonModel.onTap.call();
           },
           child: Ink(
             decoration: BoxDecoration(

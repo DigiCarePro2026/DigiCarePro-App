@@ -1,4 +1,5 @@
 import 'package:digi_care_pro/app/logic/profile_logic.dart';
+import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:digi_care_pro/app/ui/widgets/confirm_dialog.dart';
@@ -166,7 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   children: [
                     InkWell(
-                      onTap: () {},
+                      onTap: () => Get.toNamed(Routes.CUSTOMER_LIST),
                       borderRadius: BorderRadius.circular(12),
                       child: Padding(
                         padding: const EdgeInsets.all(profileItemPadding),
@@ -187,7 +188,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       endIndent: profileItemPadding,
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () => Get.toNamed(Routes.EMPLOYEE_LIST),
                       borderRadius: BorderRadius.circular(12),
                       child: Padding(
                         padding: const EdgeInsets.all(profileItemPadding),

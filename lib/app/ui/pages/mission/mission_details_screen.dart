@@ -31,26 +31,32 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
           Column(
             children: [
               SizedBox(height: 70),
-              Row(
+              Stack(
+                alignment: AlignmentDirectional.centerStart,
                 children: [
-                  SizedBox(width: 12),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    onTap: () => Get.back(),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset(
-                        'assets/icons/arrow-left.svg',
-                        color: Theme.of(context).colorScheme.onPrimary,
+                  Row(
+                    children: [
+                      SizedBox(width: 16),
+                      InkWell(
+                        borderRadius: BorderRadius.circular(20),
+                        onTap: () => Get.back(),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.onPrimary),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                  SizedBox(width: 16),
-                  Text(
-                    'mission_details'.tr,
-                    style: Theme.of(
-                      context,
-                    ).appBarTheme.titleTextStyle!.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'mission_details'.tr,
+                        style: Theme.of(
+                          context,
+                        ).appBarTheme.titleTextStyle!.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -70,7 +76,13 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Mostafa Babaie', style: Theme.of(context).textTheme.headlineLarge),
+                          Row(
+                            children: [
+                              CircleAvatar(radius: 32, backgroundImage: AssetImage('assets/images/profile-sample.jpg')),
+                              SizedBox(width: 12),
+                              Text('Mostafa Babaie', style: Theme.of(context).textTheme.headlineLarge),
+                            ],
+                          ),
                           SizedBox(height: 12),
                           Row(
                             children: [

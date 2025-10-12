@@ -1,15 +1,17 @@
 import 'package:digi_care_pro/app/ui/pages/main/home_screen.dart';
+import 'package:digi_care_pro/app/ui/pages/menu/customer_list_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/profile_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/missions_screen.dart';
 import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
+import 'package:digi_care_pro/app/ui/widgets/animated_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class MainScreen extends StatefulWidget {
-  int currentPage = 0;
+  int currentPage = 1;
 
-  final List<Widget> _pages = [/*HomeScreen(),*/ MissionsScreen(), ProfileScreen()];
+  final List<Widget> _pages = [CustomerListScreen(), MissionsScreen(), ProfileScreen()];
 
   MainScreen({super.key});
 
@@ -23,7 +25,9 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: AppBar(
         title: _appBarTitle(),
+        centerTitle: false,
         actionsPadding: EdgeInsets.only(right: 16),
+
         actions: [
           InkWell(
             borderRadius: BorderRadius.circular(16),
@@ -60,8 +64,8 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
           ),
-          SizedBox(width: 12),
-          CircleAvatar(radius: 16, backgroundImage: AssetImage('assets/images/profile-sample.jpg')),
+          // SizedBox(width: 12),
+          // CircleAvatar(radius: 16, backgroundImage: AssetImage('assets/images/profile-sample.jpg')),
         ],
       ),
       body: Column(
@@ -78,11 +82,11 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
         destinations: [
-         /* NavigationDestination(
-            icon: SvgPicture.asset('assets/icons/dashboard.svg', color: Theme.of(context).colorScheme.onSurface),
-            selectedIcon: SvgPicture.asset('assets/icons/dashboard.svg', color: Theme.of(context).colorScheme.primary),
-            label: 'dashboard'.tr,
-          ),*/
+          NavigationDestination(
+            icon: SvgPicture.asset('assets/icons/users.svg', color: Theme.of(context).colorScheme.onSurface),
+            selectedIcon: SvgPicture.asset('assets/icons/users.svg', color: Theme.of(context).colorScheme.primary),
+            label: 'customer_list'.tr,
+          ),
           NavigationDestination(
             icon: SvgPicture.asset('assets/icons/missions.svg', color: Theme.of(context).colorScheme.onSurface),
             selectedIcon: SvgPicture.asset('assets/icons/missions.svg', color: Theme.of(context).colorScheme.primary),
@@ -100,13 +104,13 @@ class _MainScreenState extends State<MainScreen> {
 
   _appBarTitle() {
     switch (widget.currentPage) {
-    /*  case 0:
-        return Text('dashboard'.tr);*/
-
       case 0:
-        return Text('missions'.tr);
+        return Text('customer_list'.tr);
 
       case 1:
+        return AnimatedSearchField();
+
+      case 2:
         return Text('profile'.tr);
     }
   }

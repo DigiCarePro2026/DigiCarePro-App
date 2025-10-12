@@ -50,7 +50,7 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField> {
             Padding(
               padding: const EdgeInsets.only(left: 11.0, right: 8),
               child: SvgPicture.asset(
-                'assets/icons/search-customer.svg',
+                isExpanded ? 'assets/icons/mul.svg':'assets/icons/search-customer.svg',
                 color: Theme.of(context).colorScheme.onSurface,
               ),
             ),

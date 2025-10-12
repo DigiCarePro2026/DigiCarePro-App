@@ -1,4 +1,5 @@
 import 'package:digi_care_pro/app/logic/profile_logic.dart';
+import 'package:digi_care_pro/app/routes/app_pages.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
@@ -66,7 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
               SizedBox(height: 32),
-              Text('account'.tr, style: Theme.of(context).textTheme.titleMedium),
+              Text('DigiCare'.tr, style: Theme.of(context).textTheme.titleMedium),
               SizedBox(height: 8),
               Container(
                 decoration: BoxDecoration(
@@ -76,15 +77,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   children: [
                     InkWell(
-                      onTap: () {},
+                      onTap: () => Get.toNamed(Routes.EMPLOYEE_LIST),
                       borderRadius: BorderRadius.circular(12),
                       child: Padding(
                         padding: const EdgeInsets.all(profileItemPadding),
                         child: Row(
                           children: [
-                            SvgPicture.asset('assets/icons/lock.svg', color: Color(0xFFF6353D)),
+                            SvgPicture.asset('assets/icons/employee.svg', color: Color(0xFF56B8E4)),
                             SizedBox(width: 12),
-                            Expanded(child: Text('change_password'.tr, style: Theme.of(context).textTheme.labelMedium)),
+                            Expanded(child: Text('employee_list'.tr, style: Theme.of(context).textTheme.labelMedium)),
                             SvgPicture.asset('assets/icons/arrow-right.svg', color: Theme.of(context).disabledColor),
                           ],
                         ),
@@ -145,7 +146,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         padding: const EdgeInsets.all(profileItemPadding),
                         child: Row(
                           children: [
-                            SvgPicture.asset('assets/icons/money-send.svg', color: Color(0xFF56B8E4)),
+                            SvgPicture.asset('assets/icons/money-send.svg', color: Color(0xFFF4B5A5)),
                             SizedBox(width: 12),
                             Expanded(child: Text('payroll'.tr, style: Theme.of(context).textTheme.labelMedium)),
                             SvgPicture.asset('assets/icons/arrow-right.svg', color: Theme.of(context).disabledColor),
@@ -157,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               SizedBox(height: 24),
-              Text('DigiCare'.tr, style: Theme.of(context).textTheme.titleMedium),
+              Text('account'.tr, style: Theme.of(context).textTheme.titleMedium),
               SizedBox(height: 8),
               Container(
                 decoration: BoxDecoration(
@@ -167,36 +168,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   children: [
                     InkWell(
-                      onTap: () => Get.toNamed(Routes.CUSTOMER_LIST),
+                      onTap: () => Get.toNamed(Routes.CHANGE_PASSWORD),
                       borderRadius: BorderRadius.circular(12),
                       child: Padding(
                         padding: const EdgeInsets.all(profileItemPadding),
                         child: Row(
                           children: [
-                            SvgPicture.asset('assets/icons/users.svg', color: Color(0xFF96CBB7)),
+                            SvgPicture.asset('assets/icons/lock.svg', color: Color(0xFFF6353D)),
                             SizedBox(width: 12),
-                            Expanded(child: Text('customer_list'.tr, style: Theme.of(context).textTheme.labelMedium)),
-                            SvgPicture.asset('assets/icons/arrow-right.svg', color: Theme.of(context).disabledColor),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      height: 1,
-                      color: Theme.of(context).dividerColor,
-                      indent: profileItemPadding,
-                      endIndent: profileItemPadding,
-                    ),
-                    InkWell(
-                      onTap: () => Get.toNamed(Routes.EMPLOYEE_LIST),
-                      borderRadius: BorderRadius.circular(12),
-                      child: Padding(
-                        padding: const EdgeInsets.all(profileItemPadding),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset('assets/icons/employee.svg', color: Color(0xFFF4B5A5)),
-                            SizedBox(width: 12),
-                            Expanded(child: Text('employee_list'.tr, style: Theme.of(context).textTheme.labelMedium)),
+                            Expanded(child: Text('change_password'.tr, style: Theme.of(context).textTheme.labelMedium)),
                             SvgPicture.asset('assets/icons/arrow-right.svg', color: Theme.of(context).disabledColor),
                           ],
                         ),
@@ -216,7 +196,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   children: [
                     InkWell(
-                      onTap: () {},
+                      onTap: () => Get.toNamed(Routes.CHANGE_LANGUAGE),
                       borderRadius: BorderRadius.circular(12),
                       child: Padding(
                         padding: const EdgeInsets.all(profileItemPadding),

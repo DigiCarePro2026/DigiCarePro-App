@@ -16,7 +16,6 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('customer_list'.tr)),
       body: Column(
         children: [
           SearchBarWidget(hintText: 'customer_list_search_hint'.tr, onChange: (term) {}),

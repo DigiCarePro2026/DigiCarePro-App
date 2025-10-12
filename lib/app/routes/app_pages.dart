@@ -1,5 +1,7 @@
+import 'package:digi_care_pro/app/ui/pages/account/change_password_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/account/login_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/main/main_screen.dart';
+import 'package:digi_care_pro/app/ui/pages/menu/change_language_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/customer_list_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/employee_list_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/mission_details_screen.dart';
@@ -22,12 +24,16 @@ class AppPages {
       page: () => const MissionDetailsScreen(),
     ),
     GetPage(
-      name: Routes.CUSTOMER_LIST,
-      page: () => const CustomerListScreen(),
-    ),
-    GetPage(
       name: Routes.EMPLOYEE_LIST,
       page: () => const EmployeeListScreen(),
+    ),
+    GetPage(
+      name: Routes.CHANGE_PASSWORD,
+      page: () => const ChangePasswordScreen(),
+    ),
+    GetPage(
+      name: Routes.CHANGE_LANGUAGE,
+      page: () => const ChangeLanguageScreen(),
     ),
   ];
 }

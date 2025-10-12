@@ -26,38 +26,40 @@ class _MissionsScreenState extends State<MissionsScreen> {
           SliverToBoxAdapter(
             child: Stack(
               children: [
-                PositionedDirectional(top: 8, end: 10, child: AnimatedSearchField()),
-                CalendarWidget(
-                  onDateSelected: (date) => print("Selected: $date"),
-                  events: {
-                    DateTime(2025, 10, 10): [
-                      Event(
-                        title: "Meeting",
-                        startTime: TimeOfDay(hour: 9, minute: 0),
-                        endTime: TimeOfDay(hour: 10, minute: 0),
-                      ),
-                      Event(
-                        title: "Meeting",
-                        startTime: TimeOfDay(hour: 9, minute: 0),
-                        endTime: TimeOfDay(hour: 10, minute: 0),
-                      ),
-                      Event(
-                        title: "Meeting",
-                        startTime: TimeOfDay(hour: 9, minute: 0),
-                        endTime: TimeOfDay(hour: 10, minute: 0),
-                      ),
-                      Event(
-                        title: "Meeting",
-                        startTime: TimeOfDay(hour: 9, minute: 0),
-                        endTime: TimeOfDay(hour: 10, minute: 0),
-                      ),
-                      Event(
-                        title: "Meeting",
-                        startTime: TimeOfDay(hour: 9, minute: 0),
-                        endTime: TimeOfDay(hour: 10, minute: 0),
-                      ),
-                    ],
-                  },
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: CalendarWidget(
+                    onDateSelected: (date) => print("Selected: $date"),
+                    events: {
+                      DateTime(2025, 10, 10): [
+                        Event(
+                          title: "Meeting",
+                          startTime: TimeOfDay(hour: 9, minute: 0),
+                          endTime: TimeOfDay(hour: 10, minute: 0),
+                        ),
+                        Event(
+                          title: "Meeting",
+                          startTime: TimeOfDay(hour: 9, minute: 0),
+                          endTime: TimeOfDay(hour: 10, minute: 0),
+                        ),
+                        Event(
+                          title: "Meeting",
+                          startTime: TimeOfDay(hour: 9, minute: 0),
+                          endTime: TimeOfDay(hour: 10, minute: 0),
+                        ),
+                        Event(
+                          title: "Meeting",
+                          startTime: TimeOfDay(hour: 9, minute: 0),
+                          endTime: TimeOfDay(hour: 10, minute: 0),
+                        ),
+                        Event(
+                          title: "Meeting",
+                          startTime: TimeOfDay(hour: 9, minute: 0),
+                          endTime: TimeOfDay(hour: 10, minute: 0),
+                        ),
+                      ],
+                    },
+                  ),
                 ),
               ],
             ),
@@ -85,7 +87,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
       child: Card.filled(
         child: InkWell(
           borderRadius: BorderRadius.circular(cardRadius),
-          onTap: (){
+          onTap: () {
             Get.toNamed(Routes.MISSION_DETAILS);
           },
           child: Padding(
@@ -95,13 +97,15 @@ class _MissionsScreenState extends State<MissionsScreen> {
               children: [
                 Row(
                   children: [
-                    Expanded(child: Row(
-                      children: [
-                        CircleAvatar(radius: 16, backgroundImage: AssetImage('assets/images/profile-sample.jpg')),
-                        SizedBox(width: 12),
-                        Text('Mostafa Babaie', style: Theme.of(context).textTheme.labelLarge),
-                      ],
-                    )),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          CircleAvatar(radius: 16, backgroundImage: AssetImage('assets/images/profile-sample.jpg')),
+                          SizedBox(width: 12),
+                          Text('Mostafa Babaie', style: Theme.of(context).textTheme.labelLarge),
+                        ],
+                      ),
+                    ),
                     PopupMenuButton(
                       icon: SvgPicture.asset('assets/icons/more-hor.svg'),
                       onSelected: (value) {
@@ -116,18 +120,9 @@ class _MissionsScreenState extends State<MissionsScreen> {
                       },
                       itemBuilder: (ctx) {
                         return [
-                          const PopupMenuItem(
-                            value: 'info',
-                            child: Text('Customer info'),
-                          ),
-                          const PopupMenuItem(
-                            value: 'routing',
-                            child: Text('Routing'),
-                          ),
-                          const PopupMenuItem(
-                            value: 'add_mission',
-                            child: Text('Add mission'),
-                          ),
+                          PopupMenuItem(value: 'call', child: Text('call'.tr)),
+                          PopupMenuItem(value: 'routing', child: Text('routing'.tr)),
+                          PopupMenuItem(value: 'add_mission', child: Text('add_mission'.tr)),
                         ];
                       },
                     ),
@@ -221,21 +216,48 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
         },
         child: Container(
           decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).colorScheme.primary.withAlpha(200), width: 0.75),
+            border: Border.all(color: Theme.of(context).colorScheme.primary.withAlpha(200), width: 1),
             borderRadius: BorderRadius.circular(24),
             color: selectedMissionType == missionType
                 ? Theme.of(context).colorScheme.primary
                 : Theme.of(context).colorScheme.surface,
           ),
           child: Padding(
-            padding: const EdgeInsets.only(top: 8, bottom: 8, right: 12, left: 12),
-            child: Text(
-              missionType.title,
-              style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                color: selectedMissionType == missionType
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.primary.withAlpha(150),
-              ),
+            padding: const EdgeInsets.only(top: 0, bottom: 0, right: 12, left: 12),
+            child: Row(
+              children: [
+                Text(
+                  missionType.title,
+                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                    color: selectedMissionType == missionType
+                        ? Theme.of(context).colorScheme.onPrimary
+                        : Theme.of(context).colorScheme.primary.withAlpha(150),
+                  ),
+                ),
+                if (missionType == MissionType.all) SizedBox(width: 16),
+                if (missionType == MissionType.all)
+                  Container(
+                    decoration: BoxDecoration(color: AppColors.red, shape: BoxShape.circle),
+                    constraints: BoxConstraints(minWidth: 20, minHeight: 20),
+                    child: Center(
+                      child: Text(
+                        '23',
+                        style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                if (missionType != MissionType.all)
+                  Container(
+                    decoration: BoxDecoration(color: AppColors.red, shape: BoxShape.circle),
+                    constraints: BoxConstraints(minWidth: 0, minHeight: 20),
+                    child: Center(
+                      child: Text(
+                        '',
+                        style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
         ),
@@ -247,7 +269,7 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => Get.width < 400 ? 63 : 64; // Adjust based on chip height + padding
 
   @override
-  double get minExtent => Get.width < 400 ? 63 : 64;  // Same as maxExtent to prevent shrinking
+  double get minExtent => Get.width < 400 ? 63 : 64; // Same as maxExtent to prevent shrinking
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {

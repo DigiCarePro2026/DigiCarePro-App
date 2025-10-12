@@ -1,5 +1,3 @@
-import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
-import 'package:digi_care_pro/app/ui/theme/app_dimens.dart' as AppDimens;
 import 'package:flutter/material.dart';
 
 class Event {
@@ -13,30 +11,40 @@ class Event {
 class CalendarWidget extends StatefulWidget {
   final void Function(DateTime selectedDate)? onDateSelected;
   final Map<DateTime, List<Event>> events;
-
-  /// ماهِ پایه برای چیپ‌ها (اختیاری). اگر null باشه از DateTime.now() استفاده می‌شه.
   final DateTime? baseMonth;
 
-  const CalendarWidget({Key? key, this.onDateSelected, this.events = const {}, this.baseMonth}) : super(key: key);
+  const CalendarWidget({
+    Key? key,
+    this.onDateSelected,
+    this.events = const {},
+    this.baseMonth,
+  }) : super(key: key);
 
   @override
   State<CalendarWidget> createState() => _CalendarWidgetState();
 }
 
 class _CalendarWidgetState extends State<CalendarWidget> {
-  late final DateTime _baseMonth; // برای چیپ‌ها ثابت نگه داشته میشه
-  DateTime _focusedMonth = DateTime.now();
+  late final DateTime _baseMonth;
+  late DateTime _focusedMonth;
+  late DateTime _minMonth;
+  late DateTime _maxMonth;
+
   DateTime? _selectedDate;
 
-  final List<String> _weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  final List<String> _weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
   @override
   void initState() {
     super.initState();
-    // مقداردهی baseMonth ثابت (چیپ‌ها از روی این محاسبه می‌شن و بعدا تغییر نمیکنن)
+
     final bm = widget.baseMonth ?? DateTime.now();
     _baseMonth = DateTime(bm.year, bm.month, 1);
-    _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month, 1);
+    _focusedMonth = DateTime(_baseMonth.year, _baseMonth.month, 1);
+
+    // محدوده‌ی مجاز برای حرکت (دو ماه قبل و دو ماه بعد)
+    _minMonth = DateTime(_baseMonth.year, _baseMonth.month - 2, 1);
+    _maxMonth = DateTime(_baseMonth.year, _baseMonth.month + 2, 1);
   }
 
   String _getMonthName(int month) {
@@ -59,10 +67,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   bool _isSameMonth(DateTime a, DateTime b) => a.year == b.year && a.month == b.month;
 
-  void _changeMonth(DateTime newMonth) {
-    setState(() => _focusedMonth = DateTime(newMonth.year, newMonth.month, 1));
-  }
-
   String _formatTime(TimeOfDay time) {
     final h = time.hour.toString().padLeft(2, '0');
     final m = time.minute.toString().padLeft(2, '0');
@@ -73,18 +77,23 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   Widget build(BuildContext context) {
     final firstDay = DateTime(_focusedMonth.year, _focusedMonth.month, 1);
     final daysInMonth = DateTime(_focusedMonth.year, _focusedMonth.month + 1, 0).day;
-    final firstWeekDay = firstDay.weekday % 7; // Sunday = 0
+    final firstWeekDay = (firstDay.weekday + 6) % 7;
     final today = DateTime.now();
 
     final List<Widget> dayCells = [];
+
+    // خالی‌ها قبل از روز اول
     for (int i = 0; i < firstWeekDay; i++) {
       dayCells.add(Container());
     }
 
+    // روزهای ماه
     for (int day = 1; day <= daysInMonth; day++) {
       final date = DateTime(_focusedMonth.year, _focusedMonth.month, day);
 
-      final isSelected = _selectedDate != null && _isSameMonth(_selectedDate!, date) && _selectedDate!.day == date.day;
+      final isSelected = _selectedDate != null &&
+          _isSameMonth(_selectedDate!, date) &&
+          _selectedDate!.day == date.day;
       final isToday = today.year == date.year && today.month == date.month && today.day == date.day;
 
       final List<Event> events = widget.events.keys
@@ -130,7 +139,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   ),
                 ),
                 const SizedBox(height: 4),
-                if (events.isNotEmpty) Row(mainAxisAlignment: MainAxisAlignment.center, children: eventIndicators),
+                if (events.isNotEmpty)
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: eventIndicators),
               ],
             ),
           ),
@@ -145,118 +155,97 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       }
     }
 
-    // selected events
-    List<Event> selectedEvents = [];
-    if (_selectedDate != null) {
-      widget.events.forEach((key, value) {
-        if (key.year == _selectedDate!.year && key.month == _selectedDate!.month && key.day == _selectedDate!.day) {
-          selectedEvents = value;
+    return GestureDetector(
+      onHorizontalDragEnd: (details) {
+        if (details.primaryVelocity != null) {
+          if (details.primaryVelocity! < 0 && _focusedMonth.isBefore(_maxMonth)) {
+            // سوایپ به چپ → ماه بعد
+            setState(() {
+              _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month + 1, 1);
+            });
+          } else if (details.primaryVelocity! > 0 && _focusedMonth.isAfter(_minMonth)) {
+            // سوایپ به راست → ماه قبل
+            setState(() {
+              _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month - 1, 1);
+            });
+          }
         }
-      });
-    }
-
-    return Column(
-      children: [
-        _buildMonthHeader(),
-        const SizedBox(height: 8),
-        // Weekdays
-        Row(
-          children: _weekDays
-              .map(
-                (d) => Expanded(
-                  child: Center(
-                    child: Text(d, style: const TextStyle(fontWeight: FontWeight.w400)),
-                  ),
+      },
+      child: Column(
+        children: [
+          _buildMonthHeader(),
+          const SizedBox(height: 8),
+          // هفته‌ها
+          Row(
+            children: _weekDays
+                .map(
+                  (d) => Expanded(
+                child: Center(
+                  child: Text(d, style: const TextStyle(fontWeight: FontWeight.w400)),
                 ),
-              )
-              .toList(),
-        ),
-        const SizedBox(height: 6),
-        // Days grid
-        GridView.count(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 7,
-          childAspectRatio: 1,
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          children: dayCells,
-        ),
-        // Events
-       /* if (selectedEvents.isNotEmpty)
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(8),
-            color: Colors.grey.shade100,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text("Events:", style: TextStyle(fontWeight: FontWeight.bold)),
-                ...selectedEvents.map(
-                  (e) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 2),
-                    child: Text("• ${e.title} (${_formatTime(e.startTime)} - ${_formatTime(e.endTime)})"),
-                  ),
-                ),
-              ],
-            ),
-          ),*/
-      ],
+              ),
+            )
+                .toList(),
+          ),
+          const SizedBox(height: 6),
+          // شبکه‌ی روزها
+          GridView.count(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 7,
+            childAspectRatio: 1,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            children: dayCells,
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildMonthHeader() {
-    final now = DateTime.now();
-    final baseMonth = DateTime(now.year, now.month, 1);
-    final previousMonth = DateTime(baseMonth.year, baseMonth.month - 1, 1);
-    final nextMonth = DateTime(baseMonth.year, baseMonth.month + 1, 1);
-
-    final canGoPrev = _focusedMonth.isAfter(previousMonth);
-    final canGoNext = _focusedMonth.isBefore(nextMonth);
+    final canGoPrev = _focusedMonth.isAfter(_minMonth);
+    final canGoNext = _focusedMonth.isBefore(_maxMonth);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-      child: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              border: BoxBorder.all(color: Theme.of(context).colorScheme.outline, width: 1),
-              borderRadius: BorderRadius.circular(24),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Theme.of(context).colorScheme.outline, width: 1),
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.chevron_left),
+              onPressed: canGoPrev
+                  ? () {
+                setState(() {
+                  _focusedMonth =
+                      DateTime(_focusedMonth.year, _focusedMonth.month - 1, 1);
+                });
+              }
+                  : null,
             ),
-            child: Wrap(
-              direction: Axis.horizontal,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                // دکمه قبلی
-                IconButton(
-                  icon: const Icon(Icons.chevron_left),
-                  onPressed: canGoPrev
-                      ? () {
-                    setState(() => _focusedMonth =
-                        DateTime(_focusedMonth.year, _focusedMonth.month - 1, 1));
-                  }
-                      : null,
-                ),
-
-                // نام ماه و سال
-                Text(
-                  _getMonthName(_focusedMonth.month) /*+ ' ${_focusedMonth.year}'*/,
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-
-                // دکمه بعدی
-                IconButton(
-                  icon: const Icon(Icons.chevron_right),
-                  onPressed: canGoNext
-                      ? () {
-                    setState(() => _focusedMonth =
-                        DateTime(_focusedMonth.year, _focusedMonth.month + 1, 1));
-                  }
-                      : null,
-                ),
-              ],
+            Expanded(
+              child: Text(
+                textAlign: TextAlign.center,
+                '${_getMonthName(_focusedMonth.month)} ${_focusedMonth.year}',
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
             ),
-          ),
-        ],
+            IconButton(
+              icon: const Icon(Icons.chevron_right),
+              onPressed: canGoNext
+                  ? () {
+                setState(() {
+                  _focusedMonth =
+                      DateTime(_focusedMonth.year, _focusedMonth.month + 1, 1);
+                });
+              }
+                  : null,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -20,6 +20,8 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
     MenuModel(title: 'customer_signature'.tr, icon: 'assets/icons/signature.svg', color: AppColors.signatureColor),
     MenuModel(title: 'submit_report'.tr, icon: 'assets/icons/report.svg', color: AppColors.reportColor),
     MenuModel(title: 'delay_report'.tr, icon: 'assets/icons/delay-report.svg', color: AppColors.delayReportColor),
+    MenuModel(title: 'change_date_time'.tr, icon: 'assets/icons/calendar-setting.svg', color: AppColors.delayReportColor),
+    MenuModel(title: 'cancel_mission'.tr, icon: 'assets/icons/cancel.svg', color: AppColors.delayReportColor),
 
   ];
 
@@ -30,7 +32,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
         children: [
           Container(
             width: double.infinity,
-            height: 250,
+            height: 280,
             color: Theme.of(context).colorScheme.primary,
             child: Image.asset(
               'assets/images/bg-customer-detail-header.png',
@@ -42,7 +44,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
           ),
           Column(
             children: [
-              SizedBox(height: Get.width < 400 ? 40 : 70),
+              SizedBox(height: Get.width < 400 ? 30 : 60),
               Stack(
                 alignment: AlignmentDirectional.centerStart,
                 children: [
@@ -76,7 +78,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
           ),
           Column(
             children: [
-              SizedBox(height: Get.width < 400 ? 100 : 130),
+              SizedBox(height: Get.width < 400 ? 90 : 120),
               Padding(
                 padding: const EdgeInsets.only(left: 24, right: 24),
                 child: SizedBox(
@@ -154,14 +156,14 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  padding: const EdgeInsets.only(left: 24, right: 24),
                   child: GridView.builder(
                     itemCount: menu.length,
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3, // 👈 سه ستون
-                      mainAxisSpacing: 8, // فاصله عمودی بین آیتم‌ها
-                      crossAxisSpacing: 0, // فاصله افقی بین آیتم‌ها
-                      childAspectRatio: 1, // نسبت عرض به ارتفاع آیتم‌ها
+                      crossAxisCount: 2, // 👈 سه ستون
+                      mainAxisSpacing: 16, // فاصله عمودی بین آیتم‌ها
+                      crossAxisSpacing: 16, // فاصله افقی بین آیتم‌ها
+                      childAspectRatio: 1.5, // نسبت عرض به ارتفاع آیتم‌ها
                     ),
                     itemBuilder: (ctx, index) => _buildItem(menu[index]),
                   ),
@@ -181,6 +183,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
       child: Column(
         children: [
           Container(
+            width: double.infinity,
             decoration: BoxDecoration(
               color: menu.color.withAlpha(30),
               borderRadius: BorderRadius.circular(cardRadius),

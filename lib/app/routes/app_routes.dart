@@ -7,4 +7,5 @@ abstract class Routes {
   static const EMPLOYEE_LIST = '/employee-list';
   static const CHANGE_PASSWORD = '/change-password';
   static const CHANGE_LANGUAGE = '/change-language';
+  static const NOTIFICATIONS = '/notifications';
 }

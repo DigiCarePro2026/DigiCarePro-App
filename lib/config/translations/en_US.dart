@@ -33,9 +33,9 @@ const Map<String, String> enUS = {
   'add_mission': 'Add Mission',
   'employee_list_search_hint': 'Search employees ...',
   'routing': 'Routing',
-  'upload_document': 'Upload',
-  'customer_signature': 'Signature',
-  'submit_report': 'Submit Report',
+  'upload_document': 'Upload Document',
+  'customer_signature': 'Customer Signature',
+  'submit_report': 'Mission Report',
   'delay_report': 'Delay Report',
   'current_password': 'Current password',
   'new_password': 'New password',
@@ -43,4 +43,8 @@ const Map<String, String> enUS = {
   'english': 'English',
   'french': 'French',
   'german': 'German',
+  'notifications': 'Notifications',
+  'change_date_time': 'Change Date & Time',
+  'cancel_mission': 'Cancel Mission',
+
 };

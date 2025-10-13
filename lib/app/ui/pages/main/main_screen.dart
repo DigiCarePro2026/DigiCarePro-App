@@ -1,3 +1,4 @@
+import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/pages/main/home_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/customer_list_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/profile_screen.dart';
@@ -31,7 +32,7 @@ class _MainScreenState extends State<MainScreen> {
         actions: [
           InkWell(
             borderRadius: BorderRadius.circular(16),
-            onTap: () {},
+            onTap: () => Get.toNamed(Routes.NOTIFICATIONS),
             child: Container(
               height: 32,
               decoration: BoxDecoration(

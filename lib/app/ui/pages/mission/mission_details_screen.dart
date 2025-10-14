@@ -32,7 +32,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
         children: [
           Container(
             width: double.infinity,
-            height: 280,
+            height: MediaQuery.of(context).padding.top+ 200,
             color: Theme.of(context).colorScheme.primary,
             child: Image.asset(
               'assets/images/bg-customer-detail-header.png',
@@ -44,7 +44,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
           ),
           Column(
             children: [
-              SizedBox(height: Get.width < 400 ? 30 : 60),
+              SizedBox(height:MediaQuery.of(context).padding.top),
               Stack(
                 alignment: AlignmentDirectional.centerStart,
                 children: [
@@ -78,7 +78,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
           ),
           Column(
             children: [
-              SizedBox(height: Get.width < 400 ? 90 : 120),
+              SizedBox(height: MediaQuery.of(context).padding.top +50),
               Padding(
                 padding: const EdgeInsets.only(left: 24, right: 24),
                 child: SizedBox(
@@ -163,7 +163,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                       crossAxisCount: 2, // 👈 سه ستون
                       mainAxisSpacing: 16, // فاصله عمودی بین آیتم‌ها
                       crossAxisSpacing: 16, // فاصله افقی بین آیتم‌ها
-                      childAspectRatio: 1.5, // نسبت عرض به ارتفاع آیتم‌ها
+                      childAspectRatio: 1.3, // نسبت عرض به ارتفاع آیتم‌ها
                     ),
                     itemBuilder: (ctx, index) => _buildItem(menu[index]),
                   ),

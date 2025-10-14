@@ -45,7 +45,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(bodyPadding),
+        padding: EdgeInsets.only(
+          left: bodyPadding,
+          right: bodyPadding,
+          bottom: bodyPadding + MediaQuery.of(context).padding.bottom,
+        ),
         child: PrimaryButton(
           label: 'change_password'.tr,
           onPressed: () {

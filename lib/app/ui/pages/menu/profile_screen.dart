@@ -98,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       endIndent: profileItemPadding,
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () => Get.toNamed(Routes.REQUESTS),
                       borderRadius: BorderRadius.circular(12),
                       child: Padding(
                         padding: const EdgeInsets.all(profileItemPadding),
@@ -106,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           children: [
                             SvgPicture.asset('assets/icons/calendar.svg', color: Color(0xFFF99234)),
                             SizedBox(width: 12),
-                            Expanded(child: Text('leave_request'.tr, style: Theme.of(context).textTheme.labelMedium)),
+                            Expanded(child: Text('requests'.tr, style: Theme.of(context).textTheme.labelMedium)),
                             SvgPicture.asset('assets/icons/arrow-right.svg', color: Theme.of(context).disabledColor),
                           ],
                         ),

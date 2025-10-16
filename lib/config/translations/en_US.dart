@@ -12,7 +12,7 @@ const Map<String, String> enUS = {
   'profile': 'Profile',
   'account': 'Account',
   'change_password': 'Change password',
-  'leave_request': 'Leave request',
+  'requests': 'Requests',
   'timesheet': 'Timesheet',
   'payroll': 'Payroll',
   'more': 'More',
@@ -46,5 +46,6 @@ const Map<String, String> enUS = {
   'notifications': 'Notifications',
   'change_date_time': 'Change Date & Time',
   'cancel_mission': 'Cancel Mission',
-
+  'remove': 'Remove',
+  'leave_request': 'Leave request',
 };

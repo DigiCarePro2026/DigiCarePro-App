@@ -5,6 +5,8 @@ import 'package:digi_care_pro/app/ui/pages/main/notifications_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/change_language_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/customer_list_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/employee_list_screen.dart';
+import 'package:digi_care_pro/app/ui/pages/menu/leave_request_screen.dart';
+import 'package:digi_care_pro/app/ui/pages/menu/requests_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/mission_details_screen.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
@@ -39,6 +41,14 @@ class AppPages {
     GetPage(
       name: Routes.NOTIFICATIONS,
       page: () => const NotificationsScreen(),
+    ),
+    GetPage(
+      name: Routes.REQUESTS,
+      page: () => const RequestsScreen(),
+    ),
+    GetPage(
+      name: Routes.LEAVE_REQUEST,
+      page: () => const LeaveRequestScreen(),
     ),
   ];
 }

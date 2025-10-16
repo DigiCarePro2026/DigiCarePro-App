@@ -8,4 +8,6 @@ abstract class Routes {
   static const CHANGE_PASSWORD = '/change-password';
   static const CHANGE_LANGUAGE = '/change-language';
   static const NOTIFICATIONS = '/notifications';
+  static const REQUESTS = '/requests';
+  static const LEAVE_REQUEST = '/requests/leave-request';
 }

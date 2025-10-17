@@ -67,6 +67,16 @@ class AppTheme {
         textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
     ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        // backgroundColor: AppColors.primaryLight,
+        // foregroundColor: AppColors.textOnPrimaryPrimaryLight,
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        minimumSize: const Size(double.infinity, 48),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+      ),
+    ),
     disabledColor: AppColors.disabledLight,
     dividerColor: AppColors.dividerLight,
     fontFamily: 'NotoSans',

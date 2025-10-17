@@ -21,6 +21,7 @@ dependencies:
   internet_connection_checker:
   logger: ^2.6.1
   dropdown_search: ^6.0.2
+  url_launcher: ^6.3.2
 
 
 dev_dependencies:

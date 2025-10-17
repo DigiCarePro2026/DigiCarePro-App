@@ -59,4 +59,8 @@ const Map<String, String> enUS = {
   'submit_request': 'Submit request',
   'description': 'Description',
   'leave_request_description_hint': 'Write down the description...',
+  'delay_report_title': 'Enter delay duration',
+  'confirm': 'Confirm',
+  'hours': 'Hours',
+  'minutes': 'Minutes',
 };

@@ -21,7 +21,7 @@ class FrostedGlassDialog extends StatelessWidget {
             child: Container(
               // Slight gradient + translucency to mimic iOS-style sheet
               decoration: BoxDecoration(
-                color: Colors.white.withAlpha(100),
+                color: Colors.white.withAlpha(130),
                 borderRadius: BorderRadius.circular(26),
                 border: Border.all(color: Colors.white.withAlpha(89)),
                 boxShadow: [BoxShadow(color: Colors.black.withAlpha(40), blurRadius: 20, offset: const Offset(0, 6))],
@@ -76,7 +76,7 @@ class FrostedGlassDialog extends StatelessWidget {
           },
           child: Ink(
             decoration: BoxDecoration(
-              color: Colors.black.withAlpha(25),
+              color: Colors.white.withAlpha(100),
               borderRadius: BorderRadius.circular(28),
               // subtle inner shadow / sheen
             ),

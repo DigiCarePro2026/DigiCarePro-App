@@ -8,14 +8,22 @@ class Event {
   Event({required this.title, required this.startTime, required this.endTime});
 }
 
+enum CalendarSelectionMode { single, range }
+
 class CalendarWidget extends StatefulWidget {
+  final CalendarSelectionMode selectionMode;
+  final int? activeMinMaxMonth;
   final void Function(DateTime selectedDate)? onDateSelected;
+  final void Function(DateTime start, DateTime? end)? onRangeSelected;
   final Map<DateTime, List<Event>> events;
   final DateTime? baseMonth;
 
   const CalendarWidget({
     Key? key,
+    this.selectionMode = CalendarSelectionMode.single,
+    this.activeMinMaxMonth,
     this.onDateSelected,
+    this.onRangeSelected,
     this.events = const {},
     this.baseMonth,
   }) : super(key: key);
@@ -31,46 +39,39 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   late DateTime _maxMonth;
 
   DateTime? _selectedDate;
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
 
   final List<String> _weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
   @override
   void initState() {
     super.initState();
-
     final bm = widget.baseMonth ?? DateTime.now();
     _baseMonth = DateTime(bm.year, bm.month, 1);
     _focusedMonth = DateTime(_baseMonth.year, _baseMonth.month, 1);
 
-    // محدوده‌ی مجاز برای حرکت (دو ماه قبل و دو ماه بعد)
-    _minMonth = DateTime(_baseMonth.year, _baseMonth.month - 2, 1);
-    _maxMonth = DateTime(_baseMonth.year, _baseMonth.month + 2, 1);
+    _minMonth = DateTime(_baseMonth.year, _baseMonth.month - (widget.activeMinMaxMonth ?? 20), 1);
+    _maxMonth = DateTime(_baseMonth.year, _baseMonth.month + (widget.activeMinMaxMonth ?? 20), 1);
   }
 
   String _getMonthName(int month) {
     const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
     ];
     return months[month - 1];
   }
 
-  bool _isSameMonth(DateTime a, DateTime b) => a.year == b.year && a.month == b.month;
+  bool _isSameDay(DateTime a, DateTime b) =>
+      a.year == b.year && a.month == b.month && a.day == b.day;
 
-  String _formatTime(TimeOfDay time) {
-    final h = time.hour.toString().padLeft(2, '0');
-    final m = time.minute.toString().padLeft(2, '0');
-    return "$h:$m";
+  bool _isSameMonth(DateTime a, DateTime b) =>
+      a.year == b.year && a.month == b.month;
+
+  bool _isInRange(DateTime date) {
+    if (_rangeStart == null || _rangeEnd == null) return false;
+    return !date.isBefore(_rangeStart!) && !date.isAfter(_rangeEnd!);
   }
 
   @override
@@ -90,64 +91,32 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     // روزهای ماه
     for (int day = 1; day <= daysInMonth; day++) {
       final date = DateTime(_focusedMonth.year, _focusedMonth.month, day);
+      final isToday = _isSameDay(today, date);
 
-      final isSelected = _selectedDate != null &&
-          _isSameMonth(_selectedDate!, date) &&
-          _selectedDate!.day == date.day;
-      final isToday = today.year == date.year && today.month == date.month && today.day == date.day;
+      final isSelected = widget.selectionMode == CalendarSelectionMode.single
+          ? _selectedDate != null && _isSameDay(_selectedDate!, date)
+          : _rangeStart != null && _isSameDay(_rangeStart!, date) ||
+          _rangeEnd != null && _isSameDay(_rangeEnd!, date);
+
+      final isInRange = widget.selectionMode == CalendarSelectionMode.range && _isInRange(date);
 
       final List<Event> events = widget.events.keys
-          .where((d) => d.year == date.year && d.month == date.month && d.day == date.day)
+          .where((d) => _isSameDay(d, date))
           .expand((d) => widget.events[d]!)
           .toList();
 
-      List<Widget> eventIndicators = [];
-      const int maxDots = 4;
-      if (events.length <= maxDots) {
-        eventIndicators = events.map((e) => _buildDot()).toList();
-      } else {
-        final int extra = events.length - maxDots + 1;
-        eventIndicators = events.take(maxDots - 1).map((e) => _buildDot()).toList();
-        eventIndicators.add(_buildDotWithPlus(extra));
-      }
-
-      dayCells.add(
-        GestureDetector(
-          onTap: () {
-            setState(() => _selectedDate = date);
-            widget.onDateSelected?.call(date);
-          },
-          child: Container(
-            margin: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? Theme.of(context).primaryColor
-                  : isToday
-                  ? Theme.of(context).primaryColor.withAlpha(50)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: Colors.grey.shade300),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "$day",
-                  style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black87,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                if (events.isNotEmpty)
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: eventIndicators),
-              ],
-            ),
-          ),
-        ),
-      );
+      dayCells.add(_buildDayCell(
+        context,
+        date: date,
+        day: day,
+        isToday: isToday,
+        isSelected: isSelected,
+        isInRange: isInRange,
+        events: events,
+      ));
     }
 
+    // پر کردن خالی‌های انتهای ماه
     final remainder = dayCells.length % 7;
     if (remainder != 0) {
       for (int i = 0; i < 7 - remainder; i++) {
@@ -159,12 +128,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       onHorizontalDragEnd: (details) {
         if (details.primaryVelocity != null) {
           if (details.primaryVelocity! < 0 && _focusedMonth.isBefore(_maxMonth)) {
-            // سوایپ به چپ → ماه بعد
             setState(() {
               _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month + 1, 1);
             });
           } else if (details.primaryVelocity! > 0 && _focusedMonth.isAfter(_minMonth)) {
-            // سوایپ به راست → ماه قبل
             setState(() {
               _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month - 1, 1);
             });
@@ -175,20 +142,16 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         children: [
           _buildMonthHeader(),
           const SizedBox(height: 8),
-          // هفته‌ها
           Row(
             children: _weekDays
-                .map(
-                  (d) => Expanded(
-                child: Center(
-                  child: Text(d, style: const TextStyle(fontWeight: FontWeight.w400)),
-                ),
+                .map((d) => Expanded(
+              child: Center(
+                child: Text(d, style: const TextStyle(fontWeight: FontWeight.w400)),
               ),
-            )
+            ))
                 .toList(),
           ),
           const SizedBox(height: 6),
-          // شبکه‌ی روزها
           GridView.count(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -198,6 +161,83 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             children: dayCells,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDayCell(
+      BuildContext context, {
+        required DateTime date,
+        required int day,
+        required bool isToday,
+        required bool isSelected,
+        required bool isInRange,
+        required List<Event> events,
+      }) {
+    const int maxDots = 4;
+    List<Widget> eventIndicators = [];
+    if (events.length <= maxDots) {
+      eventIndicators = events.map((e) => _buildDot()).toList();
+    } else {
+      final int extra = events.length - maxDots + 1;
+      eventIndicators = events.take(maxDots - 1).map((e) => _buildDot()).toList();
+      eventIndicators.add(_buildDotWithPlus(extra));
+    }
+
+    Color bgColor = Colors.transparent;
+    if (isSelected) {
+      bgColor = Theme.of(context).primaryColor;
+    } else if (isInRange) {
+      bgColor = Theme.of(context).primaryColor.withOpacity(0.2);
+    } else if (isToday) {
+      bgColor = Theme.of(context).primaryColor.withOpacity(0.1);
+    }
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          if (widget.selectionMode == CalendarSelectionMode.single) {
+            _selectedDate = date;
+            widget.onDateSelected?.call(date);
+          } else {
+            if (_rangeStart == null || (_rangeStart != null && _rangeEnd != null)) {
+              _rangeStart = date;
+              _rangeEnd = null;
+            } else {
+              if (date.isBefore(_rangeStart!)) {
+                final temp = _rangeStart;
+                _rangeStart = date;
+                _rangeEnd = temp;
+              } else {
+                _rangeEnd = date;
+              }
+              widget.onRangeSelected?.call(_rangeStart!, _rangeEnd);
+            }
+          }
+        });
+      },
+      child: Container(
+        margin: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: Colors.grey.shade300),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "$day",
+              style: TextStyle(
+                color: isSelected ? Colors.white : Colors.black87,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+            const SizedBox(height: 4),
+            if (events.isNotEmpty)
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: eventIndicators),
+          ],
+        ),
       ),
     );
   }
@@ -218,12 +258,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             IconButton(
               icon: const Icon(Icons.chevron_left),
               onPressed: canGoPrev
-                  ? () {
-                setState(() {
-                  _focusedMonth =
-                      DateTime(_focusedMonth.year, _focusedMonth.month - 1, 1);
-                });
-              }
+                  ? () => setState(() {
+                _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month - 1, 1);
+              })
                   : null,
             ),
             Expanded(
@@ -236,12 +273,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             IconButton(
               icon: const Icon(Icons.chevron_right),
               onPressed: canGoNext
-                  ? () {
-                setState(() {
-                  _focusedMonth =
-                      DateTime(_focusedMonth.year, _focusedMonth.month + 1, 1);
-                });
-              }
+                  ? () => setState(() {
+                _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month + 1, 1);
+              })
                   : null,
             ),
           ],

@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 enum MissionType{
   all,
   todo,
@@ -9,13 +11,13 @@ extension MissionTypeExtension on MissionType {
   String get title {
     switch (this) {
       case MissionType.all:
-        return 'All';
+        return 'all'.tr;
       case MissionType.todo:
-        return 'Todo';
+        return 'todo'.tr;
       case MissionType.inProgress:
-        return 'In progress';
+        return 'in_progress'.tr;
       case MissionType.done:
-        return 'Done';
+        return 'done'.tr;
     }
   }
 }

@@ -63,4 +63,5 @@ const Map<String, String> enUS = {
   'confirm': 'Confirm',
   'hours': 'Hours',
   'minutes': 'Minutes',
+  'mission_report': 'Mission Report',
 };

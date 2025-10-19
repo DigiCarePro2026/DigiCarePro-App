@@ -19,7 +19,7 @@ class AccountRepository {
     return _instance!;
   }
 
-  Future<Either<ApiError, AppResponse<String>>> login(LoginRequest request, {String? loadingMessage}) async =>
+  Future<Either<ApiError, AppResponse<LoginResponse>>> login(LoginRequest request, {String? loadingMessage}) async =>
       AccountRemoteDataSource.get().login(request, loadingMessage: loadingMessage);
 
   Future<Either<ApiError, AppResponse<GetProfileResponse>>> getProfile({String? loadingMessage}) async {
@@ -27,11 +27,13 @@ class AccountRepository {
   }
 
   logout() {
-    Pref.setString(PrefKey.token, null);
+    Pref.setString(PrefKey.accessToken, null);
+    Pref.setString(PrefKey.refreshToken, null);
   }
 
-  saveLoginInfo(String? token) {
-    Pref.setString(PrefKey.token, token);
+  saveLoginInfo(LoginResponse loginResponse) {
+    Pref.setString(PrefKey.accessToken, loginResponse.accessToken);
+    Pref.setString(PrefKey.refreshToken, loginResponse.refreshToken);
   }
 
   saveProfileInfo(Profile profile) {

@@ -17,7 +17,7 @@ class LoginLogic extends GetxController {
         snackError(message: error.message);
       },
       (response) async {
-        AccountRepository.get().saveLoginInfo(response.data);
+        AccountRepository.get().saveLoginInfo(response.data!);
 
         await _getProfile();
 

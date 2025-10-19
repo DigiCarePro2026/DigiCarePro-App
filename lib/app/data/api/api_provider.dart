@@ -26,7 +26,7 @@ class ApiProvider {
   ApiProvider._() {
     dio.options.headers['locale'] = 'fa';
 
-    final token = Pref.getString(PrefKey.token);
+    final token = Pref.getString(PrefKey.accessToken);
     if (token != null) {
       dio.options.headers['Authorization'] = 'Bearer $token';
     }

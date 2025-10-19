@@ -14,13 +14,21 @@ class AccountRemoteDataSource extends BaseRemoteDataSource {
     return _instance!;
   }
 
-  Future<Either<ApiError, AppResponse<String>>> login(LoginRequest request, {String? loadingMessage}) async =>
-      api.post<String>(path: '/auth/login', body: request.toJson(), loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse<LoginResponse>>> login(
+    LoginRequest request, {
+    String? loadingMessage,
+  }) async => api.post<LoginResponse>(
+    path: '/auth/login',
+    body: request.toJson(),
+    loadingMessage: loadingMessage,
+    fromJson: (json) => LoginResponse.fromJson(json),
+  );
 
-  Future<Either<ApiError, AppResponse<GetProfileResponse>>> getProfile({String? loadingMessage}) async =>
-      api.get<GetProfileResponse>(
-        path: '/auth/getProfile',
-        loadingMessage: loadingMessage,
-        fromJson: (json) => GetProfileResponse.fromJson(json),
-      );
+  Future<Either<ApiError, AppResponse<GetProfileResponse>>> getProfile({
+    String? loadingMessage,
+  }) async => api.get<GetProfileResponse>(
+    path: '/auth/get-profile',
+    loadingMessage: loadingMessage,
+    fromJson: (json) => GetProfileResponse.fromJson(json),
+  );
 }

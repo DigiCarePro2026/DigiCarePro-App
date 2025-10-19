@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
 
         return child!;
       },
-      initialRoute: Pref.getString(PrefKey.token) == null ? Routes.LOGIN : Routes.HOME,
+      initialRoute: Pref.getString(PrefKey.accessToken) == null ? Routes.LOGIN : Routes.HOME,
       getPages: AppPages.pages,
     );
   }

@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../theme/app_dimens.dart' show fieldRadius;
 
-class AppTextField extends StatelessWidget {
+class AppTextField extends StatefulWidget {
   const AppTextField({
     super.key,
     required this.title,
@@ -27,21 +27,29 @@ class AppTextField extends StatelessWidget {
   final TextInputType? keyboardType;
 
   @override
+  State<AppTextField> createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  bool _obscureText = true;
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: theme.textTheme.labelMedium),
+        Text(widget.title, style: theme.textTheme.labelMedium),
         const SizedBox(height: 8),
         TextFormField(
-          controller: controller,
-          focusNode: focusNode,
-          enabled: enabled,
-          keyboardType: keyboardType ?? TextInputType.text,
+          controller: widget.controller,
+          focusNode: widget.focusNode,
+          enabled: widget.enabled,
+          keyboardType: widget.keyboardType ?? TextInputType.text,
+          obscureText: widget.keyboardType == TextInputType.visiblePassword ? _obscureText : false,
           textInputAction: TextInputAction.next,
           decoration: InputDecoration(
-            hintText: hint,
+            hintText: widget.hint,
             hintStyle: TextStyle(color: theme.hintColor),
             counter: Container(),
             contentPadding: const EdgeInsets.symmetric(
@@ -65,8 +73,21 @@ class AppTextField extends StatelessWidget {
                 width: 2,
               ),
             ),
+            suffixIcon: widget.keyboardType == TextInputType.visiblePassword
+                ? IconButton(
+              icon: Icon(
+                _obscureText ? Icons.visibility_off : Icons.visibility,
+                color: Theme.of(context).disabledColor,
+              ),
+              onPressed: () {
+                setState(() {
+                  _obscureText = !_obscureText;
+                });
+              },
+            )
+                : null,
           ),
-          onChanged: onChanged,
+          onChanged: widget.onChanged,
         ),
       ],
     );

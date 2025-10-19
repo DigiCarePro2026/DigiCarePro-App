@@ -18,13 +18,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
-
   LoginLogic logic = LoginLogic();
   bool _isKeyboardVisible = false;
 
   final _emailController = TextEditingController(text: 'admin@digicarepro.com');
   final _passwordController = TextEditingController(text: '123456');
-
 
   @override
   void initState() {
@@ -53,113 +51,127 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<LoginLogic>(builder: (logic) {
-      return Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(bodyPadding),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if(!_isKeyboardVisible)
+    return GetBuilder<LoginLogic>(
+      builder: (logic) {
+        return Scaffold(
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(bodyPadding),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (!_isKeyboardVisible)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/images/logo2.png',
+                                height: 50,
+                              ),
+                            ],
+                          ),
+                        SizedBox(height: 50),
+                        Text(
+                          'log_in'.tr,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 23,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
+                        Text(
+                          'login_caption'.tr,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        SizedBox(height: 32),
+                        AppTextField(
+                          controller: _emailController,
+                          title: 'email'.tr,
+                          hint: 'email_hint'.tr,
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+                        SizedBox(height: 16),
+                        AppTextField(
+                          controller: _passwordController,
+                          title: 'password'.tr,
+                          hint: 'password_hint'.tr,
+                          keyboardType: TextInputType.visiblePassword,
+                        ),
+                        SizedBox(height: 4),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [Image.asset('assets/images/logo2.png', height: 50)],
-                        ),
-                      SizedBox(height: 50),
-                      Text(
-                        'log_in'.tr,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 23,
-                          color: Theme
-                              .of(context)
-                              .colorScheme
-                              .onSurface,
-                        ),
-                      ),
-                      Text('login_caption'.tr, style: Theme
-                          .of(context)
-                          .textTheme
-                          .bodyMedium),
-                      SizedBox(height: 32),
-                      AppTextField(controller: _emailController,
-                        title: 'email'.tr,
-                        hint: 'email_hint'.tr,
-                        keyboardType: TextInputType.emailAddress,),
-                      SizedBox(height: 16),
-                      AppTextField(controller: _passwordController,
-                        title: 'password'.tr, hint: 'password_hint'.tr, keyboardType: TextInputType.visiblePassword,),
-                      SizedBox(height: 4),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          InkWell(
-                            borderRadius: BorderRadius.circular(8),
-                            onTap: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'forget_pass'.tr,
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                  color: Theme
-                                      .of(context)
-                                      .colorScheme
-                                      .primary,
-                                  fontWeight: FontWeight.w600,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            InkWell(
+                              borderRadius: BorderRadius.circular(8),
+                              onTap: () {},
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'forget_pass'.tr,
+                                  style: Theme.of(context).textTheme.bodyMedium!
+                                      .copyWith(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                 ),
                               ),
                             ),
+                          ],
+                        ),
+                        SizedBox(height: 16),
+                        PrimaryButton(
+                          label: 'login'.tr,
+                          onPressed: () {
+                            logic.login(
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (!_isKeyboardVisible)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          borderRadius: BorderRadius.circular(8),
+                          onTap: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: SvgPicture.asset(
+                              'assets/icons/instagram.svg',
+                              color: Theme.of(context).disabledColor,
+                            ),
                           ),
-                        ],
-                      ),
-                      SizedBox(height: 16),
-                      PrimaryButton(label: 'login'.tr, onPressed: () {
-                        logic.login(email: _emailController.text, password: _passwordController.text);
-                      }),
-                    ],
-                  ),
-                ),
-                if(!_isKeyboardVisible)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: () {},
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: SvgPicture.asset('assets/icons/instagram.svg', color: Theme
-                              .of(context)
-                              .disabledColor),
                         ),
-                      ),
-                      SizedBox(width: 16),
-                      InkWell(
-                        borderRadius: BorderRadius.circular(8),
-                        onTap: () {},
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: SvgPicture.asset('assets/icons/facebook.svg', color: Theme
-                              .of(context)
-                              .disabledColor),
+                        SizedBox(width: 16),
+                        InkWell(
+                          borderRadius: BorderRadius.circular(8),
+                          onTap: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: SvgPicture.asset(
+                              'assets/icons/facebook.svg',
+                              color: Theme.of(context).disabledColor,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-              ],
+                      ],
+                    ),
+                ],
+              ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }

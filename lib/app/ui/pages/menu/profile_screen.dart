@@ -307,11 +307,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         ),
+                        Divider(
+                          height: 1,
+                          color: Theme.of(context).dividerColor,
+                          indent: profileItemPadding,
+                          endIndent: profileItemPadding,
+                        ),
                         InkWell(
                           onTap: () {},
                           borderRadius: BorderRadius.circular(12),
                           child: Padding(
-                            padding: const EdgeInsets.all(profileItemPadding),
+                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: profileItemPadding),
                             child: Row(
                               children: [
                                 SvgPicture.asset(

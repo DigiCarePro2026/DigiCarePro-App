@@ -7,7 +7,6 @@ class ProfileLogic extends GetxController{
 
   late Profile profile;
 
-
   @override
   onInit(){
     super.onInit();
@@ -17,6 +16,12 @@ class ProfileLogic extends GetxController{
 
   _fetchProfile(){
     profile = AccountRepository.get().fetchProfile();
+
+    update();
+  }
+
+  updateProfile(){
+    // fixme: call api
 
     update();
   }

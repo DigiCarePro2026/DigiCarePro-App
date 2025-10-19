@@ -20,9 +20,29 @@ class _RequestsScreenState extends State<RequestsScreen> {
       body: ListView.builder(
           itemCount: 15,
           itemBuilder: (ctx, index) => _buildItem(index)),
-      floatingActionButton: FloatingActionButton(
-          child: SvgPicture.asset('assets/icons/plus.svg', color: Theme.of(context).colorScheme.onPrimary,),
-          onPressed: () => Get.toNamed(Routes.LEAVE_REQUEST)),
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary,
+          borderRadius: BorderRadius.circular(cardRadius),
+        ),
+        child: InkWell(
+          onTap: (){
+            Get.toNamed(Routes.LEAVE_REQUEST);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Wrap(
+              runAlignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                SvgPicture.asset('assets/icons/plus.svg', color: Theme.of(context).colorScheme.onPrimary,),
+                SizedBox(width: 12),
+                Text('New Request', style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.bold),)
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 

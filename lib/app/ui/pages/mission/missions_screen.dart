@@ -130,16 +130,62 @@ class _MissionsScreenState extends State<MissionsScreen> {
                     ),
                   ],
                 ),
-                Text('Max Mustermann Musterstraße 12', style: Theme.of(context).textTheme.titleMedium),
                 Row(
                   children: [
-                    Text('2025/07/10', style: Theme.of(context).textTheme.titleMedium),
-                    SizedBox(width: 12),
-                    Text('14:00', style: Theme.of(context).textTheme.titleMedium),
+                    SvgPicture.asset(
+                      'assets/icons/location.svg',
+                      color: Theme.of(context).disabledColor,
+                      width: 16,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      'Max Mustermann Musterstraße 12',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleMedium,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8),
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/calendar2.svg',
+                      color: Theme.of(context).disabledColor,
+                      width: 16,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      '2025/01/25',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleMedium,
+                    ),
+                    SizedBox(width: 32),
+                    SvgPicture.asset(
+                      'assets/icons/clock.svg',
+                      color: Theme.of(context).disabledColor,
+                      width: 16,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      '15:25',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleMedium,
+                    ),
                     SizedBox(width: 4),
-                    SvgPicture.asset('assets/icons/arrow-long-right.svg', color: Theme.of(context).disabledColor),
+                    SvgPicture.asset(
+                      'assets/icons/arrow-long-right.svg',
+                      color: Theme.of(context).disabledColor,
+                    ),
                     SizedBox(width: 4),
-                    Text('15:30', style: Theme.of(context).textTheme.titleMedium),
+                    Text(
+                      '17:00',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleMedium,
+                    ),
                   ],
                 ),
                 Divider(height: 12, thickness: 0.5, color: Theme.of(context).dividerColor),

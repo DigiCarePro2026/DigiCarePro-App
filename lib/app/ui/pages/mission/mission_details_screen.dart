@@ -220,26 +220,26 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
   }
 
   _buildItem(MenuModel menu) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(cardRadius),
-      onTap: menu.callback,
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: menu.color.withAlpha(30),
-              borderRadius: BorderRadius.circular(cardRadius),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: SvgPicture.asset(menu.icon, color: menu.color, width: 32),
-            ),
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: menu.color.withAlpha(30),
+        borderRadius: BorderRadius.circular(cardRadius),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(cardRadius),
+        onTap: menu.callback,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(menu.icon, color: menu.color, width: 32),
+              SizedBox(height: 32),
+              Text(menu.title, style: Theme.of(context).textTheme.labelMedium, maxLines: 2,),
+            ],
           ),
-          SizedBox(height: 12),
-          Text(menu.title, style: Theme.of(context).textTheme.labelMedium),
-          SizedBox(height: 8),
-        ],
+        ),
       ),
     );
   }

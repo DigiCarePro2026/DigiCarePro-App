@@ -67,4 +67,9 @@ const Map<String, String> enUS = {
   'support': 'Support',
   'subject': 'Subject',
   'send': 'Send',
+  'remind_mission': 'Remind mission',
+  'sickness': 'Sickness',
+  'unplanned_leave': 'Unplanned Leave',
+  'customer_cancellation': 'Customer Cancellation',
+  'other': 'Other',
 };

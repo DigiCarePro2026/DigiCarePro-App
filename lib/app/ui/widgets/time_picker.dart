@@ -130,12 +130,15 @@ class _DelayTimePickerFieldState extends State<DelayTimePickerField> {
                   ),
                 ),
               ),
-              Text(
-                value.toString().padLeft(2, '0'),
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: textColor,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  value.toString().padLeft(2, '0'),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: textColor,
+                  ),
                 ),
               ),
               Padding(

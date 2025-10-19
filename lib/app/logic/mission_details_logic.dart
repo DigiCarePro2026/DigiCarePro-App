@@ -1,7 +1,10 @@
+import 'package:digi_care_pro/app/data/enum/cancel_mission_type.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/mission_details_screen.dart';
 import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
+import 'package:digi_care_pro/app/ui/widgets/app_dropdown_field.dart';
 import 'package:digi_care_pro/app/ui/widgets/app_text_area_field.dart';
+import 'package:digi_care_pro/app/ui/widgets/calendar_widget.dart';
 import 'package:digi_care_pro/app/ui/widgets/primary_button.dart';
 import 'package:digi_care_pro/app/ui/widgets/secondary_button.dart';
 import 'package:digi_care_pro/app/ui/widgets/time_picker.dart';
@@ -47,9 +50,9 @@ class MissionDetailsLogic extends GetxController {
         title: 'customer_signature'.tr,
         icon: 'assets/icons/signature.svg',
         color: AppColors.signatureColor,
-        callback: (){
+        callback: () {
           Get.toNamed(Routes.MISSION_SIGNATURE);
-        }
+        },
       ),
       MenuModel(
         title: 'submit_report'.tr,
@@ -59,9 +62,9 @@ class MissionDetailsLogic extends GetxController {
           String? report = await showMissionReportBottomSheet();
 
           if (report != null) {
-            debugPrint(report);//fixme: call api
+            debugPrint(report); //fixme: call api
           }
-        }
+        },
       ),
       MenuModel(
         title: 'delay_report'.tr,
@@ -71,7 +74,7 @@ class MissionDetailsLogic extends GetxController {
           Duration? duration = await showDelayTimeBottomSheet();
 
           if (duration != null) {
-            debugPrint(duration.inMinutes.toString());//fixme: call api
+            debugPrint(duration.inMinutes.toString()); //fixme: call api
           }
         },
       ),
@@ -79,11 +82,21 @@ class MissionDetailsLogic extends GetxController {
         title: 'change_date_time'.tr,
         icon: 'assets/icons/calendar-setting.svg',
         color: AppColors.delayReportColor,
+        callback: () async {
+          String? result =  await showChangeDateAndTimeBottomSheet();
+        }
       ),
       MenuModel(
         title: 'cancel_mission'.tr,
         icon: 'assets/icons/cancel.svg',
         color: AppColors.delayReportColor,
+        callback: () async {
+          CancelMissionType? reason = await showCancelMissionBottomSheet();
+
+          if (reason != null) {
+            debugPrint(reason.title); //fixme: call api
+          }
+        },
       ),
     ];
   }
@@ -102,7 +115,6 @@ class MissionDetailsLogic extends GetxController {
 
   Future<Duration?> showDelayTimeBottomSheet({
     Duration? initialValue,
-    bool showHours = true,
   }) async {
     Duration? selectedValue = initialValue;
 
@@ -116,7 +128,8 @@ class MissionDetailsLogic extends GetxController {
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom:  MediaQuery.of(context).viewInsets.bottom +
+            bottom:
+                MediaQuery.of(context).viewInsets.bottom +
                 MediaQuery.of(context).padding.bottom,
             left: 16,
             right: 16,
@@ -134,7 +147,7 @@ class MissionDetailsLogic extends GetxController {
                   const SizedBox(height: 16),
                   DelayTimePickerField(
                     title: '',
-                    showHours: showHours,
+                    showHours: false,
                     initialValue: selectedValue,
                     onChanged: (value) {
                       setState(() => selectedValue = value);
@@ -169,7 +182,7 @@ class MissionDetailsLogic extends GetxController {
     );
   }
 
-  Future<String?> showMissionReportBottomSheet({String? initialValue}) async{
+  Future<String?> showMissionReportBottomSheet({String? initialValue}) async {
     String? report = initialValue;
 
     return await showModalBottomSheet<String>(
@@ -182,8 +195,9 @@ class MissionDetailsLogic extends GetxController {
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom:  MediaQuery.of(context).viewInsets.bottom +
-              MediaQuery.of(context).padding.bottom,
+            bottom:
+                MediaQuery.of(context).viewInsets.bottom +
+                MediaQuery.of(context).padding.bottom,
             left: 16,
             right: 16,
             top: 20,
@@ -198,9 +212,85 @@ class MissionDetailsLogic extends GetxController {
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   const SizedBox(height: 16),
-                  AppTextAreaField(title: 'description'.tr,onChanged: (value){
-                    setState(() => report = value);
-                  },),
+                  AppTextAreaField(
+                    title: 'description'.tr,
+                    onChanged: (value) {
+                      setState(() => report = value);
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SecondaryButton(
+                          label: 'cancel'.tr,
+                          onPressed: () => Navigator.pop(context, null),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: PrimaryButton(
+                          label: 'confirm'.tr,
+                          onPressed: () => Navigator.pop(context, report),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<String?> showChangeDateAndTimeBottomSheet() async{
+    String? result;
+
+    return await showModalBottomSheet<String>(
+      context: Get.context!,
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom:
+            MediaQuery.of(context).viewInsets.bottom +
+                MediaQuery.of(context).padding.bottom,
+            left: 16,
+            right: 16,
+            top: 20,
+          ),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'change_date_time'.tr,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  const SizedBox(height: 16),
+                  Column(
+                    children: [
+                      CalendarWidget(
+                        selectionMode: CalendarSelectionMode.single,
+                      ),
+                      DelayTimePickerField(
+                        title: '',
+                        showHours: true,
+                        initialValue: null,
+                        onChanged: (value) {
+                          // setState(() => selectedValue = value);
+                        },
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 24),
                   Row(
                     children: [
@@ -215,7 +305,81 @@ class MissionDetailsLogic extends GetxController {
                         child: PrimaryButton(
                           label: 'confirm'.tr,
                           onPressed: () =>
-                              Navigator.pop(context, report),
+                              Navigator.pop(context, result),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Future<CancelMissionType?> showCancelMissionBottomSheet() async {
+    CancelMissionType? selectedValue;
+
+    return await showModalBottomSheet<CancelMissionType>(
+      context: Get.context!,
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom:
+                MediaQuery.of(context).viewInsets.bottom +
+                MediaQuery.of(context).padding.bottom,
+            left: 16,
+            right: 16,
+            top: 20,
+          ),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'cancel_mission'.tr,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  const SizedBox(height: 16),
+                  AppDropdownField<CancelMissionType>(
+                    title: 'reason'.tr,
+                    onChanged: (value){
+
+                    },
+                    items: CancelMissionType.values.map((cmt) {
+                      return DropdownMenuItem<CancelMissionType>(
+                        value: cmt,
+                        child: Text(
+                          cmt.title,
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SecondaryButton(
+                          label: 'cancel'.tr,
+                          onPressed: () => Navigator.pop(context, null),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: PrimaryButton(
+                          label: 'confirm'.tr,
+                          onPressed: () =>
+                              Navigator.pop(context, selectedValue),
                         ),
                       ),
                     ],

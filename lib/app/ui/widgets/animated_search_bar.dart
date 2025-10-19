@@ -34,8 +34,8 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField> {
       child: AnimatedContainer(
         duration: animationDuration,
         curve: Curves.easeInOut,
-        height: 48,
-        width: isExpanded ? 250 : 48,
+        height: 40,
+        width: isExpanded ? 250 : 40,
         onEnd: () {
           setState(() {
             animationEnd = true;
@@ -48,7 +48,7 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField> {
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 11.0, right: 8),
+              padding: const EdgeInsets.only(left: 8.0, right: 5),
               child: SvgPicture.asset(
                 isExpanded ? 'assets/icons/mul.svg':'assets/icons/search-customer.svg',
                 color: Theme.of(context).colorScheme.onSurface,

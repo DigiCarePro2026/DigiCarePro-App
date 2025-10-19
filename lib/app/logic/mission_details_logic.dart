@@ -109,13 +109,15 @@ class MissionDetailsLogic extends GetxController {
     return await showModalBottomSheet<Duration>(
       context: Get.context!,
       isScrollControlled: true,
+      useSafeArea: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
+            bottom:  MediaQuery.of(context).viewInsets.bottom +
+                MediaQuery.of(context).padding.bottom,
             left: 16,
             right: 16,
             top: 20,
@@ -173,13 +175,15 @@ class MissionDetailsLogic extends GetxController {
     return await showModalBottomSheet<String>(
       context: Get.context!,
       isScrollControlled: true,
+      useSafeArea: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
+            bottom:  MediaQuery.of(context).viewInsets.bottom +
+              MediaQuery.of(context).padding.bottom,
             left: 16,
             right: 16,
             top: 20,

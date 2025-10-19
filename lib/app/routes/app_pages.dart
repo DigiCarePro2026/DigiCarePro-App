@@ -7,6 +7,7 @@ import 'package:digi_care_pro/app/ui/pages/menu/customer_list_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/employee_list_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/leave_request_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/requests_screen.dart';
+import 'package:digi_care_pro/app/ui/pages/menu/support_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/mission_details_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/signature_screen.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
@@ -54,6 +55,10 @@ class AppPages {
     GetPage(
       name: Routes.MISSION_SIGNATURE,
       page: () => const SignatureScreen(),
+    ),
+    GetPage(
+      name: Routes.SUPPORT,
+      page: () => const SupportScreen(),
     ),
   ];
 }

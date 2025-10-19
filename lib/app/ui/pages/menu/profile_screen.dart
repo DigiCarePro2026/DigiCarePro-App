@@ -154,6 +154,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
+                    Divider(
+                      height: 1,
+                      color: Theme.of(context).dividerColor,
+                      indent: profileItemPadding,
+                      endIndent: profileItemPadding,
+                    ),
+                    InkWell(
+                      onTap: () => Get.toNamed(Routes.SUPPORT),
+                      borderRadius: BorderRadius.circular(12),
+                      child: Padding(
+                        padding: const EdgeInsets.all(profileItemPadding),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset('assets/icons/support.svg', color: Color(0xFFA685DB)),
+                            SizedBox(width: 12),
+                            Expanded(child: Text('support'.tr, style: Theme.of(context).textTheme.labelMedium)),
+                            SvgPicture.asset('assets/icons/arrow-right.svg', color: Theme.of(context).disabledColor),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

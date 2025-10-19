@@ -51,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Ahmad Azarnia',
+                              logic.profile.fullName,
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                             SizedBox(height: 6),
@@ -333,8 +333,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ).textTheme.labelMedium,
                                   ),
                                 ),
-                              Switch(value: logic.profile.remindMission ?? false, onChanged: (status){
-                                logic.profile.remindMission = status;
+                              Switch(value: logic.profile.receiveNotifications ?? false, onChanged: (status){
+                                logic.profile.receiveNotifications = status;
                                 logic.updateProfile();
                               })
                               ],

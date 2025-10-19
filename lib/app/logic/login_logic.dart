@@ -1,4 +1,5 @@
 import 'package:digi_care_pro/app/data/api/api_models/login.dart';
+import 'package:digi_care_pro/app/data/api/api_provider.dart';
 import 'package:digi_care_pro/app/data/repositories/account_repository.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
@@ -18,6 +19,8 @@ class LoginLogic extends GetxController {
       },
       (response) async {
         AccountRepository.get().saveLoginInfo(response.data!);
+
+        ApiProvider().setToken(response.data?.accessToken);
 
         await _getProfile();
 

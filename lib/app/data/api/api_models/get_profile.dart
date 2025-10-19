@@ -5,12 +5,16 @@ class GetProfileResponse {
   final String accountId;
   final String employeeId;
   final String email;
+  final String fullName;
+  final bool receiveNotifications;
 
   GetProfileResponse({
     required this.userId,
     required this.accountId,
     required this.employeeId,
     required this.email,
+    required this.fullName,
+    required this.receiveNotifications,
   });
 
   factory GetProfileResponse.fromJson(Map<String, dynamic> json) =>
@@ -19,8 +23,16 @@ class GetProfileResponse {
         accountId: json['accountId'] ?? '',
         employeeId: json['employeeId'] ?? '',
         email: json['email'] ?? '',
+        fullName: json['fullName'] ?? '',
+        receiveNotifications: json['receiveNotifications'] ?? false,
       );
 
-  Profile toProfile() =>
-      Profile(userId: userId, accountId: accountId,employeeId: employeeId, email: email);
+  Profile toProfile() => Profile(
+    userId: userId,
+    accountId: accountId,
+    employeeId: employeeId,
+    email: email,
+    fullName: fullName,
+    receiveNotifications: receiveNotifications,
+  );
 }

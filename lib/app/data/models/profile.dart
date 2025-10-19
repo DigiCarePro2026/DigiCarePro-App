@@ -3,14 +3,16 @@ class Profile {
   final String accountId;
   final String employeeId;
   final String email;
-  bool? remindMission;
+  final String fullName;
+  bool receiveNotifications;
 
   Profile({
     required this.userId,
     required this.accountId,
     required this.employeeId,
     required this.email,
-    this.remindMission,
+    required this.fullName,
+    required this.receiveNotifications,
   });
 
   Map<String, dynamic> toJson() => {
@@ -18,7 +20,8 @@ class Profile {
     'accountId': accountId,
     'employeeId': employeeId,
     'email': email,
-    'remindMission': remindMission,
+    'fullName': fullName,
+    'receiveNotifications': receiveNotifications,
   };
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
@@ -26,6 +29,7 @@ class Profile {
     accountId: json['accountId'] ?? '',
     employeeId: json['employeeId'] ?? '',
     email: json['email'] ?? '',
-    remindMission: json['remindMission'] ?? false,
+    fullName: json['fullName'] ?? '',
+    receiveNotifications: json['receiveNotifications'] ?? false,
   );
 }

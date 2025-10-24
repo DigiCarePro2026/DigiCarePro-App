@@ -1,9 +1,13 @@
+import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
 class AnimatedSearchField extends StatefulWidget {
-  const AnimatedSearchField({super.key});
+
+  List<Customer> employeeCustomers = [];
+
+  AnimatedSearchField({super.key, required this.employeeCustomers});
 
   @override
   State<AnimatedSearchField> createState() => _AnimatedSearchFieldState();
@@ -14,9 +18,7 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField> {
   bool animationEnd = false;
 
   final Duration animationDuration = const Duration(milliseconds: 300);
-  String? selectedItem;
-
-  final List<String> items = ['Apple', 'Banana', 'Cherry', 'Mango', 'Orange', 'Peach', 'Strawberry'];
+  Customer? selectedItem;
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +62,10 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField> {
                   padding: const EdgeInsets.only(right: 8.0),
                   child: Visibility(
                     visible: animationEnd,
-                    child: DropdownSearch<String>(
-                      items: (filter, infiniteScrollProps) => items,
+                    child: DropdownSearch<Customer>(
+                      items: (filter, infiniteScrollProps) => widget.employeeCustomers,
                       selectedItem: selectedItem,
+                      compareFn: (item, selectedItem) => item.id == selectedItem.id,
                       onChanged: (value) {
                         setState(() {
                           selectedItem = value;
@@ -89,7 +92,7 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField> {
                         ),
                       ),
                       dropdownBuilder: (context, selectedItem) => Text(
-                        selectedItem ?? '',
+                        selectedItem == null ? '' :  selectedItem.getFullName(),
                         style: Theme.of(context).textTheme.labelSmall,
                         overflow: TextOverflow.ellipsis,
                       ),

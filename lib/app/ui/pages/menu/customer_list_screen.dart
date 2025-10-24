@@ -1,4 +1,5 @@
-import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
+import 'package:digi_care_pro/app/data/models/customer.dart';
+import 'package:digi_care_pro/app/logic/customers_logic.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:digi_care_pro/app/ui/widgets/search_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -13,19 +14,39 @@ class CustomerListScreen extends StatefulWidget {
 }
 
 class _CustomerListScreenState extends State<CustomerListScreen> {
+  CustomersLogic logic = CustomersLogic();
+
+  @override
+  void initState() {
+    Get.put(logic);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          SearchBarWidget(hintText: 'customer_list_search_hint'.tr, onChange: (term) {}),
-          Expanded(child: ListView.builder(itemCount: 16, itemBuilder: (ctx, index) => _buildCustomerItem(index))),
-        ],
-      ),
+    return GetBuilder<CustomersLogic>(
+      builder: (logic) {
+        return Scaffold(
+          body: Column(
+            children: [
+              SearchBarWidget(
+                hintText: 'customer_list_search_hint'.tr,
+                onChange: (term) {},
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: logic.customers.length,
+                  itemBuilder: (ctx, index) => _buildCustomerItem(logic.customers[index]),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildCustomerItem(int index) {
+  Widget _buildCustomerItem(Customer customer) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
       child: Card.filled(
@@ -39,9 +60,17 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                   Expanded(
                     child: Row(
                       children: [
-                        CircleAvatar(radius: 24, backgroundImage: AssetImage('assets/images/profile-sample.jpg')),
+                        CircleAvatar(
+                          radius: 24,
+                          backgroundImage: NetworkImage(
+                            customer.profileImageUrl ?? '',
+                          ),
+                        ),
                         SizedBox(width: 12),
-                        Text('Mostafa Babaie', style: Theme.of(context).textTheme.labelLarge),
+                        Text(
+                          customer.getFullName(),
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
                       ],
                     ),
                   ),
@@ -49,7 +78,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                     icon: SvgPicture.asset('assets/icons/more-hor.svg'),
                     onSelected: (value) {
                       if (value == 'call') {
-                        print('call selected');
+                        logic.makeCall(customer.mobile ?? customer.phone!);
                       } else if (value == 'add_mission') {
                         print('add mission selected');
                       }
@@ -57,7 +86,10 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                     itemBuilder: (ctx) {
                       return [
                         PopupMenuItem(value: 'call', child: Text('call'.tr)),
-                        PopupMenuItem(value: 'add_mission', child: Text('add_mission'.tr)),
+                        PopupMenuItem(
+                          value: 'add_mission',
+                          child: Text('add_mission'.tr),
+                        ),
                       ];
                     },
                   ),
@@ -66,9 +98,16 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
               SizedBox(height: 12),
               Row(
                 children: [
-                  SvgPicture.asset('assets/icons/location.svg', width: 16, color: Theme.of(context).disabledColor),
+                  SvgPicture.asset(
+                    'assets/icons/location.svg',
+                    width: 16,
+                    color: Theme.of(context).disabledColor,
+                  ),
                   SizedBox(width: 8),
-                  Text('Max Mustermann Musterstraße 12', style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    customer.address ?? '',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                 ],
               ),
             ],

@@ -27,18 +27,30 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
     return GetBuilder<CustomersLogic>(
       builder: (logic) {
         return Scaffold(
-          body: Column(
+          body: Stack(
             children: [
-              SearchBarWidget(
-                hintText: 'customer_list_search_hint'.tr,
-                onChange: (term) {},
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: logic.customers.length,
-                  itemBuilder: (ctx, index) => _buildCustomerItem(logic.customers[index]),
+              if (logic.customers.isEmpty)
+                Center(child: CircularProgressIndicator()),
+              if (logic.customers.isNotEmpty)
+                Column(
+                  children: [
+                    Column(
+                      children: [
+                        SearchBarWidget(
+                          hintText: 'customer_list_search_hint'.tr,
+                          onChange: (term) {},
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: logic.customers.length,
+                            itemBuilder: (ctx, index) =>
+                                _buildCustomerItem(logic.customers[index]),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ),
             ],
           ),
         );

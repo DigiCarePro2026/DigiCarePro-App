@@ -13,8 +13,8 @@ import 'package:get/get.dart' as getX;
 class ApiProvider {
   var dio = Dio(
     BaseOptions(
-      connectTimeout: const Duration(seconds: 5),
-      receiveTimeout: const Duration(seconds: 5),
+      connectTimeout: const Duration(seconds: 25),
+      receiveTimeout: const Duration(seconds: 25),
       baseUrl: 'https://mobileapi.demostage.ir/api',
     ),
   );

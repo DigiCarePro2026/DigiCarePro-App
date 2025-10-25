@@ -72,4 +72,5 @@ const Map<String, String> enUS = {
   'unplanned_leave': 'Unplanned Leave',
   'customer_cancellation': 'Customer Cancellation',
   'other': 'Other',
+  'loading_missions': 'Loading missions...',
 };

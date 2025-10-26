@@ -111,7 +111,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
         child: InkWell(
           borderRadius: BorderRadius.circular(cardRadius),
           onTap: () {
-            Get.toNamed(Routes.MISSION_DETAILS);
+            Get.toNamed(Routes.MISSION_DETAILS, arguments: mission);
           },
           child: Padding(
             padding: const EdgeInsets.all(cardPadding),

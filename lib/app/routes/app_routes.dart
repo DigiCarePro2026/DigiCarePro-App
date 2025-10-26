@@ -3,6 +3,7 @@
 abstract class Routes {
   static const HOME = '/';
   static const LOGIN = '/login';
+  static const FORGET_PASSWORD = '/forget-password';
   static const MISSION_DETAILS = '/missions/mission-details';
   static const MISSION_SIGNATURE = '/mission/mission-details/signature';
   static const EMPLOYEE_LIST = '/employee-list';

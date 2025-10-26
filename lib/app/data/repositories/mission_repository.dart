@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
+import 'package:digi_care_pro/app/data/api/api_models/cancel_mission.dart';
+import 'package:digi_care_pro/app/data/api/api_models/delay_mission.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:digi_care_pro/app/data/models/mission.dart';
@@ -15,9 +17,12 @@ class MissionRepository {
     return _instance!;
   }
 
-  Future<Either<ApiError, AppResponse<List<Mission>>>> getMissions({
-    required int year,
-    required int month,
-  }) async =>
+  Future<Either<ApiError, AppResponse<List<Mission>>>> getMissions({required int year, required int month}) async =>
       MissionRemoteDataSource.get().getMissions(year: year, month: month);
+
+  Future<Either<ApiError, AppResponse>> cancelMission(CancelMissionRequest request, {String? loadingMessage}) =>
+      MissionRemoteDataSource.get().cancel(request, loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse>> delayReport(DelayMissionRequest request, {String? loadingMessage}) =>
+      MissionRemoteDataSource.get().delayReport(request, loadingMessage: loadingMessage);
 }

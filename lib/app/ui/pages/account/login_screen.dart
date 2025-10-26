@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                           children: [
                             InkWell(
                               borderRadius: BorderRadius.circular(8),
-                              onTap: () {},
+                              onTap: () => Get.toNamed(Routes.FORGET_PASSWORD),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(

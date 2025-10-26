@@ -11,7 +11,7 @@ class CustomersLogic extends GetxController{
   @override
   Future<void> onInit() async {
 
-   await  getCustomers();
+   await getCustomers();
 
     super.onInit();
   }

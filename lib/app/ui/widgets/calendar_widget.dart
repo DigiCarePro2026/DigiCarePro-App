@@ -260,6 +260,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               onPressed: canGoPrev
                   ? () => setState(() {
                 _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month - 1, 1);
+
+                widget.onDateSelected?.call(_focusedMonth);
               })
                   : null,
             ),
@@ -275,6 +277,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               onPressed: canGoNext
                   ? () => setState(() {
                 _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month + 1, 1);
+
+                widget.onDateSelected?.call(_focusedMonth);
               })
                   : null,
             ),

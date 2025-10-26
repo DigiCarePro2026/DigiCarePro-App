@@ -1,4 +1,6 @@
+import 'package:digi_care_pro/app/data/models/mission.dart';
 import 'package:digi_care_pro/app/ui/pages/account/change_password_screen.dart';
+import 'package:digi_care_pro/app/ui/pages/account/forget_password_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/account/login_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/main/main_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/main/notifications_screen.dart';
@@ -10,6 +12,7 @@ import 'package:digi_care_pro/app/ui/pages/menu/requests_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/support_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/mission_details_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/signature_screen.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
 import 'app_routes.dart';
@@ -25,8 +28,12 @@ class AppPages {
       page: () => const LoginScreen(),
     ),
     GetPage(
+      name: Routes.FORGET_PASSWORD,
+      page: () => const ForgetPasswordScreen(),
+    ),
+    GetPage(
       name: Routes.MISSION_DETAILS,
-      page: () => const MissionDetailsScreen(),
+      page: () =>  MissionDetailsScreen(mission: Get.arguments as Mission,),
     ),
     GetPage(
       name: Routes.EMPLOYEE_LIST,

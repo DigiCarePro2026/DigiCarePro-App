@@ -1,13 +1,14 @@
+import 'package:digi_care_pro/app/data/models/mission.dart';
 import 'package:digi_care_pro/app/logic/mission_details_logic.dart';
-import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class MissionDetailsScreen extends StatefulWidget {
-  const MissionDetailsScreen({super.key});
+  MissionDetailsScreen({super.key, required this.mission});
+
+  Mission mission;
 
   @override
   State<MissionDetailsScreen> createState() => _MissionDetailsScreenState();
@@ -16,7 +17,7 @@ class MissionDetailsScreen extends StatefulWidget {
 class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
   @override
   void initState() {
-    Get.put(MissionDetailsLogic());
+    Get.put(MissionDetailsLogic(widget.mission));
     super.initState();
   }
 
@@ -137,7 +138,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                   ),
                                   SizedBox(width: 8),
                                   Text(
-                                    '2025/01/25',
+                                    logic.mission.plannedStartDateTime!.substring(0, 10),
                                     style: Theme.of(
                                       context,
                                     ).textTheme.titleMedium,

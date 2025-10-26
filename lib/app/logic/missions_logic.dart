@@ -13,7 +13,7 @@ class MissionsLogic extends GetxController {
   Future<void> onInit() async {
     super.onInit();
 
-    Future.delayed(Duration(seconds: 200),(){
+    Future.delayed(Duration(milliseconds: 200),(){
       getMissions();
     });
 

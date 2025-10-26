@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
+import 'package:digi_care_pro/app/data/api/api_models/forget_password.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get_profile.dart';
 import 'package:digi_care_pro/app/data/api/api_models/login.dart';
 import 'package:digi_care_pro/app/data/constants/pref_key.dart';
@@ -26,6 +27,11 @@ class AccountRepository {
     return await AccountRemoteDataSource.get().getProfile(loadingMessage: loadingMessage);
   }
 
+  Future<Either<ApiError, AppResponse<dynamic>>> forgetPassword(
+    ForgetPasswordRequest request, {
+    String? loadingMessage,
+  }) async => AccountRemoteDataSource.get().forgetPassword(request, loadingMessage: loadingMessage);
+
   logout() {
     Pref.setString(PrefKey.accessToken, null);
     Pref.setString(PrefKey.refreshToken, null);
@@ -40,7 +46,7 @@ class AccountRepository {
     Pref.setString(PrefKey.profile, jsonEncode(profile.toJson()));
   }
 
-  fetchProfile(){
+  fetchProfile() {
     return Profile.fromJson(jsonDecode(Pref.getString(PrefKey.profile)!));
   }
 }

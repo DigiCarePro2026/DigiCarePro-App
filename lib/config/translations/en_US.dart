@@ -73,4 +73,8 @@ const Map<String, String> enUS = {
   'customer_cancellation': 'Customer Cancellation',
   'other': 'Other',
   'loading_missions': 'Loading missions...',
+  'forget_password': 'Forget password',
+  'submit': 'Submit',
+  'loading_cancel_mission': 'Requesting cancellation',
+  'loading_delay_mission': 'Announcing delay'
 };

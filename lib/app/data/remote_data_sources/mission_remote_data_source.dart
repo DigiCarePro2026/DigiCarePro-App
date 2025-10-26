@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
+import 'package:digi_care_pro/app/data/api/api_models/cancel_mission.dart';
+import 'package:digi_care_pro/app/data/api/api_models/delay_mission.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:digi_care_pro/app/data/models/mission.dart';
@@ -15,13 +17,16 @@ class MissionRemoteDataSource extends BaseRemoteDataSource {
     return _instance!;
   }
 
-  Future<Either<ApiError, AppResponse<List<Mission>>>> getMissions({
-    required int year,
-    required int month,
-  }) async => api.get<List<Mission>>(
-    path: '/mission/employee/$year/$month',
-    loadingMessage: 'loading_missions'.tr,
-    fromJson: (json) =>
-        (json as List).map((json) => Mission.fromJson(json)).toList(),
-  );
+  Future<Either<ApiError, AppResponse<List<Mission>>>> getMissions({required int year, required int month}) async =>
+      api.get<List<Mission>>(
+        path: '/mission/employee/$year/$month',
+        loadingMessage: 'loading_missions'.tr,
+        fromJson: (json) => (json as List).map((json) => Mission.fromJson(json)).toList(),
+      );
+
+  Future<Either<ApiError, AppResponse>> cancel(CancelMissionRequest request, {String? loadingMessage}) =>
+      api.post(path: '/mission/${request.missionId}/cancel', body: request.toJson(), loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse>> delayReport(DelayMissionRequest request, {String? loadingMessage}) =>
+      api.post(path: '/mission/${request.missionId}/delay', body: request.toJson(), loadingMessage: loadingMessage);
 }

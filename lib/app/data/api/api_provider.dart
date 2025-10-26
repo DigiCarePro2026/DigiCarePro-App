@@ -3,6 +3,7 @@ import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
 import 'package:digi_care_pro/app/data/constants/pref_key.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/pref.dart';
+import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/utils/globals.dart';
 import 'package:digi_care_pro/app/utils/dialog_handler.dart';
 import 'package:digi_care_pro/app/utils/utils.dart';
@@ -69,7 +70,9 @@ class ApiProvider {
           switch (error.response?.statusCode) {
             case 401:
               logger.e('Unauthorized error, redirecting to login...');
-              refreshToken();
+              getX.Get.offAllNamed(Routes.LOGIN);
+
+              // refreshToken();
               break;
           }
           /*

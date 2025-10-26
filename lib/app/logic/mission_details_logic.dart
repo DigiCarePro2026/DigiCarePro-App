@@ -1,4 +1,8 @@
+import 'package:digi_care_pro/app/data/api/api_models/cancel_mission.dart';
+import 'package:digi_care_pro/app/data/api/api_models/delay_mission.dart';
 import 'package:digi_care_pro/app/data/enum/cancel_mission_type.dart';
+import 'package:digi_care_pro/app/data/models/mission.dart';
+import 'package:digi_care_pro/app/data/repositories/mission_repository.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/mission_details_screen.dart';
 import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
@@ -7,13 +11,17 @@ import 'package:digi_care_pro/app/ui/widgets/app_text_area_field.dart';
 import 'package:digi_care_pro/app/ui/widgets/calendar_widget.dart';
 import 'package:digi_care_pro/app/ui/widgets/primary_button.dart';
 import 'package:digi_care_pro/app/ui/widgets/secondary_button.dart';
+import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:digi_care_pro/app/ui/widgets/time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MissionDetailsLogic extends GetxController {
+  late Mission mission;
   List<MenuModel> menuItems = [];
+
+  MissionDetailsLogic(this.mission);
 
   @override
   void onInit() {
@@ -36,16 +44,8 @@ class MissionDetailsLogic extends GetxController {
         color: AppColors.callColor,
         callback: () => _makeCall('123'),
       ),
-      MenuModel(
-        title: 'upload_document'.tr,
-        icon: 'assets/icons/upload.svg',
-        color: AppColors.uploadColor,
-      ),
-      MenuModel(
-        title: 'add_mission'.tr,
-        icon: 'assets/icons/add-mission.svg',
-        color: AppColors.addMissionColor,
-      ),
+      MenuModel(title: 'upload_document'.tr, icon: 'assets/icons/upload.svg', color: AppColors.uploadColor),
+      MenuModel(title: 'add_mission'.tr, icon: 'assets/icons/add-mission.svg', color: AppColors.addMissionColor),
       MenuModel(
         title: 'customer_signature'.tr,
         icon: 'assets/icons/signature.svg',
@@ -74,7 +74,7 @@ class MissionDetailsLogic extends GetxController {
           Duration? duration = await showDelayTimeBottomSheet();
 
           if (duration != null) {
-            debugPrint(duration.inMinutes.toString()); //fixme: call api
+            _delayReportApi(duration.inMinutes);
           }
         },
       ),
@@ -83,8 +83,8 @@ class MissionDetailsLogic extends GetxController {
         icon: 'assets/icons/calendar-setting.svg',
         color: AppColors.delayReportColor,
         callback: () async {
-          String? result =  await showChangeDateAndTimeBottomSheet();
-        }
+          String? result = await showChangeDateAndTimeBottomSheet();
+        },
       ),
       MenuModel(
         title: 'cancel_mission'.tr,
@@ -94,7 +94,7 @@ class MissionDetailsLogic extends GetxController {
           CancelMissionType? reason = await showCancelMissionBottomSheet();
 
           if (reason != null) {
-            debugPrint(reason.title); //fixme: call api
+            _cancelMissionApi(reason.title);
           }
         },
       ),
@@ -102,9 +102,7 @@ class MissionDetailsLogic extends GetxController {
   }
 
   _route() async {
-    final Uri googleMapsUri = Uri.parse(
-      'https://www.google.com/maps/dir/?api=1&destination=35.6892,51.3890',
-    );
+    final Uri googleMapsUri = Uri.parse('https://www.google.com/maps/dir/?api=1&destination=35.6892,51.3890');
     await launchUrl(googleMapsUri, mode: LaunchMode.externalApplication);
   }
 
@@ -113,24 +111,19 @@ class MissionDetailsLogic extends GetxController {
     await launchUrl(launchUri);
   }
 
-  Future<Duration?> showDelayTimeBottomSheet({
-    Duration? initialValue,
-  }) async {
+  //<editor-fold desc="Delay">
+  Future<Duration?> showDelayTimeBottomSheet({Duration? initialValue}) async {
     Duration? selectedValue = initialValue;
 
     return await showModalBottomSheet<Duration>(
       context: Get.context!,
       isScrollControlled: true,
       useSafeArea: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom:
-                MediaQuery.of(context).viewInsets.bottom +
-                MediaQuery.of(context).padding.bottom,
+            bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
             left: 16,
             right: 16,
             top: 20,
@@ -140,10 +133,7 @@ class MissionDetailsLogic extends GetxController {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'delay_report_title'.tr,
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
+                  Text('delay_report_title'.tr, style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 16),
                   DelayTimePickerField(
                     title: '',
@@ -157,17 +147,13 @@ class MissionDetailsLogic extends GetxController {
                   Row(
                     children: [
                       Expanded(
-                        child: SecondaryButton(
-                          label: 'cancel'.tr,
-                          onPressed: () => Navigator.pop(context, null),
-                        ),
+                        child: SecondaryButton(label: 'cancel'.tr, onPressed: () => Navigator.pop(context, null)),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: PrimaryButton(
                           label: 'confirm'.tr,
-                          onPressed: () =>
-                              Navigator.pop(context, selectedValue),
+                          onPressed: () => Navigator.pop(context, selectedValue),
                         ),
                       ),
                     ],
@@ -182,6 +168,24 @@ class MissionDetailsLogic extends GetxController {
     );
   }
 
+  _delayReportApi(int minutes) async {
+    var result = await MissionRepository.get().delayReport(
+        DelayMissionRequest(missionId: mission.id, delayMinutes: minutes), loadingMessage: 'loading_delay_mission'.tr
+    );
+
+    result.fold(
+          (error) {
+        snackError(message: error.message);
+      },
+          (response) {
+        snackSuccess(message: response.message);
+
+        //todo: what todo?
+      },
+    );
+  }
+  //</editor-fold>
+
   Future<String?> showMissionReportBottomSheet({String? initialValue}) async {
     String? report = initialValue;
 
@@ -189,15 +193,11 @@ class MissionDetailsLogic extends GetxController {
       context: Get.context!,
       isScrollControlled: true,
       useSafeArea: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom:
-                MediaQuery.of(context).viewInsets.bottom +
-                MediaQuery.of(context).padding.bottom,
+            bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
             left: 16,
             right: 16,
             top: 20,
@@ -207,10 +207,7 @@ class MissionDetailsLogic extends GetxController {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'mission_report'.tr,
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
+                  Text('mission_report'.tr, style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 16),
                   AppTextAreaField(
                     title: 'description'.tr,
@@ -222,17 +219,11 @@ class MissionDetailsLogic extends GetxController {
                   Row(
                     children: [
                       Expanded(
-                        child: SecondaryButton(
-                          label: 'cancel'.tr,
-                          onPressed: () => Navigator.pop(context, null),
-                        ),
+                        child: SecondaryButton(label: 'cancel'.tr, onPressed: () => Navigator.pop(context, null)),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: PrimaryButton(
-                          label: 'confirm'.tr,
-                          onPressed: () => Navigator.pop(context, report),
-                        ),
+                        child: PrimaryButton(label: 'confirm'.tr, onPressed: () => Navigator.pop(context, report)),
                       ),
                     ],
                   ),
@@ -246,22 +237,18 @@ class MissionDetailsLogic extends GetxController {
     );
   }
 
-  Future<String?> showChangeDateAndTimeBottomSheet() async{
+  Future<String?> showChangeDateAndTimeBottomSheet() async {
     String? result;
 
     return await showModalBottomSheet<String>(
       context: Get.context!,
       isScrollControlled: true,
       useSafeArea: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom:
-            MediaQuery.of(context).viewInsets.bottom +
-                MediaQuery.of(context).padding.bottom,
+            bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
             left: 16,
             right: 16,
             top: 20,
@@ -271,16 +258,11 @@ class MissionDetailsLogic extends GetxController {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'change_date_time'.tr,
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
+                  Text('change_date_time'.tr, style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 16),
                   Column(
                     children: [
-                      CalendarWidget(
-                        selectionMode: CalendarSelectionMode.single,
-                      ),
+                      CalendarWidget(selectionMode: CalendarSelectionMode.single),
                       DelayTimePickerField(
                         title: '',
                         showHours: true,
@@ -295,18 +277,11 @@ class MissionDetailsLogic extends GetxController {
                   Row(
                     children: [
                       Expanded(
-                        child: SecondaryButton(
-                          label: 'cancel'.tr,
-                          onPressed: () => Navigator.pop(context, null),
-                        ),
+                        child: SecondaryButton(label: 'cancel'.tr, onPressed: () => Navigator.pop(context, null)),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: PrimaryButton(
-                          label: 'confirm'.tr,
-                          onPressed: () =>
-                              Navigator.pop(context, result),
-                        ),
+                        child: PrimaryButton(label: 'confirm'.tr, onPressed: () => Navigator.pop(context, result)),
                       ),
                     ],
                   ),
@@ -320,6 +295,7 @@ class MissionDetailsLogic extends GetxController {
     );
   }
 
+  //<editor-fold desc="Cancel">
   Future<CancelMissionType?> showCancelMissionBottomSheet() async {
     CancelMissionType? selectedValue;
 
@@ -327,15 +303,11 @@ class MissionDetailsLogic extends GetxController {
       context: Get.context!,
       isScrollControlled: true,
       useSafeArea: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom:
-                MediaQuery.of(context).viewInsets.bottom +
-                MediaQuery.of(context).padding.bottom,
+            bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
             left: 16,
             right: 16,
             top: 20,
@@ -345,23 +317,19 @@ class MissionDetailsLogic extends GetxController {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'cancel_mission'.tr,
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
+                  Text('cancel_mission'.tr, style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 16),
                   AppDropdownField<CancelMissionType>(
                     title: 'reason'.tr,
-                    onChanged: (value){
-
+                    onChanged: (value) {
+                      setState((){
+                        selectedValue = value;
+                      });
                     },
                     items: CancelMissionType.values.map((cmt) {
                       return DropdownMenuItem<CancelMissionType>(
                         value: cmt,
-                        child: Text(
-                          cmt.title,
-                          style: Theme.of(context).textTheme.labelMedium,
-                        ),
+                        child: Text(cmt.title, style: Theme.of(context).textTheme.labelMedium),
                       );
                     }).toList(),
                   ),
@@ -369,17 +337,13 @@ class MissionDetailsLogic extends GetxController {
                   Row(
                     children: [
                       Expanded(
-                        child: SecondaryButton(
-                          label: 'cancel'.tr,
-                          onPressed: () => Navigator.pop(context, null),
-                        ),
+                        child: SecondaryButton(label: 'cancel'.tr, onPressed: () => Navigator.pop(context, null)),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: PrimaryButton(
                           label: 'confirm'.tr,
-                          onPressed: () =>
-                              Navigator.pop(context, selectedValue),
+                          onPressed: () => Navigator.pop(context, selectedValue),
                         ),
                       ),
                     ],
@@ -393,4 +357,22 @@ class MissionDetailsLogic extends GetxController {
       },
     );
   }
+
+  _cancelMissionApi(String reason) async {
+    var result = await MissionRepository.get().cancelMission(
+      CancelMissionRequest(missionId: mission.id, reason: reason), loadingMessage: 'loading_cancel_mission'.tr
+    );
+
+    result.fold(
+      (error) {
+        snackError(message: error.message);
+      },
+      (response) {
+        snackSuccess(message: response.message);
+
+        //todo: what todo?
+      },
+    );
+  }
+  //</editor-fold>
 }

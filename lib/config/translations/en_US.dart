@@ -76,5 +76,8 @@ const Map<String, String> enUS = {
   'forget_password': 'Forget password',
   'submit': 'Submit',
   'loading_cancel_mission': 'Requesting cancellation',
-  'loading_delay_mission': 'Announcing delay'
+  'loading_delay_mission': 'Announcing delay',
+  'subject_required': 'Subject required',
+  'loading_send_message': 'Sending message',
+  'message_send_success': 'Message sent successfully',
 };

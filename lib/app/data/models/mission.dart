@@ -1,7 +1,8 @@
+import 'customer.dart';
+
 class Mission {
   final String id;
   final String companyId;
-  final String customerId;
   final String employeeId;
   final String? plannedStartDateTime;
   final String? plannedEndDateTime;
@@ -15,11 +16,11 @@ class Mission {
   final bool? endedByAdmin;
   final bool? endedManually;
   final int? status;
+  final Customer customer;
 
   Mission({
     required this.id,
     required this.companyId,
-    required this.customerId,
     required this.employeeId,
     this.plannedStartDateTime,
     this.plannedEndDateTime,
@@ -33,12 +34,12 @@ class Mission {
     this.endedByAdmin,
     this.endedManually,
     this.status,
+    required this.customer,
   });
 
   factory Mission.fromJson(Map<String, dynamic> json) => Mission(
     id: json['id']?.toString() ?? '',
     companyId: json['companyId']?.toString() ?? '',
-    customerId: json['customerId']?.toString() ?? '',
     employeeId: json['employeeId']?.toString() ?? '',
     plannedStartDateTime: json['plannedStartDateTime']?.toString() ?? '',
     plannedEndDateTime: json['plannedEndDateTime']?.toString() ?? '',
@@ -54,6 +55,6 @@ class Mission {
     status:  (json['status'] != null)
         ? int.tryParse(json['status'].toString())
         : null,
-
+    customer: Customer.fromJson(json['customer']),
   );
 }

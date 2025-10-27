@@ -131,7 +131,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
                           ),
                           SizedBox(width: 12),
                           Text(
-                            mission.comment!,
+                            mission.customer.getFullName(),
                             style: Theme.of(context).textTheme.labelLarge,
                           ),
                         ],
@@ -174,7 +174,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
                     ),
                     SizedBox(width: 8),
                     Text(
-                      'Max Mustermann Musterstraße 12',
+                      mission.customer.address!,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ],

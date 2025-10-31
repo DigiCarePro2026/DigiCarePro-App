@@ -90,4 +90,7 @@ const Map<String, String> enUS = {
   'start': 'Start',
   'end': 'End',
   'submit_mission': 'Submit mission',
+  'check_repeat_pass_message': 'New password and repeat it must be equal',
+  'all_fields_are_required': 'All fields are required',
+
 };

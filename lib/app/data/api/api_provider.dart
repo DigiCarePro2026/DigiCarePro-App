@@ -65,41 +65,15 @@ class ApiProvider {
         onError: (error, handler) {
           getX.Get.back();
 
-          // Handle errors globally
-
-          switch (error.response?.statusCode) {
-            case 401:
-              logger.e('Unauthorized error, redirecting to login...');
-              getX.Get.offAllNamed(Routes.LOGIN);
-
-              // refreshToken();
-              break;
-          }
-          /*
-          case 404:
-            snackError(message: '404');
-            break;
-
-          default:
-          // Handle other errors
-        }*/
-
-          // _handleError(error);
-
           logger.e('Error occurred: ${error.message}');
 
-          return handler.next(
-            DioException.connectionError(
-              requestOptions: error.requestOptions,
-              reason: 'Connection failed',
-            ),
-          ); // Continue to the next interceptor or error
+          return handler.next(error); // Continue to the next interceptor or error
         },
       ),
     );
   }
 
-  refreshToken(){
+  refreshToken() {
     //fixme
   }
 
@@ -176,10 +150,7 @@ class ApiProvider {
     T Function(dynamic)? fromJson,
   }) async {
     try {
-      Response response = await dio.delete(
-        '$path/$pathParameter',
-        options: Options(headers: headers),
-      );
+      Response response = await dio.delete('$path/$pathParameter', options: Options(headers: headers));
 
       return _handleResponse(response, fromJson);
     } catch (e) {
@@ -187,14 +158,9 @@ class ApiProvider {
     }
   }
 
-  Future<Either<ApiError, AppResponse<T>>> _handleResponse<T>(
-    Response response,
-    T Function(dynamic)? fromJson,
-  ) async {
+  Future<Either<ApiError, AppResponse<T>>> _handleResponse<T>(Response response, T Function(dynamic)? fromJson) async {
     if (!response.data['isSuccess']) {
-      return Left(
-        ApiError(code: response.statusCode!, message: response.data['message']),
-      );
+      return Left(ApiError(code: response.statusCode!, message: response.data['message']));
     }
 
     T? data;
@@ -213,6 +179,11 @@ class ApiProvider {
   Future<Either<ApiError, T>> _handleError<T>(dynamic e) async {
     if (e is DioError && e.response != null) {
       switch (e.response!.statusCode) {
+        case 401:
+          logger.e('Unauthorized error, redirecting to login...');
+          getX.Get.offAllNamed(Routes.LOGIN);
+          break;
+
         case 403:
           // show403Dialog(message: e.response!.data['message']);
           break;
@@ -224,10 +195,7 @@ class ApiProvider {
           break;
       }
 
-      ApiError error = ApiError(
-        code: e.response!.statusCode!,
-        message: e.response!.data['message'],
-      );
+      ApiError error = ApiError(code: e.response!.statusCode!, message: e.response!.data['message']);
       return Left(error);
     } else {
       // Handle other types of errors if needed

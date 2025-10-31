@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
+import 'package:digi_care_pro/app/data/api/api_models/change_password.dart';
 import 'package:digi_care_pro/app/data/api/api_models/forget_password.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get_profile.dart';
 import 'package:digi_care_pro/app/data/api/api_models/login.dart';
@@ -31,6 +32,11 @@ class AccountRepository {
     ForgetPasswordRequest request, {
     String? loadingMessage,
   }) async => AccountRemoteDataSource.get().forgetPassword(request, loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse>> changePassword(
+    ChangePasswordRequest request, {
+    String? loadingMessage,
+  }) async => AccountRemoteDataSource.get().changePassword(request, loadingMessage: loadingMessage);
 
   logout() {
     Pref.setString(PrefKey.accessToken, null);

@@ -30,7 +30,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
             children: [
               Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).padding.top + 200,
+                height: MediaQuery.of(context).padding.top + 170,
                 color: Theme.of(context).colorScheme.primary,
                 child: Image.asset(
                   'assets/images/bg-customer-detail-header.png',
@@ -54,10 +54,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                             onTap: () => Get.back(),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Icon(
-                                Icons.arrow_back_ios,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
+                              child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.onPrimary),
                             ),
                           ),
                         ],
@@ -67,12 +64,9 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                         children: [
                           Text(
                             'mission_details'.tr,
-                            style: Theme.of(context).appBarTheme.titleTextStyle!
-                                .copyWith(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onPrimary,
-                                ),
+                            style: Theme.of(
+                              context,
+                            ).appBarTheme.titleTextStyle!.copyWith(color: Theme.of(context).colorScheme.onPrimary),
                           ),
                         ],
                       ),
@@ -98,16 +92,12 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                 children: [
                                   CircleAvatar(
                                     radius: 32,
-                                    backgroundImage: AssetImage(
-                                      'assets/images/profile-sample.jpg',
-                                    ),
+                                    backgroundImage: NetworkImage(logic.mission.customer.profileImageUrl!),
                                   ),
                                   SizedBox(width: 12),
                                   Text(
-                                    'Mostafa Babaie',
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.headlineLarge,
+                                    logic.mission.customer.getFullName(),
+                                    style: Theme.of(context).textTheme.headlineLarge,
                                   ),
                                 ],
                               ),
@@ -121,10 +111,8 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                   ),
                                   SizedBox(width: 8),
                                   Text(
-                                    'Max Mustermann Musterstraße 12',
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.titleMedium,
+                                    logic.mission.customer.address ?? '',
+                                    style: Theme.of(context).textTheme.titleMedium,
                                   ),
                                 ],
                               ),
@@ -139,9 +127,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                   SizedBox(width: 8),
                                   Text(
                                     logic.mission.plannedStartDateTime!.substring(0, 10),
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.titleMedium,
+                                    style: Theme.of(context).textTheme.titleMedium,
                                   ),
                                   SizedBox(width: 32),
                                   SvgPicture.asset(
@@ -151,10 +137,8 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                   ),
                                   SizedBox(width: 8),
                                   Text(
-                                    '15:25',
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.titleMedium,
+                                    logic.mission.plannedStartDateTime!.substring(11, 16),
+                                    style: Theme.of(context).textTheme.titleMedium,
                                   ),
                                   SizedBox(width: 4),
                                   SvgPicture.asset(
@@ -163,14 +147,12 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                   ),
                                   SizedBox(width: 4),
                                   Text(
-                                    '17:00',
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.titleMedium,
+                                    logic.mission.plannedEndDateTime!.substring(11, 16),
+                                    style: Theme.of(context).textTheme.titleMedium,
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 12),
+                             /* SizedBox(height: 12),
                               Row(
                                 children: [
                                   SvgPicture.asset(
@@ -179,14 +161,9 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                     width: 16,
                                   ),
                                   SizedBox(width: 8),
-                                  Text(
-                                    '120 €',
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.titleMedium,
-                                  ),
+                                  Text('120 €', style: Theme.of(context).textTheme.titleMedium),
                                 ],
-                              ),
+                              ),*/
                             ],
                           ),
                         ),
@@ -198,16 +175,13 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                       padding: const EdgeInsets.only(left: 24, right: 24),
                       child: GridView.builder(
                         itemCount: logic.menuItems.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, // 👈 سه ستون
-                              mainAxisSpacing: 16, // فاصله عمودی بین آیتم‌ها
-                              crossAxisSpacing: 16, // فاصله افقی بین آیتم‌ها
-                              childAspectRatio:
-                                  1.3, // نسبت عرض به ارتفاع آیتم‌ها
-                            ),
-                        itemBuilder: (ctx, index) =>
-                            _buildItem(logic.menuItems[index]),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, // 👈 سه ستون
+                          mainAxisSpacing: 16, // فاصله عمودی بین آیتم‌ها
+                          crossAxisSpacing: 16, // فاصله افقی بین آیتم‌ها
+                          childAspectRatio: 1.3, // نسبت عرض به ارتفاع آیتم‌ها
+                        ),
+                        itemBuilder: (ctx, index) => _buildItem(logic.menuItems[index]),
                       ),
                     ),
                   ),
@@ -222,11 +196,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
 
   _buildItem(MenuModel menu) {
     return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: menu.color.withAlpha(30),
-        borderRadius: BorderRadius.circular(cardRadius),
-      ),
+      decoration: BoxDecoration(color: menu.color.withAlpha(30), borderRadius: BorderRadius.circular(cardRadius)),
       child: InkWell(
         borderRadius: BorderRadius.circular(cardRadius),
         onTap: menu.callback,
@@ -236,8 +206,17 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(menu.icon, color: menu.color, width: 32),
-              SizedBox(height: 32),
-              Text(menu.title, style: Theme.of(context).textTheme.labelMedium, maxLines: 2,),
+              SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  menu.title,
+                  style: Theme.of(context).textTheme.labelMedium,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                ),
+              )
             ],
           ),
         ),
@@ -252,10 +231,5 @@ class MenuModel {
   final Color color;
   final VoidCallback? callback;
 
-  MenuModel({
-    required this.title,
-    required this.icon,
-    required this.color,
-    this.callback,
-  });
+  MenuModel({required this.title, required this.icon, required this.color, this.callback});
 }

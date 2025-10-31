@@ -43,38 +43,12 @@ class _MissionsScreenState extends State<MissionsScreen> {
                       child: CalendarWidget(
                         selectionMode: CalendarSelectionMode.single,
                         activeMinMaxMonth: 2,
-                        onDateSelected: (date) {
-                          logic.changeDate(date);
+                        onDateSelected: (date, isChangedMonth) {
+                          if(isChangedMonth) {
+                            logic.changeDate(date);
+                          }
                         },
-                        events: {
-                          DateTime(2025, 10, 10): [
-                            Event(
-                              title: "Meeting",
-                              startTime: TimeOfDay(hour: 9, minute: 0),
-                              endTime: TimeOfDay(hour: 10, minute: 0),
-                            ),
-                            Event(
-                              title: "Meeting",
-                              startTime: TimeOfDay(hour: 9, minute: 0),
-                              endTime: TimeOfDay(hour: 10, minute: 0),
-                            ),
-                            Event(
-                              title: "Meeting",
-                              startTime: TimeOfDay(hour: 9, minute: 0),
-                              endTime: TimeOfDay(hour: 10, minute: 0),
-                            ),
-                            Event(
-                              title: "Meeting",
-                              startTime: TimeOfDay(hour: 9, minute: 0),
-                              endTime: TimeOfDay(hour: 10, minute: 0),
-                            ),
-                            Event(
-                              title: "Meeting",
-                              startTime: TimeOfDay(hour: 9, minute: 0),
-                              endTime: TimeOfDay(hour: 10, minute: 0),
-                            ),
-                          ],
-                        },
+                        events: logic.groupMissionsByDate(),
                       ),
                     ),
                   ],
@@ -84,6 +58,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
                 pinned: true,
                 delegate: _ChipsHeaderDelegate(
                   selectedMissionType: _selectedMissionType,
+                  count: logic.missions.length,
                   onMissionTypeSelected: (missionType) {
                     setState(() {
                       _selectedMissionType = missionType;
@@ -123,17 +98,9 @@ class _MissionsScreenState extends State<MissionsScreen> {
                     Expanded(
                       child: Row(
                         children: [
-                          CircleAvatar(
-                            radius: 16,
-                            backgroundImage: AssetImage(
-                              'assets/images/profile-sample.jpg',
-                            ),
-                          ),
+                          CircleAvatar(radius: 16, backgroundImage: NetworkImage(mission.customer.profileImageUrl!)),
                           SizedBox(width: 12),
-                          Text(
-                            mission.customer.getFullName(),
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
+                          Text(mission.customer.getFullName(), style: Theme.of(context).textTheme.labelLarge),
                         ],
                       ),
                     ),
@@ -152,14 +119,8 @@ class _MissionsScreenState extends State<MissionsScreen> {
                       itemBuilder: (ctx) {
                         return [
                           PopupMenuItem(value: 'call', child: Text('call'.tr)),
-                          PopupMenuItem(
-                            value: 'routing',
-                            child: Text('routing'.tr),
-                          ),
-                          PopupMenuItem(
-                            value: 'add_mission',
-                            child: Text('add_mission'.tr),
-                          ),
+                          PopupMenuItem(value: 'routing', child: Text('routing'.tr)),
+                          PopupMenuItem(value: 'add_mission', child: Text('add_mission'.tr)),
                         ];
                       },
                     ),
@@ -167,65 +128,35 @@ class _MissionsScreenState extends State<MissionsScreen> {
                 ),
                 Row(
                   children: [
-                    SvgPicture.asset(
-                      'assets/icons/location.svg',
-                      color: Theme.of(context).disabledColor,
-                      width: 16,
-                    ),
+                    SvgPicture.asset('assets/icons/location.svg', color: Theme.of(context).disabledColor, width: 16),
                     SizedBox(width: 8),
-                    Text(
-                      mission.customer.address!,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
+                    Text(mission.customer.address!, style: Theme.of(context).textTheme.titleMedium),
                   ],
                 ),
                 SizedBox(height: 8),
                 Row(
                   children: [
-                    SvgPicture.asset(
-                      'assets/icons/calendar2.svg',
-                      color: Theme.of(context).disabledColor,
-                      width: 16,
-                    ),
+                    SvgPicture.asset('assets/icons/calendar2.svg', color: Theme.of(context).disabledColor, width: 16),
                     SizedBox(width: 8),
                     Text(
                       mission.plannedStartDateTime!.substring(0, 10),
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     SizedBox(width: 32),
-                    SvgPicture.asset(
-                      'assets/icons/clock.svg',
-                      color: Theme.of(context).disabledColor,
-                      width: 16,
-                    ),
+                    SvgPicture.asset('assets/icons/clock.svg', color: Theme.of(context).disabledColor, width: 16),
                     SizedBox(width: 8),
                     Text(
                       mission.plannedStartDateTime!.substring(11, 16),
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     SizedBox(width: 4),
-                    SvgPicture.asset(
-                      'assets/icons/arrow-long-right.svg',
-                      color: Theme.of(context).disabledColor,
-                    ),
+                    SvgPicture.asset('assets/icons/arrow-long-right.svg', color: Theme.of(context).disabledColor),
                     SizedBox(width: 4),
-                    Text(
-                      mission.plannedEndDateTime!.substring(11, 16),
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
+                    Text(mission.plannedEndDateTime!.substring(11, 16), style: Theme.of(context).textTheme.titleMedium),
                   ],
                 ),
-                Divider(
-                  height: 12,
-                  thickness: 0.5,
-                  color: Theme.of(context).dividerColor,
-                ),
-                Text(
-                  'Todo',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleSmall!.copyWith(color: AppColors.missionNew),
-                ),
+                Divider(height: 12, thickness: 0.5, color: Theme.of(context).dividerColor),
+                Text('Todo', style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionNew)),
                 /*Row(
                   children: [
                     if (index % 3 == 2)
@@ -266,18 +197,12 @@ class _MissionsScreenState extends State<MissionsScreen> {
 class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
   final MissionType selectedMissionType;
   final Function(MissionType) onMissionTypeSelected;
+  final int count;
 
-  _ChipsHeaderDelegate({
-    required this.selectedMissionType,
-    required this.onMissionTypeSelected,
-  });
+  _ChipsHeaderDelegate({required this.selectedMissionType, required this.onMissionTypeSelected, required this.count});
 
   @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       color: Theme.of(context).colorScheme.surface,
       padding: const EdgeInsets.all(bodyPadding),
@@ -286,7 +211,7 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
         physics: BouncingScrollPhysics(),
         child: Row(
           children: [
-            _buildChipsItem(context, missionType: MissionType.all),
+            _buildChipsItem(context, missionType: MissionType.all, count: count),
             _buildChipsItem(context, missionType: MissionType.todo),
             _buildChipsItem(context, missionType: MissionType.inProgress),
             _buildChipsItem(context, missionType: MissionType.done),
@@ -296,10 +221,7 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
     );
   }
 
-  Widget _buildChipsItem(
-    BuildContext context, {
-    required MissionType missionType,
-  }) {
+  Widget _buildChipsItem(BuildContext context, {required MissionType missionType, int? count}) {
     return Padding(
       padding: EdgeInsetsDirectional.only(end: 10.0),
       child: InkWell(
@@ -309,22 +231,14 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
         },
         child: Container(
           decoration: BoxDecoration(
-            border: Border.all(
-              color: Theme.of(context).colorScheme.primary.withAlpha(200),
-              width: 1,
-            ),
+            border: Border.all(color: Theme.of(context).colorScheme.primary.withAlpha(200), width: 1),
             borderRadius: BorderRadius.circular(24),
             color: selectedMissionType == missionType
                 ? Theme.of(context).colorScheme.primary
                 : Theme.of(context).colorScheme.surface,
           ),
           child: Padding(
-            padding: const EdgeInsets.only(
-              top: 0,
-              bottom: 0,
-              right: 12,
-              left: 12,
-            ),
+            padding: const EdgeInsets.only(top: 0, bottom: 0, right: 12, left: 12),
             child: Row(
               children: [
                 Text(
@@ -338,37 +252,23 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
                 if (missionType == MissionType.all) SizedBox(width: 16),
                 if (missionType == MissionType.all)
                   Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.red,
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: BoxDecoration(color: AppColors.red, shape: BoxShape.circle),
                     constraints: BoxConstraints(minWidth: 20, minHeight: 20),
                     child: Center(
                       child: Text(
-                        '23',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        count.toString(),
+                        style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
                 if (missionType != MissionType.all)
                   Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.red,
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: BoxDecoration(color: AppColors.red, shape: BoxShape.circle),
                     constraints: BoxConstraints(minWidth: 0, minHeight: 20),
                     child: Center(
                       child: Text(
                         '',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -388,7 +288,6 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return oldDelegate is _ChipsHeaderDelegate &&
-        (oldDelegate.selectedMissionType != selectedMissionType);
+    return oldDelegate is _ChipsHeaderDelegate && (oldDelegate.selectedMissionType != selectedMissionType || oldDelegate.count != count);
   }
 }

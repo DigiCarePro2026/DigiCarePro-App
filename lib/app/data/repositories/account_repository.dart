@@ -46,7 +46,7 @@ class AccountRepository {
     Pref.setString(PrefKey.profile, jsonEncode(profile.toJson()));
   }
 
-  fetchProfile() {
+  Profile fetchProfile() {
     return Profile.fromJson(jsonDecode(Pref.getString(PrefKey.profile)!));
   }
 }

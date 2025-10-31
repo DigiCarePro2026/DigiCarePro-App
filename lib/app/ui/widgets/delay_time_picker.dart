@@ -5,8 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../theme/app_dimens.dart' show fieldRadius;
 
-class TimePickerField extends StatefulWidget {
-  const TimePickerField({
+class DelayTimePickerField extends StatefulWidget {
+  const DelayTimePickerField({
     super.key,
     required this.title,
     this.initialValue,
@@ -22,10 +22,10 @@ class TimePickerField extends StatefulWidget {
   final bool enabled;
 
   @override
-  State<TimePickerField> createState() => _TimePickerFieldState();
+  State<DelayTimePickerField> createState() => _DelayTimePickerFieldState();
 }
 
-class _TimePickerFieldState extends State<TimePickerField> {
+class _DelayTimePickerFieldState extends State<DelayTimePickerField> {
   int _hours = 0;
   int _minutes = 0;
 
@@ -45,7 +45,9 @@ class _TimePickerFieldState extends State<TimePickerField> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textColor = widget.enabled ? theme.textTheme.bodyMedium?.color : theme.disabledColor;
+    final textColor = widget.enabled
+        ? theme.textTheme.bodyMedium?.color
+        : theme.disabledColor;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,23 +61,23 @@ class _TimePickerFieldState extends State<TimePickerField> {
             color: widget.enabled ? null : theme.disabledColor.withOpacity(0.1),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
+          child: Row(
             children: [
+              if (widget.showHours) ...[
+                _buildNumberSpinner(
+                  label: 'hours'.tr,
+                  value: _hours,
+                  max: 23,
+                  onChanged: (val) {
+                    setState(() => _hours = val);
+                    _updateValue();
+                  },
+                  textColor: textColor,
+                ),
+                const SizedBox(width: 16),
+              ],
               _buildNumberSpinner(
-                value: _hours,
-                max: 23,
-                onChanged: (val) {
-                  setState(() => _hours = val);
-                  _updateValue();
-                },
-                textColor: textColor,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text(':', style: TextStyle(fontSize: 22),),
-              ),
-              _buildNumberSpinner(
+                label: 'minutes'.tr,
                 value: _minutes,
                 step: 5,
                 max: 55,
@@ -93,6 +95,7 @@ class _TimePickerFieldState extends State<TimePickerField> {
   }
 
   Widget _buildNumberSpinner({
+    required String label,
     required int value,
     required int max,
     required ValueChanged<int> onChanged,
@@ -103,33 +106,11 @@ class _TimePickerFieldState extends State<TimePickerField> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Text(label, style: TextStyle(fontSize: 13, color: textColor)),
           const SizedBox(height: 4),
-          Column(
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                  onTap: value < max ? () => onChanged(value + step) : null,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary.withAlpha(200),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset('assets/icons/plus.svg', color: Theme.of(context).colorScheme.onPrimary),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  value.toString().padLeft(2, '0'),
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
-                ),
-              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: InkWell(
@@ -141,7 +122,40 @@ class _TimePickerFieldState extends State<TimePickerField> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset('assets/icons/minus.svg', color: Theme.of(context).colorScheme.onPrimary),
+                      child: SvgPicture.asset(
+                        'assets/icons/minus.svg',
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  value.toString().padLeft(2, '0'),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: textColor,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: InkWell(
+                  onTap: value < max ? () => onChanged(value + step) : null,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary.withAlpha(200),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset(
+                        'assets/icons/plus.svg',
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
                     ),
                   ),
                 ),

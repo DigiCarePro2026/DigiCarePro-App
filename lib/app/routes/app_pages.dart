@@ -7,11 +7,14 @@ import 'package:digi_care_pro/app/ui/pages/main/notifications_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/change_language_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/customer_list_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/employee_list_screen.dart';
+import 'package:digi_care_pro/app/ui/pages/menu/employee_profile_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/leave_request_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/requests_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/support_screen.dart';
+import 'package:digi_care_pro/app/ui/pages/mission/create_mission_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/mission_details_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/signature_screen.dart';
+import 'package:digi_care_pro/app/ui/pages/mission/upload_document_screen.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
@@ -36,6 +39,22 @@ class AppPages {
       page: () =>  MissionDetailsScreen(mission: Get.arguments as Mission,),
     ),
     GetPage(
+      name: Routes.MISSION_UPLOAD_DOC,
+      page: () => const UploadDocumentScreen(),
+    ),
+    GetPage(
+      name: Routes.CREATE_MISSION,
+      page: () => const CreateMissionScreen(),
+    ),
+    GetPage(
+      name: Routes.MISSION_SIGNATURE,
+      page: () => const SignatureScreen(),
+    ),
+    GetPage(
+      name: Routes.EMPLOYEE_PROFILE,
+      page: () => const EmployeeProfileScreen(),
+    ),
+    GetPage(
       name: Routes.EMPLOYEE_LIST,
       page: () => const EmployeeListScreen(),
     ),
@@ -58,10 +77,6 @@ class AppPages {
     GetPage(
       name: Routes.LEAVE_REQUEST,
       page: () => const LeaveRequestScreen(),
-    ),
-    GetPage(
-      name: Routes.MISSION_SIGNATURE,
-      page: () => const SignatureScreen(),
     ),
     GetPage(
       name: Routes.SUPPORT,

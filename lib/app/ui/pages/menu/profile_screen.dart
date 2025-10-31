@@ -69,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       InkWell(
                         borderRadius: BorderRadius.circular(12),
-                        onTap: () {},
+                        onTap: () => Get.toNamed(Routes.EMPLOYEE_PROFILE),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: SvgPicture.asset(

@@ -1,9 +1,13 @@
 import 'package:get/get.dart';
 
-enum LeaveType{
-  personal,
-  vocation,
-  sick,
+enum LeaveType {
+  vocation(1),
+  personal(2),
+  sick(3);
+
+  final int code;
+
+  const LeaveType(this.code);
 }
 
 extension LeaveTypeExtension on LeaveType {

@@ -12,7 +12,7 @@ import 'package:digi_care_pro/app/ui/widgets/calendar_widget.dart';
 import 'package:digi_care_pro/app/ui/widgets/primary_button.dart';
 import 'package:digi_care_pro/app/ui/widgets/secondary_button.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
-import 'package:digi_care_pro/app/ui/widgets/time_picker.dart';
+import 'package:digi_care_pro/app/ui/widgets/delay_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -42,10 +42,24 @@ class MissionDetailsLogic extends GetxController {
         title: 'call'.tr,
         icon: 'assets/icons/call.svg',
         color: AppColors.callColor,
-        callback: () => _makeCall('123'),
+        callback: () => _makeCall(mission.customer.mobile ?? mission.customer.phone ?? ''),
       ),
-      MenuModel(title: 'upload_document'.tr, icon: 'assets/icons/upload.svg', color: AppColors.uploadColor),
-      MenuModel(title: 'add_mission'.tr, icon: 'assets/icons/add-mission.svg', color: AppColors.addMissionColor),
+      MenuModel(
+        title: 'upload_document'.tr,
+        icon: 'assets/icons/upload.svg',
+        color: AppColors.uploadColor,
+        callback: () {
+          Get.toNamed(Routes.MISSION_UPLOAD_DOC);
+        },
+      ),
+      MenuModel(
+        title: 'add_mission'.tr,
+        icon: 'assets/icons/add-mission.svg',
+        color: AppColors.addMissionColor,
+        callback: () {
+          Get.toNamed(Routes.CREATE_MISSION);
+        },
+      ),
       MenuModel(
         title: 'customer_signature'.tr,
         icon: 'assets/icons/signature.svg',
@@ -102,7 +116,9 @@ class MissionDetailsLogic extends GetxController {
   }
 
   _route() async {
-    final Uri googleMapsUri = Uri.parse('https://www.google.com/maps/dir/?api=1&destination=35.6892,51.3890');
+    final Uri googleMapsUri = Uri.parse(
+      'https://www.google.com/maps/dir/?api=1&destination=${mission.customer.latitude},${mission.customer.longitude}',
+    );
     await launchUrl(googleMapsUri, mode: LaunchMode.externalApplication);
   }
 
@@ -170,20 +186,22 @@ class MissionDetailsLogic extends GetxController {
 
   _delayReportApi(int minutes) async {
     var result = await MissionRepository.get().delayReport(
-        DelayMissionRequest(missionId: mission.id, delayMinutes: minutes), loadingMessage: 'loading_delay_mission'.tr
+      DelayMissionRequest(missionId: mission.id, delayMinutes: minutes),
+      loadingMessage: 'loading_delay_mission'.tr,
     );
 
     result.fold(
-          (error) {
+      (error) {
         snackError(message: error.message);
       },
-          (response) {
+      (response) {
         snackSuccess(message: response.message);
 
         //todo: what todo?
       },
     );
   }
+
   //</editor-fold>
 
   Future<String?> showMissionReportBottomSheet({String? initialValue}) async {
@@ -322,7 +340,7 @@ class MissionDetailsLogic extends GetxController {
                   AppDropdownField<CancelMissionType>(
                     title: 'reason'.tr,
                     onChanged: (value) {
-                      setState((){
+                      setState(() {
                         selectedValue = value;
                       });
                     },
@@ -360,7 +378,8 @@ class MissionDetailsLogic extends GetxController {
 
   _cancelMissionApi(String reason) async {
     var result = await MissionRepository.get().cancelMission(
-      CancelMissionRequest(missionId: mission.id, reason: reason), loadingMessage: 'loading_cancel_mission'.tr
+      CancelMissionRequest(missionId: mission.id, reason: reason),
+      loadingMessage: 'loading_cancel_mission'.tr,
     );
 
     result.fold(
@@ -374,5 +393,6 @@ class MissionDetailsLogic extends GetxController {
       },
     );
   }
+
   //</editor-fold>
 }

@@ -57,7 +57,7 @@ class MissionDetailsLogic extends GetxController {
         icon: 'assets/icons/add-mission.svg',
         color: AppColors.addMissionColor,
         callback: () {
-          Get.toNamed(Routes.CREATE_MISSION);
+          Get.toNamed(Routes.CREATE_MISSION, arguments: mission.customer.id);
         },
       ),
       MenuModel(

@@ -156,7 +156,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
                   ],
                 ),
                 Divider(height: 12, thickness: 0.5, color: Theme.of(context).dividerColor),
-                Text('Todo', style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionNew)),
+                Text(mission.statusName!, style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionNew)),
                 /*Row(
                   children: [
                     if (index % 3 == 2)

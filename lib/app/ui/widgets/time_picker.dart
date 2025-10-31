@@ -16,8 +16,8 @@ class TimePickerField extends StatefulWidget {
   });
 
   final String title;
-  final Duration? initialValue;
-  final ValueChanged<Duration>? onChanged;
+  final TimeOfDay? initialValue;
+  final ValueChanged<TimeOfDay>? onChanged;
   final bool showHours;
   final bool enabled;
 
@@ -26,20 +26,20 @@ class TimePickerField extends StatefulWidget {
 }
 
 class _TimePickerFieldState extends State<TimePickerField> {
-  int _hours = 0;
-  int _minutes = 0;
+  int _hour = 0;
+  int _minute = 0;
 
   @override
   void initState() {
     super.initState();
-    final init = widget.initialValue ?? Duration.zero;
-    _hours = init.inHours;
-    _minutes = init.inMinutes % 60;
+    final init = widget.initialValue ?? TimeOfDay.now();
+    _hour = init.hour;
+    _minute = 0;
   }
 
   void _updateValue() {
-    final duration = Duration(hours: _hours, minutes: _minutes);
-    widget.onChanged?.call(duration);
+    final timeOfDay = TimeOfDay(hour: _hour, minute: _minute);
+    widget.onChanged?.call(timeOfDay);
   }
 
   @override
@@ -63,10 +63,10 @@ class _TimePickerFieldState extends State<TimePickerField> {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               _buildNumberSpinner(
-                value: _hours,
+                value: _hour,
                 max: 23,
                 onChanged: (val) {
-                  setState(() => _hours = val);
+                  setState(() => _hour = val);
                   _updateValue();
                 },
                 textColor: textColor,
@@ -76,11 +76,11 @@ class _TimePickerFieldState extends State<TimePickerField> {
                 child: Text(':', style: TextStyle(fontSize: 22),),
               ),
               _buildNumberSpinner(
-                value: _minutes,
+                value: _minute,
                 step: 5,
                 max: 55,
                 onChanged: (val) {
-                  setState(() => _minutes = val);
+                  setState(() => _minute = val);
                   _updateValue();
                 },
                 textColor: textColor,

@@ -24,6 +24,8 @@ dependencies:
   url_launcher: ^6.3.2
   syncfusion_flutter_signaturepad: ^31.2.2
   camera: ^0.10.5+2
+  firebase_core: ^4.2.0
+  firebase_messaging: ^16.0.3
 
 
 dev_dependencies:

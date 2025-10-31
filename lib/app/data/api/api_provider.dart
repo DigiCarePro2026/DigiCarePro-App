@@ -124,6 +124,28 @@ class ApiProvider {
     }
   }
 
+  Future<Either<ApiError, AppResponse<T>>> put<T>({
+    required String path,
+    Map<String, dynamic>? headers,
+    required dynamic body,
+    T Function(dynamic)? fromJson,
+    String? loadingMessage,
+  }) async {
+    DialogHandler.showLoading(loadingMessage ?? 'loading_default_message'.tr);
+
+    try {
+      Response response = await dio.put(
+        path,
+        data: body,
+        options: Options(headers: headers),
+      );
+
+      return _handleResponse(response, fromJson);
+    } catch (e) {
+      return _handleError(e);
+    }
+  }
+
   Future<Either<ApiError, AppResponse<T>>> patch<T>({
     required String path,
     Map<String, dynamic>? headers,

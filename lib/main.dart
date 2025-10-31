@@ -1,6 +1,7 @@
 import 'package:digi_care_pro/app/data/constants/pref_key.dart';
 import 'package:digi_care_pro/app/ui/theme/app_theme.dart';
 import 'package:digi_care_pro/config/translations/app_translations.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -14,8 +15,15 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Pref.init();
+  _initFirebaseServices();
 
   runApp(const MyApp());
+}
+
+_initFirebaseServices() async {
+  await Firebase.initializeApp(
+    // options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 class MyApp extends StatelessWidget {

@@ -333,9 +333,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ).textTheme.labelMedium,
                                   ),
                                 ),
-                              Switch(value: logic.profile.receiveNotifications ?? false, onChanged: (status){
-                                logic.profile.receiveNotifications = status;
-                                logic.updateProfile();
+                              Switch(value: logic.profile.receiveNotifications, onChanged: (value){
+                                logic.changeEmployeeSettings(value);
                               })
                               ],
                             ),

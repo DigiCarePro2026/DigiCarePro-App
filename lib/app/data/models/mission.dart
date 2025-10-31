@@ -16,6 +16,7 @@ class Mission {
   final bool? endedByAdmin;
   final bool? endedManually;
   final int? status;
+  final String? statusName;
   final Customer customer;
 
   Mission({
@@ -34,6 +35,7 @@ class Mission {
     this.endedByAdmin,
     this.endedManually,
     this.status,
+    this.statusName,
     required this.customer,
   });
 
@@ -55,6 +57,7 @@ class Mission {
     status:  (json['status'] != null)
         ? int.tryParse(json['status'].toString())
         : null,
+    statusName: json['statusName']?.toString() ?? '',
     customer: Customer.fromJson(json['customer']),
   );
 }

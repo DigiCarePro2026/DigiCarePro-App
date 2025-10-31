@@ -44,7 +44,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.CREATE_MISSION,
-      page: () => const CreateMissionScreen(),
+      page: () => CreateMissionScreen(customerId: Get.arguments as String,),
     ),
     GetPage(
       name: Routes.MISSION_SIGNATURE,

@@ -92,5 +92,5 @@ const Map<String, String> enUS = {
   'submit_mission': 'Submit mission',
   'check_repeat_pass_message': 'New password and repeat it must be equal',
   'all_fields_are_required': 'All fields are required',
-
+  'change_employee_settings_message': 'Requesting change settings',
 };

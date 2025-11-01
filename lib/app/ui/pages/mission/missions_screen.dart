@@ -44,7 +44,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
                         selectionMode: CalendarSelectionMode.single,
                         activeMinMaxMonth: 2,
                         onDateSelected: (date, isChangedMonth) {
-                          if(isChangedMonth) {
+                          if (isChangedMonth) {
                             logic.changeDate(date);
                           }
                         },
@@ -156,7 +156,10 @@ class _MissionsScreenState extends State<MissionsScreen> {
                   ],
                 ),
                 Divider(height: 12, thickness: 0.5, color: Theme.of(context).dividerColor),
-                Text(mission.statusName!, style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionNew)),
+                Text(
+                  mission.statusName!,
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.missionNew),
+                ),
                 /*Row(
                   children: [
                     if (index % 3 == 2)
@@ -288,6 +291,7 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return oldDelegate is _ChipsHeaderDelegate && (oldDelegate.selectedMissionType != selectedMissionType || oldDelegate.count != count);
+    return oldDelegate is _ChipsHeaderDelegate &&
+        (oldDelegate.selectedMissionType != selectedMissionType || oldDelegate.count != count);
   }
 }

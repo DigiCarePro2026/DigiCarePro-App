@@ -1,5 +1,6 @@
 import 'package:digi_care_pro/app/data/api/api_models/forget_password.dart';
 import 'package:digi_care_pro/app/data/repositories/account_repository.dart';
+import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +14,8 @@ class ForgetPasswordLogic extends GetxController {
       snackError(message: error.message);
     }, (response) {
       snackSuccess(message: response.message);
+
+      Get.toNamed(Routes.RESET_PASSWORD, arguments: email);
     });
   }
 }

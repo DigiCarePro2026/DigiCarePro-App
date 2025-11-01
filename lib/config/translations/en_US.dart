@@ -93,4 +93,7 @@ const Map<String, String> enUS = {
   'check_repeat_pass_message': 'New password and repeat it must be equal',
   'all_fields_are_required': 'All fields are required',
   'change_employee_settings_message': 'Requesting change settings',
+  'refresh_token_401_message': 'Your account session is expired',
+  'reset_password': 'Reset password',
+  'verification_code': 'Verification code',
 };

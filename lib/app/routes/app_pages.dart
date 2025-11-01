@@ -2,6 +2,7 @@ import 'package:digi_care_pro/app/data/models/mission.dart';
 import 'package:digi_care_pro/app/ui/pages/account/change_password_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/account/forget_password_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/account/login_screen.dart';
+import 'package:digi_care_pro/app/ui/pages/account/reset_password_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/main/main_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/main/notifications_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/change_language_screen.dart';
@@ -33,6 +34,10 @@ class AppPages {
     GetPage(
       name: Routes.FORGET_PASSWORD,
       page: () => const ForgetPasswordScreen(),
+    ),
+    GetPage(
+      name: Routes.RESET_PASSWORD,
+      page: () => ResetPasswordScreen(email: Get.arguments as String,),
     ),
     GetPage(
       name: Routes.MISSION_DETAILS,

@@ -19,7 +19,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   @override
   void initState() {
-    Get.put(ForgetPasswordLogic());
+    Get.put(logic);
     super.initState();
   }
 

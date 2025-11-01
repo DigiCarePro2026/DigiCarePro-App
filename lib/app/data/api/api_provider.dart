@@ -4,12 +4,15 @@ import 'package:digi_care_pro/app/data/constants/pref_key.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/pref.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
+import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:digi_care_pro/app/utils/globals.dart';
 import 'package:digi_care_pro/app/utils/dialog_handler.dart';
 import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as getX;
+
+import 'api_models/login.dart';
 
 class ApiProvider {
   var dio = Dio(
@@ -71,10 +74,6 @@ class ApiProvider {
         },
       ),
     );
-  }
-
-  refreshToken() {
-    //fixme
   }
 
   Future<Either<ApiError, AppResponse<T>>> get<T>({
@@ -202,8 +201,9 @@ class ApiProvider {
     if (e is DioError && e.response != null) {
       switch (e.response!.statusCode) {
         case 401:
-          logger.e('Unauthorized error, redirecting to login...');
-          getX.Get.offAllNamed(Routes.LOGIN);
+          logger.e('Unauthorized error, call refreshToken...');
+          
+          refreshToken();
           break;
 
         case 403:
@@ -223,5 +223,29 @@ class ApiProvider {
       // Handle other types of errors if needed
       return Left(ApiError(code: 0, message: 'Failed to complete request: $e'));
     }
+  }
+
+  refreshToken() async {
+    final refreshToken = Pref.getString(PrefKey.refreshToken);
+
+    var result = await post<LoginResponse>(
+      path: '/auth/refresh-token',
+      body: {'refreshToken' : refreshToken},
+      fromJson: (json) => LoginResponse.fromJson(json),
+    );
+
+    result.fold((error){
+      if(error.code == 401){
+        Pref.setString(PrefKey.accessToken, null);
+        Pref.setString(PrefKey.refreshToken, null);
+
+        snackError(message: 'refresh_token_401_message'.tr);
+        getX.Get.offAllNamed(Routes.LOGIN);
+      }else{
+        logger.i('refreshToken error(not 401) : ${error.message}');
+      }
+    }, (response){
+      logger.i('refreshToken success : ${response.message}');
+    });
   }
 }

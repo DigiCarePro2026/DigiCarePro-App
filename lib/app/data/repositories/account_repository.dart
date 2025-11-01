@@ -6,6 +6,7 @@ import 'package:digi_care_pro/app/data/api/api_models/change_password.dart';
 import 'package:digi_care_pro/app/data/api/api_models/forget_password.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get_profile.dart';
 import 'package:digi_care_pro/app/data/api/api_models/login.dart';
+import 'package:digi_care_pro/app/data/api/api_models/reset_password.dart';
 import 'package:digi_care_pro/app/data/constants/pref_key.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/models/profile.dart';
@@ -28,15 +29,14 @@ class AccountRepository {
     return await AccountRemoteDataSource.get().getProfile(loadingMessage: loadingMessage);
   }
 
-  Future<Either<ApiError, AppResponse<dynamic>>> forgetPassword(
-    ForgetPasswordRequest request, {
-    String? loadingMessage,
-  }) async => AccountRemoteDataSource.get().forgetPassword(request, loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse>> forgetPassword(ForgetPasswordRequest request, {String? loadingMessage}) async =>
+      AccountRemoteDataSource.get().forgetPassword(request, loadingMessage: loadingMessage);
 
-  Future<Either<ApiError, AppResponse>> changePassword(
-    ChangePasswordRequest request, {
-    String? loadingMessage,
-  }) async => AccountRemoteDataSource.get().changePassword(request, loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse>> resetPassword(ResetPasswordRequest request, {String? loadingMessage}) async =>
+      AccountRemoteDataSource.get().resetPassword(request, loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse>> changePassword(ChangePasswordRequest request, {String? loadingMessage}) async =>
+      AccountRemoteDataSource.get().changePassword(request, loadingMessage: loadingMessage);
 
   logout() {
     Pref.setString(PrefKey.accessToken, null);

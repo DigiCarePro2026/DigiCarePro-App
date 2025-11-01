@@ -15,6 +15,6 @@ class CustomerRepository {
     return _instance!;
   }
 
-  Future<Either<ApiError, AppResponse<GetCustomersResponse>>> getCustomers() async =>
-      CustomerRemoteDataSource.get().getCustomers();
+  Future<Either<ApiError, AppResponse<GetCustomersResponse>>> getCustomers({String? loadingMessage}) async =>
+      CustomerRemoteDataSource.get().getCustomers(loadingMessage: loadingMessage);
 }

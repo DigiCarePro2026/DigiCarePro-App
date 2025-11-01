@@ -29,25 +29,16 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
         return Scaffold(
           body: Stack(
             children: [
-              if (logic.customers.isEmpty)
-                Center(child: CircularProgressIndicator()),
+              if (logic.customers.isEmpty) Center(child: CircularProgressIndicator()),
               if (logic.customers.isNotEmpty)
                 Column(
                   children: [
-                    Column(
-                      children: [
-                        SearchBarWidget(
-                          hintText: 'customer_list_search_hint'.tr,
-                          onChange: (term) {},
-                        ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: logic.customers.length,
-                            itemBuilder: (ctx, index) =>
-                                _buildCustomerItem(logic.customers[index]),
-                          ),
-                        ),
-                      ],
+                    SearchBarWidget(hintText: 'customer_list_search_hint'.tr, onChange: (term) {}),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: logic.customers.length,
+                        itemBuilder: (ctx, index) => _buildCustomerItem(logic.customers[index]),
+                      ),
                     ),
                   ],
                 ),
@@ -72,17 +63,9 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                   Expanded(
                     child: Row(
                       children: [
-                        CircleAvatar(
-                          radius: 24,
-                          backgroundImage: NetworkImage(
-                            customer.profileImageUrl ?? '',
-                          ),
-                        ),
+                        CircleAvatar(radius: 24, backgroundImage: NetworkImage(customer.profileImageUrl ?? '')),
                         SizedBox(width: 12),
-                        Text(
-                          customer.getFullName(),
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
+                        Text(customer.getFullName(), style: Theme.of(context).textTheme.labelLarge),
                       ],
                     ),
                   ),
@@ -98,10 +81,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                     itemBuilder: (ctx) {
                       return [
                         PopupMenuItem(value: 'call', child: Text('call'.tr)),
-                        PopupMenuItem(
-                          value: 'add_mission',
-                          child: Text('add_mission'.tr),
-                        ),
+                        PopupMenuItem(value: 'add_mission', child: Text('add_mission'.tr)),
                       ];
                     },
                   ),
@@ -110,16 +90,9 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
               SizedBox(height: 12),
               Row(
                 children: [
-                  SvgPicture.asset(
-                    'assets/icons/location.svg',
-                    width: 16,
-                    color: Theme.of(context).disabledColor,
-                  ),
+                  SvgPicture.asset('assets/icons/location.svg', width: 16, color: Theme.of(context).disabledColor),
                   SizedBox(width: 8),
-                  Text(
-                    customer.address ?? '',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
+                  Text(customer.address ?? '', style: Theme.of(context).textTheme.titleMedium),
                 ],
               ),
             ],

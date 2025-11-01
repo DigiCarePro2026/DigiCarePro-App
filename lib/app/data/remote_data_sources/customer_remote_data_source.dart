@@ -14,9 +14,10 @@ class CustomerRemoteDataSource extends BaseRemoteDataSource {
     return _instance!;
   }
 
-  Future<Either<ApiError, AppResponse<GetCustomersResponse>>>
-  getCustomers() async => api.get<GetCustomersResponse>(
-    path: '/customer',
-    fromJson: (json) => GetCustomersResponse.fromJson(json),
-  );
+  Future<Either<ApiError, AppResponse<GetCustomersResponse>>> getCustomers({String? loadingMessage}) async =>
+      api.get<GetCustomersResponse>(
+        path: '/customer',
+        loadingMessage: loadingMessage,
+        fromJson: (json) => GetCustomersResponse.fromJson(json),
+      );
 }

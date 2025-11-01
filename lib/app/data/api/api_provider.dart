@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dartz/dartz.dart';
 import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
 import 'package:digi_care_pro/app/data/constants/pref_key.dart';
@@ -61,7 +63,7 @@ class ApiProvider {
         onResponse: (response, handler) {
           getX.Get.back();
 
-          logger.i('onResponse : ${response.data}');
+          logger.i('onResponse : ${response.data.toString().substring(0, max(response.data.toString().length, 300))}');
 
           return handler.next(response);
         },
@@ -208,6 +210,10 @@ class ApiProvider {
 
         case 403:
           // show403Dialog(message: e.response!.data['message']);
+          break;
+
+        case 500:
+          snackError(message: 'Server error 500');
           break;
 
         case 503:

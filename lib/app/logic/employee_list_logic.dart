@@ -1,28 +1,27 @@
-import 'package:digi_care_pro/app/data/models/customer.dart';
-import 'package:digi_care_pro/app/data/repositories/customer_repository.dart';
+import 'package:digi_care_pro/app/data/models/support_employee.dart';
 import 'package:digi_care_pro/app/data/repositories/employee_repository.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class CustomersLogic extends GetxController {
-  List<Customer> customers = [];
+class EmployeeListLogic extends GetxController {
+  List<SupportEmployee> employees = [];
 
   @override
   void onReady() {
     super.onReady();
-    getCustomers();
+    _getSupportEmployees();
   }
 
-  Future<void> getCustomers() async {
-    var result = await CustomerRepository.get().getCustomers();
+  _getSupportEmployees() async {
+    var result = await EmployeeRepository.get().getSupportEmployees(loadingMessage: 'support_employees_loading'.tr);
 
     result.fold(
       (error) {
         snackError(message: error.message);
       },
       (response) {
-        customers = response.data!.customers;
+        employees = response.data!;
 
         update();
       },

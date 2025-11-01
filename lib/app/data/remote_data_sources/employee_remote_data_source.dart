@@ -5,6 +5,7 @@ import 'package:digi_care_pro/app/data/models/change_settings.dart';
 import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:digi_care_pro/app/data/models/employee.dart';
 import 'package:digi_care_pro/app/data/models/request_day_off.dart';
+import 'package:digi_care_pro/app/data/models/support_employee.dart';
 import 'package:digi_care_pro/app/data/remote_data_sources/base_remote_data_source.dart';
 
 class EmployeeRemoteDataSource extends BaseRemoteDataSource {
@@ -23,9 +24,15 @@ class EmployeeRemoteDataSource extends BaseRemoteDataSource {
         loadingMessage: loadingMessage,
       );
 
-  Future<Either<ApiError, AppResponse<List<Customer>>>> getCustomers() async => api.get<List<Customer>>(
+  Future<Either<ApiError, AppResponse<List<Customer>>>> getCustomers() => api.get<List<Customer>>(
     path: '/employee/customers',
     fromJson: (json) => (json as List).map((json) => Customer.fromJson(json)).toList(),
+  );
+
+  Future<Either<ApiError, AppResponse<List<SupportEmployee>>>> getSupportEmployees( {String? loadingMessage}) => api.get(
+    path: '/employee/support-employees',
+    loadingMessage: loadingMessage,
+    fromJson: (json) => (json as List).map((json) => SupportEmployee.fromJson(json)).toList(),
   );
 
   Future<Either<ApiError, AppResponse>> requestDayOff(RequestDayOffRequest request, {String? loadingMessage}) =>

@@ -96,4 +96,5 @@ const Map<String, String> enUS = {
   'refresh_token_401_message': 'Your account session is expired',
   'reset_password': 'Reset password',
   'verification_code': 'Verification code',
+  'support_employees_loading': 'Getting support employees',
 };

@@ -1,3 +1,5 @@
+import 'package:digi_care_pro/app/data/models/support_employee.dart';
+import 'package:digi_care_pro/app/logic/employee_list_logic.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:digi_care_pro/app/ui/widgets/search_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -12,20 +14,38 @@ class EmployeeListScreen extends StatefulWidget {
 }
 
 class _EmployeeListScreenState extends State<EmployeeListScreen> {
+  EmployeeListLogic logic = EmployeeListLogic();
+
+  @override
+  void initState() {
+    Get.put(logic);
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('employee_list'.tr),),
-      body: Column(
-        children: [
-          SearchBarWidget(hintText: 'employee_list_search_hint'.tr, onChange: (term) {}),
-          Expanded(child: ListView.builder(itemCount: 16, itemBuilder: (ctx, index) => _buildEmployeeItem(index))),
-        ],
-      ),
+    return GetBuilder<EmployeeListLogic>(
+      builder: (logic) {
+        return Scaffold(
+          appBar: AppBar(title: Text('employee_list'.tr)),
+          body: Column(
+            children: [
+              SearchBarWidget(hintText: 'employee_list_search_hint'.tr, onChange: (term) {}),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: logic.employees.length,
+                  itemBuilder: (ctx, index) => _buildEmployeeItem(logic.employees[index]),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildEmployeeItem(int index) {
+  Widget _buildEmployeeItem(SupportEmployee employee) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
       child: Card.filled(
@@ -41,7 +61,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                       children: [
                         CircleAvatar(radius: 24, backgroundImage: AssetImage('assets/images/profile-sample.jpg')),
                         SizedBox(width: 12),
-                        Text('Mostafa Babaie', style: Theme.of(context).textTheme.labelLarge),
+                        Text(employee.fullName, style: Theme.of(context).textTheme.labelLarge),
                       ],
                     ),
                   ),
@@ -49,13 +69,11 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                     icon: SvgPicture.asset('assets/icons/more-hor.svg'),
                     onSelected: (value) {
                       if (value == 'call') {
-                        print('call selected');
+                       logic.makeCall(employee.mobile ?? '');
                       }
                     },
                     itemBuilder: (ctx) {
-                      return [
-                        PopupMenuItem(value: 'call', child: Text('call'.tr)),
-                      ];
+                      return [PopupMenuItem(value: 'call', child: Text('call'.tr))];
                     },
                   ),
                 ],

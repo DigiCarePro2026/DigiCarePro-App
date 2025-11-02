@@ -1,5 +1,6 @@
 import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:digi_care_pro/app/logic/customers_logic.dart';
+import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:digi_care_pro/app/ui/widgets/search_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +76,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                       if (value == 'call') {
                         logic.makeCall(customer.mobile ?? customer.phone!);
                       } else if (value == 'add_mission') {
-                        print('add mission selected');
+                        Get.toNamed(Routes.CREATE_MISSION, arguments: customer.id);
                       }
                     },
                     itemBuilder: (ctx) {

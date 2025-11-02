@@ -22,10 +22,13 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              CameraCaptureWidget(callback: (file){
-                debugPrint('CameraCaptureWidget : ${file.path}');
-                //fixme
-              },),
+              SizedBox(
+                width: double.infinity,
+                child: CameraCaptureWidget(callback: (file){
+                  debugPrint('CameraCaptureWidget : ${file.path}');
+                  //fixme
+                },),
+              ),
               SizedBox(height: fieldSpace),
               AppTextAreaField(title: 'short_title'.tr),
             ],

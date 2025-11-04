@@ -14,9 +14,7 @@ class EmployeeListLogic extends GetxController {
   }
 
   _getSupportEmployees() async {
-    var result = await EmployeeRepository.get().getSupportEmployees(loadingMessage: 'support_employees_loading'.tr);
-
-    Get.back();
+    var result = await EmployeeRepository.get().getSupportEmployees();
 
     result.fold(
       (error) {

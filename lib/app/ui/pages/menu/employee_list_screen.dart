@@ -33,9 +33,15 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
             children: [
               SearchBarWidget(hintText: 'employee_list_search_hint'.tr, onChange: (term) {}),
               Expanded(
-                child: ListView.builder(
-                  itemCount: logic.employees.length,
-                  itemBuilder: (ctx, index) => _buildEmployeeItem(logic.employees[index]),
+                child: Stack(
+                  children: [
+                    if (logic.employees.isEmpty) Center(child: CircularProgressIndicator()),
+                    if (logic.employees.isNotEmpty)
+                    ListView.builder(
+                      itemCount: logic.employees.length,
+                      itemBuilder: (ctx, index) => _buildEmployeeItem(logic.employees[index]),
+                    ),
+                  ],
                 ),
               ),
             ],

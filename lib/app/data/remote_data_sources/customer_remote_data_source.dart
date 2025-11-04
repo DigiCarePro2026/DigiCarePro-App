@@ -3,6 +3,7 @@ import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get_customers.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/models/customer.dart';
+import 'package:digi_care_pro/app/data/models/paging_model.dart';
 import 'package:digi_care_pro/app/data/remote_data_sources/base_remote_data_source.dart';
 
 class CustomerRemoteDataSource extends BaseRemoteDataSource {
@@ -14,9 +15,9 @@ class CustomerRemoteDataSource extends BaseRemoteDataSource {
     return _instance!;
   }
 
-  Future<Either<ApiError, AppResponse<GetCustomersResponse>>> getCustomers({String? loadingMessage}) async =>
+  Future<Either<ApiError, AppResponse<GetCustomersResponse>>> getCustomers({required PagingModel pagingModel, String? loadingMessage}) async =>
       api.get<GetCustomersResponse>(
-        path: '/customer',
+        path: '/customer?page=${pagingModel.page}&pageSize=${pagingModel.pageSize}',
         loadingMessage: loadingMessage,
         fromJson: (json) => GetCustomersResponse.fromJson(json),
       );

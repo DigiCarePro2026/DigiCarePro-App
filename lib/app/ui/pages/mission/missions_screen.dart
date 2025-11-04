@@ -6,6 +6,7 @@ import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:digi_care_pro/app/ui/widgets/calendar_widget.dart';
+import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,6 @@ class MissionsScreen extends StatefulWidget {
 
 class _MissionsScreenState extends State<MissionsScreen> {
   MissionsLogic logic = MissionsLogic();
-  MissionType _selectedMissionType = MissionType.all;
 
   @override
   void initState() {
@@ -45,7 +45,9 @@ class _MissionsScreenState extends State<MissionsScreen> {
                         activeMinMaxMonth: 2,
                         onDateSelected: (date, isChangedMonth) {
                           if (isChangedMonth) {
-                            logic.changeDate(date);
+                            logic.changeMonth(date);
+                          }else{
+                            logic.innerFilterMissions(day: date.day);
                           }
                         },
                         events: logic.groupMissionsByDate(),
@@ -57,19 +59,19 @@ class _MissionsScreenState extends State<MissionsScreen> {
               SliverPersistentHeader(
                 pinned: true,
                 delegate: _ChipsHeaderDelegate(
-                  selectedMissionType: _selectedMissionType,
-                  count: logic.missions.length,
+                  selectedMissionType: logic.selectedMissionType,
+                  count: logic.missionCountInDateFilter,
                   onMissionTypeSelected: (missionType) {
                     setState(() {
-                      _selectedMissionType = missionType;
+                      logic.innerFilterMissions(missionType: missionType);
                     });
                   },
                 ),
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
-                  childCount: logic.missions.length,
-                  (ctx, index) => _buildMissionItem(logic.missions[index]),
+                  childCount: logic.filteredMissions.length,
+                  (ctx, index) => _buildMissionItem(logic.filteredMissions[index]),
                 ),
               ),
             ],
@@ -98,9 +100,9 @@ class _MissionsScreenState extends State<MissionsScreen> {
                     Expanded(
                       child: Row(
                         children: [
-                          CircleAvatar(radius: 16, backgroundImage: NetworkImage(mission.customer.profileImageUrl!)),
+                          CircleAvatar(radius: 16, backgroundImage: NetworkImage(mission.customerAvatar ?? '')),
                           SizedBox(width: 12),
-                          Text(mission.customer.getFullName(), style: Theme.of(context).textTheme.labelLarge),
+                          Text(mission.customerName ?? '', style: Theme.of(context).textTheme.labelLarge),
                         ],
                       ),
                     ),
@@ -108,12 +110,12 @@ class _MissionsScreenState extends State<MissionsScreen> {
                       icon: SvgPicture.asset('assets/icons/more-hor.svg'),
                       onSelected: (value) {
                         // عمل مورد نظر برای هر آیتم
-                        if (value == 'edit') {
-                          print('Edit selected');
-                        } else if (value == 'delete') {
-                          print('Delete selected');
-                        } else if (value == 'share') {
-                          print('Share selected');
+                        if (value == 'call') {
+                          makeCall(mission.customerPhone ?? '');
+                        } else if (value == 'routing') {
+                          openNavigation(mission.customerLatitude ?? 0, mission.customerLongitude ?? 0);
+                        } else if (value == 'add_mission') {
+                          Get.toNamed(Routes.CREATE_MISSION, arguments: mission.customerId!);
                         }
                       },
                       itemBuilder: (ctx) {
@@ -130,7 +132,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
                   children: [
                     SvgPicture.asset('assets/icons/location.svg', color: Theme.of(context).disabledColor, width: 16),
                     SizedBox(width: 8),
-                    Text(mission.customer.address!, style: Theme.of(context).textTheme.titleMedium),
+                    Text(mission.customerAddress!, style: Theme.of(context).textTheme.titleMedium),
                   ],
                 ),
                 SizedBox(height: 8),

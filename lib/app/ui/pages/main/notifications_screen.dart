@@ -1,3 +1,5 @@
+import 'package:digi_care_pro/app/data/models/message.dart';
+import 'package:digi_care_pro/app/logic/notifications_logic.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,27 +12,55 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
+  NotificationsLogic logic = NotificationsLogic();
+
+  @override
+  void initState() {
+    Get.put(logic);
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('notifications'.tr)),
-      body: ListView.builder(
-        itemCount: 16,
-        itemBuilder: (ctx, index) => NewsItem(index: index),
-      ),
+    return GetBuilder<NotificationsLogic>(
+      builder: (logic) {
+        return Scaffold(
+          appBar: AppBar(title: Text('notifications'.tr)),
+          body: Stack(
+            children: [
+              if (logic.messages.isEmpty) Center(child: CircularProgressIndicator()),
+              if (logic.messages.isNotEmpty)
+              ListView.builder(
+                itemCount: logic.messages.length,
+                itemBuilder: (ctx, index) {
+                  if(index == logic.messages.length - 1){
+                    logic.paging.page ++;
+
+                    logic.getMessages();
+                  }
+
+                  return MessageItem(message: logic.messages[index]);
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
 
-class NewsItem extends StatefulWidget {
-  final int index;
-  const NewsItem({super.key, required this.index});
+class MessageItem extends StatefulWidget {
+  final Message message;
+
+  const MessageItem({super.key, required this.message});
 
   @override
-  State<NewsItem> createState() => _NewsItemState();
+  State<MessageItem> createState() => _MessageItemState();
 }
 
-class _NewsItemState extends State<NewsItem> {
+class _MessageItemState extends State<MessageItem> {
   bool isExpanded = false;
   static const double cardPadding = 16.0;
 
@@ -44,7 +74,7 @@ class _NewsItemState extends State<NewsItem> {
         child: Card(
           child: InkWell(
             borderRadius: BorderRadius.circular(cardRadius),
-            onTap: (){
+            onTap: () {
               setState(() {
                 isExpanded = !isExpanded;
               });
@@ -54,33 +84,23 @@ class _NewsItemState extends State<NewsItem> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'How Families Manage Health and Daily Support',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
+                  Text(widget.message.subject, style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 12),
                   AnimatedCrossFade(
                     firstChild: Text(
-                      'A new app called CareConnect is making waves in the digital health space, offering an all-in-one solution for families, caregivers, and healthcare professionals. The app simplifies care coordination by combining features like medication reminders, health tracking, appointment scheduling, and secure messaging — all in a single, easy-to-use platform.',
+                      widget.message.body!.length > 200 ? widget.message.body!.substring(0, 200) : widget.message.body!,
                       style: Theme.of(context).textTheme.bodyMedium,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    secondChild: Text(
-                      'A new app called CareConnect is making waves in the digital health space, offering an all-in-one solution for families, caregivers, and healthcare professionals. The app simplifies care coordination by combining features like medication reminders, health tracking, appointment scheduling, and secure messaging — all in a single, easy-to-use platform.',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    crossFadeState: isExpanded
-                        ? CrossFadeState.showSecond
-                        : CrossFadeState.showFirst,
+                    secondChild: Text(widget.message.body!, style: Theme.of(context).textTheme.bodyMedium),
+                    crossFadeState: isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
                     duration: const Duration(milliseconds: 300),
                   ),
                   const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text('2025/07/10 11:34', style: Theme.of(context).textTheme.titleSmall),
-                    ],
+                    children: [Text(widget.message.sentAt, style: Theme.of(context).textTheme.titleSmall)],
                   ),
                 ],
               ),

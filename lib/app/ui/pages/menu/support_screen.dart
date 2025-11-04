@@ -73,10 +73,21 @@ class _SupportScreenState extends State<SupportScreen> {
           child: PrimaryButton(
             label: 'send'.tr,
             onPressed: () {
+              if(selectedSubject == null){
+                snackError(message: 'subject_required'.tr);
+
+                return;
+              }
+
+              if(bodyController.text.length < 5){
+                snackError(message: 'support_body_length_validation'.tr);
+
+                return;
+              }
+
               if(selectedSubject != null){
                 logic.sendMessage(subject: selectedSubject!, body: bodyController.text);
               }else{
-                snackError(message: 'subject_required'.tr);
               }
             },
           ),

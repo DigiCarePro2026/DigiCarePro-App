@@ -3,6 +3,7 @@ import 'package:digi_care_pro/app/logic/customers_logic.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:digi_care_pro/app/ui/widgets/search_bar_widget.dart';
+import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -38,7 +39,17 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                     Expanded(
                       child: ListView.builder(
                         itemCount: logic.customers.length,
-                        itemBuilder: (ctx, index) => _buildCustomerItem(logic.customers[index]),
+                        itemBuilder: (ctx, index) {
+                          if(index == logic.customers.length - 1){
+                            //detect end
+
+                            logic.paging.page ++;
+
+                            logic.getCustomers();
+                          }
+
+                          return _buildCustomerItem(logic.customers[index]);
+                        },
                       ),
                     ),
                   ],
@@ -74,7 +85,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                     icon: SvgPicture.asset('assets/icons/more-hor.svg'),
                     onSelected: (value) {
                       if (value == 'call') {
-                        logic.makeCall(customer.mobile ?? customer.phone!);
+                        makeCall(customer.mobile ?? customer.phone!);
                       } else if (value == 'add_mission') {
                         Get.toNamed(Routes.CREATE_MISSION, arguments: customer.id);
                       }

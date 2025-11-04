@@ -92,11 +92,11 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                 children: [
                                   CircleAvatar(
                                     radius: 32,
-                                    backgroundImage: NetworkImage(logic.mission.customer.profileImageUrl!),
+                                    backgroundImage: NetworkImage(logic.mission.customerAvatar ?? ''),
                                   ),
                                   SizedBox(width: 12),
                                   Text(
-                                    logic.mission.customer.getFullName(),
+                                    logic.mission.customerName ?? '',
                                     style: Theme.of(context).textTheme.headlineLarge,
                                   ),
                                 ],
@@ -111,7 +111,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                   ),
                                   SizedBox(width: 8),
                                   Text(
-                                    logic.mission.customer.address ?? '',
+                                    logic.mission.customerAddress ?? '',
                                     style: Theme.of(context).textTheme.titleMedium,
                                   ),
                                 ],

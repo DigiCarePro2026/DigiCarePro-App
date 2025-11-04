@@ -13,6 +13,7 @@ import 'package:digi_care_pro/app/ui/widgets/primary_button.dart';
 import 'package:digi_care_pro/app/ui/widgets/secondary_button.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:digi_care_pro/app/ui/widgets/delay_time_picker.dart';
+import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -36,13 +37,13 @@ class MissionDetailsLogic extends GetxController {
         title: 'routing'.tr,
         icon: 'assets/icons/routing.svg',
         color: AppColors.routingColor,
-        callback: () => _route(),
+        callback: () => openNavigation(mission.customerLatitude ?? 0, mission.customerLongitude ?? 0),
       ),
       MenuModel(
         title: 'call'.tr,
         icon: 'assets/icons/call.svg',
         color: AppColors.callColor,
-        callback: () => _makeCall(mission.customer.mobile ?? mission.customer.phone ?? ''),
+        callback: () => _makeCall(mission.customerPhone ?? ''),
       ),
       MenuModel(
         title: 'upload_document'.tr,
@@ -57,7 +58,7 @@ class MissionDetailsLogic extends GetxController {
         icon: 'assets/icons/add-mission.svg',
         color: AppColors.addMissionColor,
         callback: () {
-          Get.toNamed(Routes.CREATE_MISSION, arguments: mission.customer.id);
+          Get.toNamed(Routes.CREATE_MISSION, arguments: mission.customerId);
         },
       ),
       MenuModel(
@@ -113,13 +114,6 @@ class MissionDetailsLogic extends GetxController {
         },
       ),
     ];
-  }
-
-  _route() async {
-    final Uri googleMapsUri = Uri.parse(
-      'https://www.google.com/maps/dir/?api=1&destination=${mission.customer.latitude},${mission.customer.longitude}',
-    );
-    await launchUrl(googleMapsUri, mode: LaunchMode.externalApplication);
   }
 
   _makeCall(String phoneNumber) async {

@@ -28,6 +28,8 @@ class ProfileLogic extends GetxController {
       loadingMessage: 'change_employee_settings_message'.tr,
     );
 
+    Get.back();
+
     result.fold((error) {}, (response) {
       profile.receiveNotifications = value;
 

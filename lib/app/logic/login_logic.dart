@@ -13,6 +13,8 @@ class LoginLogic extends GetxController {
 
     var result = await AccountRepository.get().login(request, loadingMessage: 'loading_message_login'.tr);
 
+    Get.back();
+
     result.fold(
       (error) {
         snackError(message: error.message);
@@ -31,6 +33,8 @@ class LoginLogic extends GetxController {
 
   _getProfile() async {
     var result = await AccountRepository.get().getProfile(loadingMessage: 'loading_message_get_profile'.tr);
+
+    Get.back();
 
     result.fold(
       (error) {

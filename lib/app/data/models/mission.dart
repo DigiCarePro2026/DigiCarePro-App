@@ -17,7 +17,13 @@ class Mission {
   final bool? endedManually;
   final int? status;
   final String? statusName;
-  final Customer customer;
+  final String? customerId;
+  final String? customerName;
+  final String? customerPhone;
+  final String? customerAddress;
+  final double? customerLatitude;
+  final double? customerLongitude;
+  final String? customerAvatar;
 
   Mission({
     required this.id,
@@ -36,7 +42,13 @@ class Mission {
     this.endedManually,
     this.status,
     this.statusName,
-    required this.customer,
+    this.customerId,
+    this.customerName,
+    this.customerPhone,
+    this.customerAddress,
+    this.customerLatitude,
+    this.customerLongitude,
+    this.customerAvatar,
   });
 
   factory Mission.fromJson(Map<String, dynamic> json) => Mission(
@@ -54,10 +66,13 @@ class Mission {
     comment: json['comment']?.toString() ?? '',
     endedByAdmin: json['endedByAdmin'] ?? false,
     endedManually: json['endedManually'] ?? false,
-    status:  (json['status'] != null)
-        ? int.tryParse(json['status'].toString())
-        : null,
+    status: (json['status'] != null) ? int.tryParse(json['status'].toString()) : null,
     statusName: json['statusName']?.toString() ?? '',
-    customer: Customer.fromJson(json['customer']),
+    customerId: json['customerId']?.toString() ?? '',
+    customerName: json['customerName']?.toString() ?? '',
+    customerPhone: json['customerPhone']?.toString() ?? '',
+    customerAddress: json['customerAddress']?.toString() ?? '',
+    customerLatitude: json['customerLatitude'],
+    customerLongitude: json['customerLongitude'],
   );
 }

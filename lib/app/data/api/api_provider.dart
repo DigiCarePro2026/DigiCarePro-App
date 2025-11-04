@@ -6,6 +6,8 @@ import 'package:digi_care_pro/app/data/constants/pref_key.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/pref.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
+import 'package:digi_care_pro/app/ui/widgets/primary_button.dart';
+import 'package:digi_care_pro/app/ui/widgets/secondary_button.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:digi_care_pro/app/utils/globals.dart';
 import 'package:digi_care_pro/app/utils/dialog_handler.dart';
@@ -19,8 +21,8 @@ import 'api_models/login.dart';
 class ApiProvider {
   var dio = Dio(
     BaseOptions(
-      connectTimeout: const Duration(seconds: 25),
-      receiveTimeout: const Duration(seconds: 25),
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 15),
       baseUrl: 'https://mobileapi.demostage.ir/api',
     ),
   );
@@ -55,20 +57,19 @@ class ApiProvider {
 
             return handler.next(options);
           } else {
-            logger.i('you are offline!!!');
-
-            // getX.Get.to(OfflineScreen());
+            getX.Get.back();
+            showOfflineBottomSheet();
           }
         },
         onResponse: (response, handler) {
-          getX.Get.back();
+          // getX.Get.back();
 
           logger.i('onResponse : ${response.data.toString().substring(0, max(response.data.toString().length, 300))}');
 
           return handler.next(response);
         },
         onError: (error, handler) {
-          getX.Get.back();
+          // getX.Get.back();
 
           logger.e('Error occurred: ${error.message}');
 
@@ -204,7 +205,7 @@ class ApiProvider {
       switch (e.response!.statusCode) {
         case 401:
           logger.e('Unauthorized error, call refreshToken...');
-          
+
           refreshToken();
           break;
 
@@ -212,9 +213,9 @@ class ApiProvider {
           // show403Dialog(message: e.response!.data['message']);
           break;
 
-        case 500:
-          snackError(message: 'Server error 500');
-          break;
+        // case 500:
+        //   snackError(message: 'Server error 500');
+        //   break;
 
         case 503:
           logger.i('server is offline');
@@ -236,22 +237,90 @@ class ApiProvider {
 
     var result = await post<LoginResponse>(
       path: '/auth/refresh-token',
-      body: {'refreshToken' : refreshToken},
+      body: {'refreshToken': refreshToken},
       fromJson: (json) => LoginResponse.fromJson(json),
     );
 
-    result.fold((error){
-      if(error.code == 401){
-        Pref.setString(PrefKey.accessToken, null);
-        Pref.setString(PrefKey.refreshToken, null);
+    result.fold(
+      (error) {
+        if (error.code == 401) {
+          Pref.setString(PrefKey.accessToken, null);
+          Pref.setString(PrefKey.refreshToken, null);
 
-        snackError(message: 'refresh_token_401_message'.tr);
-        getX.Get.offAllNamed(Routes.LOGIN);
-      }else{
-        logger.i('refreshToken error(not 401) : ${error.message}');
-      }
-    }, (response){
-      logger.i('refreshToken success : ${response.message}');
-    });
+          snackError(message: 'refresh_token_401_message'.tr);
+          getX.Get.offAllNamed(Routes.LOGIN);
+        } else {
+          logger.i('refreshToken error(not 401) : ${error.message}');
+        }
+      },
+      (response) {
+        logger.i('refreshToken success : ${response.message}');
+      },
+    );
+  }
+
+  bool _isBottomSheetOpen = false;
+
+  Future<void> showOfflineBottomSheet() async {
+    if (_isBottomSheetOpen) return;
+
+    _isBottomSheetOpen = true;
+
+    return await showModalBottomSheet<void>(
+      context: getX.Get.context!,
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
+            left: 16,
+            right: 16,
+            top: 20,
+          ),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('offline'.tr, style: Theme.of(context).textTheme.headlineMedium),
+                  const SizedBox(height: 16),
+                  Text(
+                    'You are offline, please check device connection'.tr,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SecondaryButton(
+                          label: 'cancel'.tr,
+                          onPressed: () {
+                            _isBottomSheetOpen = false;
+
+                            Navigator.pop(context, null);
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: PrimaryButton(
+                          label: 'try_again'.tr,
+                          onPressed: () {
+                            _isBottomSheetOpen = false;
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 }

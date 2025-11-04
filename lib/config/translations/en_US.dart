@@ -96,5 +96,9 @@ const Map<String, String> enUS = {
   'refresh_token_401_message': 'Your account session is expired',
   'reset_password': 'Reset password',
   'verification_code': 'Verification code',
-  'support_employees_loading': 'Getting support employees',
+  'support_employees_loading': 'Loading support employees',
+  'loading_notifications': 'Loading notifications',
+  'try_again': 'Try again',
+  'support_body_length_validation': 'Minimum password length is 5 characters',
+
 };

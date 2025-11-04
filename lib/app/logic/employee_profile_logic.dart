@@ -18,6 +18,8 @@ class EmployeeProfileLogic extends GetxController {
   _getEmployeeProfile() async {
     var result = await EmployeeRepository.get().getEmployeeProfile(loadingMessage: 'loading_profile'.tr);
 
+    Get.back();
+
     result.fold((error) {
       snackError(message: error.message);
     }, (response) {

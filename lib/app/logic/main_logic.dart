@@ -16,6 +16,8 @@ class MainLogic extends GetxController{
   Future<void> _getEmployeeCustomers() async {
     var result = await EmployeeRepository.get().getCustomers();
 
+    Get.back();
+
     result.fold((error){
 
     }, (response){

@@ -64,7 +64,7 @@ class ApiProvider {
         onResponse: (response, handler) {
           // getX.Get.back();
 
-          logger.i('onResponse : ${response.data.toString().substring(0, max(response.data.toString().length, 300))}');
+          logger.i('onResponse : ${response.data.toString().substring(0, min(response.data.toString().length-1, 300))}');
 
           return handler.next(response);
         },
@@ -224,7 +224,7 @@ class ApiProvider {
           break;
       }
 
-      ApiError error = ApiError(code: e.response!.statusCode!, message: e.response!.data['message']);
+      ApiError error = ApiError(code: e.response!.statusCode!, message: e.response!.data ['message']);
       return Left(error);
     } else {
       // Handle other types of errors if needed

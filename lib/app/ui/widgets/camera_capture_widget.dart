@@ -73,22 +73,25 @@ class _CameraCaptureWidgetState extends State<CameraCaptureWidget> {
       child: _capturedImage != null
           ? Stack(
         children: [
-          Positioned.fill(
+          SizedBox(
+            width: double.infinity,
             child: Image.file(
               File(_capturedImage!.path),
               fit: BoxFit.cover,
             ),
           ),
           Positioned(
-            top: 16,
-            right: 16,
-            child: FloatingActionButton(
-              mini: true,
-              backgroundColor: Colors.black54,
-              onPressed: () {
-                setState(() => _capturedImage = null);
-              },
-              child: const Icon(Icons.close),
+            left: 0,
+            right: 0,
+            bottom: 16,
+            child: Center(
+              child: FloatingActionButton(
+                backgroundColor: Colors.black54,
+                onPressed: () {
+                  setState(() => _capturedImage = null);
+                },
+                child: const Icon(Icons.close),
+              ),
             ),
           ),
         ],
@@ -96,7 +99,9 @@ class _CameraCaptureWidgetState extends State<CameraCaptureWidget> {
           : _isCameraInitialized
           ? Stack(
         children: [
-          CameraPreview(_controller!),
+          SizedBox(
+              width: double.infinity,
+              child: CameraPreview(_controller!)),
           Positioned(
             bottom: 16,
             left: 0,

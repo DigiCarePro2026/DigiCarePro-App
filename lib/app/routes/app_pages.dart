@@ -23,69 +23,36 @@ import 'app_routes.dart';
 
 class AppPages {
   static final pages = [
-    GetPage(
-      name: Routes.HOME,
-      page: () =>  MainScreen(),
-    ),
-    GetPage(
-      name: Routes.LOGIN,
-      page: () => const LoginScreen(),
-    ),
-    GetPage(
-      name: Routes.FORGET_PASSWORD,
-      page: () => const ForgetPasswordScreen(),
-    ),
+    GetPage(name: Routes.HOME, page: () => MainScreen()),
+    GetPage(name: Routes.LOGIN, page: () => const LoginScreen()),
+    GetPage(name: Routes.FORGET_PASSWORD, page: () => const ForgetPasswordScreen()),
     GetPage(
       name: Routes.RESET_PASSWORD,
-      page: () => ResetPasswordScreen(email: Get.arguments as String,),
+      page: () => ResetPasswordScreen(email: Get.arguments as String),
     ),
     GetPage(
       name: Routes.MISSION_DETAILS,
-      page: () =>  MissionDetailsScreen(mission: Get.arguments as Mission,),
+      page: () => MissionDetailsScreen(mission: Get.arguments as Mission),
     ),
     GetPage(
       name: Routes.MISSION_UPLOAD_DOC,
-      page: () => const UploadDocumentScreen(),
+      page: () => UploadDocumentScreen(missionId: Get.arguments['missionId'], customerId: Get.arguments['customerId']),
     ),
     GetPage(
       name: Routes.CREATE_MISSION,
-      page: () => CreateMissionScreen(customerId: Get.arguments as String,),
+      page: () => CreateMissionScreen(customerId: Get.arguments as String),
     ),
     GetPage(
       name: Routes.MISSION_SIGNATURE,
-      page: () => const SignatureScreen(),
+      page: () => SignatureScreen(missionId: Get.arguments as String),
     ),
-    GetPage(
-      name: Routes.EMPLOYEE_PROFILE,
-      page: () => const EmployeeProfileScreen(),
-    ),
-    GetPage(
-      name: Routes.EMPLOYEE_LIST,
-      page: () => const EmployeeListScreen(),
-    ),
-    GetPage(
-      name: Routes.CHANGE_PASSWORD,
-      page: () => const ChangePasswordScreen(),
-    ),
-    GetPage(
-      name: Routes.CHANGE_LANGUAGE,
-      page: () => const ChangeLanguageScreen(),
-    ),
-    GetPage(
-      name: Routes.NOTIFICATIONS,
-      page: () => const NotificationsScreen(),
-    ),
-    GetPage(
-      name: Routes.REQUESTS,
-      page: () => const RequestsScreen(),
-    ),
-    GetPage(
-      name: Routes.LEAVE_REQUEST,
-      page: () => const LeaveRequestScreen(),
-    ),
-    GetPage(
-      name: Routes.SUPPORT,
-      page: () => const SupportScreen(),
-    ),
+    GetPage(name: Routes.EMPLOYEE_PROFILE, page: () => const EmployeeProfileScreen()),
+    GetPage(name: Routes.EMPLOYEE_LIST, page: () => const EmployeeListScreen()),
+    GetPage(name: Routes.CHANGE_PASSWORD, page: () => const ChangePasswordScreen()),
+    GetPage(name: Routes.CHANGE_LANGUAGE, page: () => const ChangeLanguageScreen()),
+    GetPage(name: Routes.NOTIFICATIONS, page: () => const NotificationsScreen()),
+    GetPage(name: Routes.REQUESTS, page: () => const RequestsScreen()),
+    GetPage(name: Routes.LEAVE_REQUEST, page: () => const LeaveRequestScreen()),
+    GetPage(name: Routes.SUPPORT, page: () => const SupportScreen()),
   ];
 }

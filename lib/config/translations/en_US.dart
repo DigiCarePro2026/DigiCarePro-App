@@ -77,6 +77,7 @@ const Map<String, String> enUS = {
   'submit': 'Submit',
   'loading_cancel_mission': 'Requesting cancellation',
   'loading_delay_mission': 'Announcing delay',
+  'loading_report_mission': 'Submitting report',
   'subject_required': 'Subject required',
   'loading_send_message': 'Sending message',
   'message_send_success': 'Message sent successfully',

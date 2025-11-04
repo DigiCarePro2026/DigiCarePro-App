@@ -1,5 +1,6 @@
 import 'package:digi_care_pro/app/data/api/api_models/cancel_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/delay_mission.dart';
+import 'package:digi_care_pro/app/data/api/api_models/report_mission.dart';
 import 'package:digi_care_pro/app/data/enum/cancel_mission_type.dart';
 import 'package:digi_care_pro/app/data/models/mission.dart';
 import 'package:digi_care_pro/app/data/repositories/mission_repository.dart';
@@ -43,14 +44,17 @@ class MissionDetailsLogic extends GetxController {
         title: 'call'.tr,
         icon: 'assets/icons/call.svg',
         color: AppColors.callColor,
-        callback: () => _makeCall(mission.customerPhone ?? ''),
+        callback: () => makeCall(mission.customerPhone ?? ''),
       ),
       MenuModel(
         title: 'upload_document'.tr,
         icon: 'assets/icons/upload.svg',
         color: AppColors.uploadColor,
         callback: () {
-          Get.toNamed(Routes.MISSION_UPLOAD_DOC);
+          Get.toNamed(
+            Routes.MISSION_UPLOAD_DOC,
+            arguments: {'missionId': mission.id, 'customerId': mission.customerId},
+          );
         },
       ),
       MenuModel(
@@ -66,7 +70,7 @@ class MissionDetailsLogic extends GetxController {
         icon: 'assets/icons/signature.svg',
         color: AppColors.signatureColor,
         callback: () {
-          Get.toNamed(Routes.MISSION_SIGNATURE);
+          Get.toNamed(Routes.MISSION_SIGNATURE, arguments: mission.id);
         },
       ),
       MenuModel(
@@ -77,7 +81,7 @@ class MissionDetailsLogic extends GetxController {
           String? report = await showMissionReportBottomSheet();
 
           if (report != null) {
-            debugPrint(report); //fixme: call api
+            _reportMissionApi(report);
           }
         },
       ),
@@ -114,11 +118,6 @@ class MissionDetailsLogic extends GetxController {
         },
       ),
     ];
-  }
-
-  _makeCall(String phoneNumber) async {
-    final Uri launchUri = Uri(scheme: 'tel', path: phoneNumber);
-    await launchUrl(launchUri);
   }
 
   //<editor-fold desc="Delay">
@@ -184,6 +183,8 @@ class MissionDetailsLogic extends GetxController {
       loadingMessage: 'loading_delay_mission'.tr,
     );
 
+    Get.back();
+
     result.fold(
       (error) {
         snackError(message: error.message);
@@ -198,6 +199,7 @@ class MissionDetailsLogic extends GetxController {
 
   //</editor-fold>
 
+  //<editor-fold desc="Report">
   Future<String?> showMissionReportBottomSheet({String? initialValue}) async {
     String? report = initialValue;
 
@@ -248,6 +250,26 @@ class MissionDetailsLogic extends GetxController {
       },
     );
   }
+
+  _reportMissionApi(String report) async {
+    var result = await MissionRepository.get().reportMission(
+      ReportMissionRequest(missionId: mission.id, report: report),
+      loadingMessage: 'loading_report_mission'.tr,
+    );
+
+    Get.back();
+
+    result.fold(
+      (error) {
+        snackError(message: error.message);
+      },
+      (response) {
+        snackSuccess(message: response.message);
+      },
+    );
+  }
+
+  //</editor-fold>
 
   Future<String?> showChangeDateAndTimeBottomSheet() async {
     String? result;
@@ -375,6 +397,8 @@ class MissionDetailsLogic extends GetxController {
       CancelMissionRequest(missionId: mission.id, reason: reason),
       loadingMessage: 'loading_cancel_mission'.tr,
     );
+
+    Get.back();
 
     result.fold(
       (error) {

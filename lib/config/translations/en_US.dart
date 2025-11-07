@@ -122,4 +122,5 @@ const Map<String, String> enUS = {
   'ambulance': 'Ambulance',
   'doctor': 'Doctor',
   'company': 'Company',
+  'empty_message': 'No items found',
 };

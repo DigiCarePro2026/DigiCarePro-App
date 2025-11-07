@@ -1,4 +1,7 @@
 enum PageStatus{
   loading,
-  loaded;
+  loadMore,
+  loaded,
+  empty,
+  error;
 }

@@ -17,7 +17,8 @@ class CustomerRepository {
   }
 
   Future<Either<ApiError, AppResponse<GetCustomersResponse>>> getCustomers({
+    String? keyword,
     required PagingModel pagingModel,
     String? loadingMessage,
-  }) async => CustomerRemoteDataSource.get().getCustomers(pagingModel: pagingModel, loadingMessage: loadingMessage);
+  }) async => CustomerRemoteDataSource.get().getCustomers(keyword:keyword, pagingModel: pagingModel, loadingMessage: loadingMessage);
 }

@@ -15,10 +15,14 @@ class CustomerRemoteDataSource extends BaseRemoteDataSource {
     return _instance!;
   }
 
-  Future<Either<ApiError, AppResponse<GetCustomersResponse>>> getCustomers({required PagingModel pagingModel, String? loadingMessage}) async =>
-      api.get<GetCustomersResponse>(
-        path: '/customer?page=${pagingModel.page}&pageSize=${pagingModel.pageSize}',
-        loadingMessage: loadingMessage,
-        fromJson: (json) => GetCustomersResponse.fromJson(json),
-      );
+  Future<Either<ApiError, AppResponse<GetCustomersResponse>>> getCustomers({
+    String? keyword,
+    required PagingModel pagingModel,
+    String? loadingMessage,
+  }) async => api.get<GetCustomersResponse>(
+    path: '/customer',
+    queryParameters: {'page': pagingModel.page, 'pageSize': pagingModel.pageSize, 'keyword': keyword},
+    loadingMessage: loadingMessage,
+    fromJson: (json) => GetCustomersResponse.fromJson(json),
+  );
 }

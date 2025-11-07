@@ -1,3 +1,7 @@
+import 'dart:ffi';
+
+import 'package:digi_care_pro/app/data/enum/leave_status.dart';
+import 'package:digi_care_pro/app/data/enum/leave_type.dart';
 import 'package:digi_care_pro/app/data/models/day_off.dart';
 import 'package:digi_care_pro/app/logic/requests_logic.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
@@ -107,12 +111,12 @@ class _RequestsScreenState extends State<RequestsScreen> {
                     ),*/
                   ],
                 ),
-                Text('Description of request', style: Theme.of(context).textTheme.titleMedium),
+                Text(request.description ?? '', style: Theme.of(context).textTheme.titleMedium),
                 Row(
                   children: [
                     Text('Reason:', style: Theme.of(context).textTheme.titleMedium),
                     SizedBox(width: 12),
-                    Text(request.leaveType, style: Theme.of(context).textTheme.titleMedium),
+                    Text(LeaveType.values[request.leaveType-1].title, style: Theme.of(context).textTheme.titleMedium),
                   ],
                 ),
                 Divider(height: 12, thickness: 0.5, color: Theme.of(context).dividerColor),
@@ -120,7 +124,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                   children: [
                     Expanded(
                       child: Text(
-                        request.status,
+                        request.status.title,
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.green),
                       ),
                     ),

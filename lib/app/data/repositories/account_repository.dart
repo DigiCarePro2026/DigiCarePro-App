@@ -6,6 +6,7 @@ import 'package:digi_care_pro/app/data/api/api_models/change_password.dart';
 import 'package:digi_care_pro/app/data/api/api_models/forget_password.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get_profile.dart';
 import 'package:digi_care_pro/app/data/api/api_models/login.dart';
+import 'package:digi_care_pro/app/data/api/api_models/register_device.dart';
 import 'package:digi_care_pro/app/data/api/api_models/reset_password.dart';
 import 'package:digi_care_pro/app/data/constants/pref_key.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
@@ -24,6 +25,9 @@ class AccountRepository {
 
   Future<Either<ApiError, AppResponse<LoginResponse>>> login(LoginRequest request, {String? loadingMessage}) async =>
       AccountRemoteDataSource.get().login(request, loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse>> registerDevice(RegisterDeviceRequest request, {String? loadingMessage}) async =>
+      AccountRemoteDataSource.get().registerDevice(request, loadingMessage: loadingMessage);
 
   Future<Either<ApiError, AppResponse<GetProfileResponse>>> getProfile({String? loadingMessage}) async {
     return await AccountRemoteDataSource.get().getProfile(loadingMessage: loadingMessage);

@@ -3,8 +3,10 @@ import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
 import 'package:digi_care_pro/app/data/api/api_models/cancel_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/change_mission_datetime.dart';
 import 'package:digi_care_pro/app/data/api/api_models/delay_mission.dart';
+import 'package:digi_care_pro/app/data/api/api_models/check_mission_status.dart';
 import 'package:digi_care_pro/app/data/api/api_models/report_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/signature_mission.dart';
+import 'package:digi_care_pro/app/data/api/api_models/start_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/upload_doc_mission.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/models/create_mission.dart';
@@ -41,8 +43,14 @@ class MissionRemoteDataSource extends BaseRemoteDataSource {
   Future<Either<ApiError, AppResponse>> createMission(CreateMissionRequest request, {String? loadingMessage}) =>
       api.post(path: '/mission/${request.customerId}/add', body: request.toJson());
 
-  Future<Either<ApiError, AppResponse>> changeMissionDatetime(ChangeMissionDatetimeRequest request, {String? loadingMessage}) =>
-      api.put(path: '/mission/${request.missionId}/update-mission-dateTime', body: request.toJson(), loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse>> changeMissionDatetime(
+    ChangeMissionDatetimeRequest request, {
+    String? loadingMessage,
+  }) => api.put(
+    path: '/mission/${request.missionId}/update-mission-dateTime',
+    body: request.toJson(),
+    loadingMessage: loadingMessage,
+  );
 
   Future<Either<ApiError, AppResponse>> uploadSignature(
     SignatureMissionRequest request, {
@@ -85,4 +93,10 @@ class MissionRemoteDataSource extends BaseRemoteDataSource {
       loadingMessage: loadingMessage,
     );
   }
+
+  Future<Either<ApiError, AppResponse>> checkMissionStatus(CheckMissionStatusRequest request, {String? loadingMessage}) =>
+      api.post(path: '/mission/${request.missionId}/status-check', body: request.toJson(), loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse>> startMission(StartMissionRequest request, {String? loadingMessage}) =>
+      api.post(path: '/mission/${request.missionId}/start', body: request.toJson(), loadingMessage: loadingMessage);
 }

@@ -4,6 +4,7 @@ import 'package:digi_care_pro/app/data/api/api_models/change_password.dart';
 import 'package:digi_care_pro/app/data/api/api_models/forget_password.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get_profile.dart';
 import 'package:digi_care_pro/app/data/api/api_models/login.dart';
+import 'package:digi_care_pro/app/data/api/api_models/register_device.dart';
 import 'package:digi_care_pro/app/data/api/api_models/reset_password.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/remote_data_sources/base_remote_data_source.dart';
@@ -23,6 +24,13 @@ class AccountRemoteDataSource extends BaseRemoteDataSource {
         body: request.toJson(),
         loadingMessage: loadingMessage,
         fromJson: (json) => LoginResponse.fromJson(json),
+      );
+
+  Future<Either<ApiError, AppResponse>> registerDevice(RegisterDeviceRequest request, {String? loadingMessage}) async =>
+      api.post(
+        path: '/user/register-device',
+        body: request.toJson(),
+        loadingMessage: loadingMessage,
       );
 
   Future<Either<ApiError, AppResponse<GetProfileResponse>>> getProfile({String? loadingMessage}) async =>

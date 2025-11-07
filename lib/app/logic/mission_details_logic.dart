@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:digi_care_pro/app/data/api/api_models/cancel_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/change_mission_datetime.dart';
+import 'package:digi_care_pro/app/data/api/api_models/check_mission_status.dart';
 import 'package:digi_care_pro/app/data/api/api_models/delay_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/report_mission.dart';
 import 'package:digi_care_pro/app/data/enum/cancel_mission_type.dart';
@@ -16,22 +19,29 @@ import 'package:digi_care_pro/app/ui/widgets/secondary_button.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:digi_care_pro/app/ui/widgets/delay_time_picker.dart';
 import 'package:digi_care_pro/app/ui/widgets/time_picker.dart';
+import 'package:digi_care_pro/app/utils/dialog_handler.dart';
+import 'package:digi_care_pro/app/utils/location_service.dart';
 import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MissionDetailsLogic extends GetxController {
   late Mission mission;
+  bool isLocationServiceOk = false;
+  Position? userLocation;
   List<MenuModel> menuItems = [];
 
   MissionDetailsLogic(this.mission);
 
   @override
-  void onInit() {
+  void onReady() {
     _prepareMenuItems();
 
-    super.onInit();
+    checkMissionStatus();
+
+    super.onReady();
   }
 
   _prepareMenuItems() {
@@ -122,6 +132,46 @@ class MissionDetailsLogic extends GetxController {
     ];
   }
 
+  Future<bool> findUserLocation() async {
+    final completer = Completer<bool>();
+
+    isLocationServiceOk = await LocationService.instance.ensurePermissionAndService(context: Get.context!);
+
+    update();
+    if(isLocationServiceOk){
+      DialogHandler.showLoading('finding_location'.tr);
+
+      userLocation = await LocationService.instance.getCurrentLocation(context: Get.context!);
+
+      Get.back();
+
+      if (!completer.isCompleted) completer.complete(true);
+    }else{
+      if (!completer.isCompleted) completer.complete(false);
+    }
+
+    return completer.future;
+  }
+
+  checkMissionStatus() async {
+    await findUserLocation();
+
+    if(isLocationServiceOk) {
+      var result = await MissionRepository.get().checkMissionStatus(
+          CheckMissionStatusRequest(
+              missionId: mission.id, latitude: userLocation!.latitude, longitude: userLocation!.longitude),
+          loadingMessage: 'loading_check_mission_status'.tr);
+
+      Get.back();
+
+      result.fold((error) {
+        snackError(message: error.message);
+      }, (response) {
+        update();
+      });
+    }
+  }
+
   //<editor-fold desc="Delay">
   Future<Duration?> showDelayTimeBottomSheet({Duration? initialValue}) async {
     Duration? selectedValue = initialValue;
@@ -134,7 +184,13 @@ class MissionDetailsLogic extends GetxController {
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
+            bottom: MediaQuery
+                .of(context)
+                .viewInsets
+                .bottom + MediaQuery
+                .of(context)
+                .padding
+                .bottom,
             left: 16,
             right: 16,
             top: 20,
@@ -144,7 +200,10 @@ class MissionDetailsLogic extends GetxController {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('delay_report_title'.tr, style: Theme.of(context).textTheme.headlineMedium),
+                  Text('delay_report_title'.tr, style: Theme
+                      .of(context)
+                      .textTheme
+                      .headlineMedium),
                   const SizedBox(height: 16),
                   DelayTimePickerField(
                     title: '',
@@ -188,10 +247,10 @@ class MissionDetailsLogic extends GetxController {
     Get.back();
 
     result.fold(
-      (error) {
+          (error) {
         snackError(message: error.message);
       },
-      (response) {
+          (response) {
         snackSuccess(message: response.message);
 
         //todo: what todo?
@@ -213,7 +272,13 @@ class MissionDetailsLogic extends GetxController {
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
+            bottom: MediaQuery
+                .of(context)
+                .viewInsets
+                .bottom + MediaQuery
+                .of(context)
+                .padding
+                .bottom,
             left: 16,
             right: 16,
             top: 20,
@@ -223,7 +288,10 @@ class MissionDetailsLogic extends GetxController {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('mission_report'.tr, style: Theme.of(context).textTheme.headlineMedium),
+                  Text('mission_report'.tr, style: Theme
+                      .of(context)
+                      .textTheme
+                      .headlineMedium),
                   const SizedBox(height: 16),
                   AppTextAreaField(
                     title: 'description'.tr,
@@ -262,10 +330,10 @@ class MissionDetailsLogic extends GetxController {
     Get.back();
 
     result.fold(
-      (error) {
+          (error) {
         snackError(message: error.message);
       },
-      (response) {
+          (response) {
         snackSuccess(message: response.message);
       },
     );
@@ -294,7 +362,13 @@ class MissionDetailsLogic extends GetxController {
           builder: (BuildContext context, ScrollController scrollController) {
             return Padding(
               padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
+                bottom: MediaQuery
+                    .of(context)
+                    .viewInsets
+                    .bottom + MediaQuery
+                    .of(context)
+                    .padding
+                    .bottom,
                 left: 16,
                 right: 16,
                 top: 20,
@@ -304,7 +378,10 @@ class MissionDetailsLogic extends GetxController {
                   return SingleChildScrollView(
                     child: Column(
                       children: [
-                        Text('change_date_time'.tr, style: Theme.of(context).textTheme.headlineMedium),
+                        Text('change_date_time'.tr, style: Theme
+                            .of(context)
+                            .textTheme
+                            .headlineMedium),
                         const SizedBox(height: 16),
                         Column(
                           children: [
@@ -421,10 +498,10 @@ class MissionDetailsLogic extends GetxController {
     Get.back();
 
     result.fold(
-      (error) {
+          (error) {
         snackError(message: error.message);
       },
-      (response) {
+          (response) {
         Navigator.pop(Get.context!, result);
 
         snackSuccess(message: response.message);
@@ -446,7 +523,13 @@ class MissionDetailsLogic extends GetxController {
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
+            bottom: MediaQuery
+                .of(context)
+                .viewInsets
+                .bottom + MediaQuery
+                .of(context)
+                .padding
+                .bottom,
             left: 16,
             right: 16,
             top: 20,
@@ -456,7 +539,10 @@ class MissionDetailsLogic extends GetxController {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('cancel_mission'.tr, style: Theme.of(context).textTheme.headlineMedium),
+                  Text('cancel_mission'.tr, style: Theme
+                      .of(context)
+                      .textTheme
+                      .headlineMedium),
                   const SizedBox(height: 16),
                   AppDropdownField<CancelMissionType>(
                     title: 'reason'.tr,
@@ -468,7 +554,10 @@ class MissionDetailsLogic extends GetxController {
                     items: CancelMissionType.values.map((cmt) {
                       return DropdownMenuItem<CancelMissionType>(
                         value: cmt,
-                        child: Text(cmt.title, style: Theme.of(context).textTheme.labelMedium),
+                        child: Text(cmt.title, style: Theme
+                            .of(context)
+                            .textTheme
+                            .labelMedium),
                       );
                     }).toList(),
                   ),
@@ -506,10 +595,10 @@ class MissionDetailsLogic extends GetxController {
     Get.back();
 
     result.fold(
-      (error) {
+          (error) {
         snackError(message: error.message);
       },
-      (response) {
+          (response) {
         snackSuccess(message: response.message);
 
         //todo: what todo?
@@ -517,5 +606,5 @@ class MissionDetailsLogic extends GetxController {
     );
   }
 
-  //</editor-fold>
+//</editor-fold>
 }

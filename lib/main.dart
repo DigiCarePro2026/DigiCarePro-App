@@ -26,11 +26,6 @@ _initFirebaseServices() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  final String? fbToken = await FirebaseMessaging.instance.getToken();
-
-
-  debugPrint('FirebaseToken : $fbToken');
 }
 
 class MyApp extends StatelessWidget {

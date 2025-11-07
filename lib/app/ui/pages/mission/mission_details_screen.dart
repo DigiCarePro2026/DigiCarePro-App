@@ -1,6 +1,7 @@
 import 'package:digi_care_pro/app/data/models/mission.dart';
 import 'package:digi_care_pro/app/logic/mission_details_logic.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
+import 'package:digi_care_pro/app/ui/widgets/secondary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -152,7 +153,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                   ),
                                 ],
                               ),
-                             /* SizedBox(height: 12),
+                              /* SizedBox(height: 12),
                               Row(
                                 children: [
                                   SvgPicture.asset(
@@ -170,21 +171,35 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 24, right: 24),
-                      child: GridView.builder(
-                        itemCount: logic.menuItems.length,
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, // 👈 سه ستون
-                          mainAxisSpacing: 16, // فاصله عمودی بین آیتم‌ها
-                          crossAxisSpacing: 16, // فاصله افقی بین آیتم‌ها
-                          childAspectRatio: 1.3, // نسبت عرض به ارتفاع آیتم‌ها
+
+                  if (!logic.isLocationServiceOk)
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: bodyPadding,
+                        bottom: bodyPadding,
+                        left: bodyPadding * 2,
+                        right: bodyPadding * 2,
+                      ),
+                      child: SecondaryButton(label: 'Location access', onPressed: () {
+                        logic.checkMissionStatus();
+                      }),
+                    )
+                  else
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 24, right: 24),
+                        child: GridView.builder(
+                          itemCount: logic.menuItems.length,
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, // 👈 سه ستون
+                            mainAxisSpacing: 16, // فاصله عمودی بین آیتم‌ها
+                            crossAxisSpacing: 16, // فاصله افقی بین آیتم‌ها
+                            childAspectRatio: 1.3, // نسبت عرض به ارتفاع آیتم‌ها
+                          ),
+                          itemBuilder: (ctx, index) => _buildItem(logic.menuItems[index]),
                         ),
-                        itemBuilder: (ctx, index) => _buildItem(logic.menuItems[index]),
                       ),
                     ),
-                  ),
                 ],
               ),
             ],
@@ -216,7 +231,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                 ),
-              )
+              ),
             ],
           ),
         ),

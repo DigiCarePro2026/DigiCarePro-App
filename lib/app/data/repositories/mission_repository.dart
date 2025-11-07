@@ -2,9 +2,11 @@ import 'package:dartz/dartz.dart';
 import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
 import 'package:digi_care_pro/app/data/api/api_models/cancel_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/change_mission_datetime.dart';
+import 'package:digi_care_pro/app/data/api/api_models/check_mission_status.dart';
 import 'package:digi_care_pro/app/data/api/api_models/delay_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/report_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/signature_mission.dart';
+import 'package:digi_care_pro/app/data/api/api_models/start_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/upload_doc_mission.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/models/create_mission.dart';
@@ -37,12 +39,20 @@ class MissionRepository {
   Future<Either<ApiError, AppResponse>> createMission(CreateMissionRequest request, {String? loadingMessage}) =>
       MissionRemoteDataSource.get().createMission(request, loadingMessage: loadingMessage);
 
-  Future<Either<ApiError, AppResponse>> changeMissionDatetime(ChangeMissionDatetimeRequest request, {String? loadingMessage}) =>
-      MissionRemoteDataSource.get().changeMissionDatetime(request, loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse>> changeMissionDatetime(
+    ChangeMissionDatetimeRequest request, {
+    String? loadingMessage,
+  }) => MissionRemoteDataSource.get().changeMissionDatetime(request, loadingMessage: loadingMessage);
 
   Future<Either<ApiError, AppResponse>> uploadSignature(SignatureMissionRequest request, {String? loadingMessage}) =>
       MissionRemoteDataSource.get().uploadSignature(request, loadingMessage: loadingMessage);
 
   Future<Either<ApiError, AppResponse>> uploadDocument(UploadDocMissionRequest request, {String? loadingMessage}) =>
       MissionRemoteDataSource.get().uploadDocument(request, loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse>> checkMissionStatus(CheckMissionStatusRequest request, {String? loadingMessage}) =>
+      MissionRemoteDataSource.get().checkMissionStatus(request, loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse>> startMission(StartMissionRequest request, {String? loadingMessage}) =>
+      MissionRemoteDataSource.get().startMission(request, loadingMessage: loadingMessage);
 }

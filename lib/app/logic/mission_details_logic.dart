@@ -1,4 +1,5 @@
 import 'package:digi_care_pro/app/data/api/api_models/cancel_mission.dart';
+import 'package:digi_care_pro/app/data/api/api_models/change_mission_datetime.dart';
 import 'package:digi_care_pro/app/data/api/api_models/delay_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/report_mission.dart';
 import 'package:digi_care_pro/app/data/enum/cancel_mission_type.dart';
@@ -14,6 +15,7 @@ import 'package:digi_care_pro/app/ui/widgets/primary_button.dart';
 import 'package:digi_care_pro/app/ui/widgets/secondary_button.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:digi_care_pro/app/ui/widgets/delay_time_picker.dart';
+import 'package:digi_care_pro/app/ui/widgets/time_picker.dart';
 import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -271,8 +273,12 @@ class MissionDetailsLogic extends GetxController {
 
   //</editor-fold>
 
+  //<editor-fold desc="change datetime">
   Future<String?> showChangeDateAndTimeBottomSheet() async {
-    String? result;
+    DateTime? selectedDate;
+    TimeOfDay startTime = TimeOfDay.now();
+    TimeOfDay endTime = TimeOfDay.now();
+    TextEditingController reasonController = TextEditingController();
 
     return await showModalBottomSheet<String>(
       context: Get.context!,
@@ -280,54 +286,153 @@ class MissionDetailsLogic extends GetxController {
       useSafeArea: true,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
-            left: 16,
-            right: 16,
-            top: 20,
-          ),
-          child: StatefulBuilder(
-            builder: (context, setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('change_date_time'.tr, style: Theme.of(context).textTheme.headlineMedium),
-                  const SizedBox(height: 16),
-                  Column(
-                    children: [
-                      CalendarWidget(selectionMode: CalendarSelectionMode.single),
-                      DelayTimePickerField(
-                        title: '',
-                        showHours: true,
-                        initialValue: null,
-                        onChanged: (value) {
-                          // setState(() => selectedValue = value);
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: SecondaryButton(label: 'cancel'.tr, onPressed: () => Navigator.pop(context, null)),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: PrimaryButton(label: 'confirm'.tr, onPressed: () => Navigator.pop(context, result)),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              );
-            },
-          ),
+        return DraggableScrollableSheet(
+          initialChildSize: 0.85,
+          maxChildSize: 0.95,
+          minChildSize: 0.50,
+          expand: false,
+          builder: (BuildContext context, ScrollController scrollController) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
+                left: 16,
+                right: 16,
+                top: 20,
+              ),
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Text('change_date_time'.tr, style: Theme.of(context).textTheme.headlineMedium),
+                        const SizedBox(height: 16),
+                        Column(
+                          children: [
+                            CalendarWidget(
+                              selectionMode: CalendarSelectionMode.single,
+                              onDateSelected: (date, isChangedMonth) {
+                                if (!isChangedMonth) {
+                                  selectedDate = date;
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Center(
+                                    child: TimePickerField(
+                                      title: 'start'.tr,
+                                      initialValue: TimeOfDay.now(),
+                                      onChanged: (time) {
+                                        setState(() {
+                                          startTime = time;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Center(
+                                    child: TimePickerField(
+                                      title: 'end'.tr,
+                                      onChanged: (time) {
+                                        setState(() {
+                                          endTime = time;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            AppTextAreaField(title: 'reason'.tr, controller: reasonController),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: SecondaryButton(label: 'cancel'.tr, onPressed: () => Navigator.pop(context, null)),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: PrimaryButton(
+                                label: 'confirm'.tr,
+                                onPressed: () {
+                                  if (selectedDate == null) {
+                                    snackError(message: 'change_datetime_error_date_null'.tr);
+                                    return;
+                                  }
+
+                                  DateTime plannedStart = DateTime(
+                                    selectedDate!.year,
+                                    selectedDate!.month,
+                                    selectedDate!.day,
+                                    startTime.hour,
+                                    startTime.minute,
+                                  );
+
+                                  DateTime plannedEnd = DateTime(
+                                    selectedDate!.year,
+                                    selectedDate!.month,
+                                    selectedDate!.day,
+                                    endTime.hour,
+                                    endTime.minute,
+                                  );
+
+                                  _changeMissionDatetimeApi(
+                                    plannedStart: plannedStart.toIso8601String(),
+                                    plannedEnd: plannedEnd.toIso8601String(),
+                                    reason: reasonController.text,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            );
+          },
         );
       },
     );
   }
+
+  _changeMissionDatetimeApi({required String plannedStart, required String plannedEnd, required String reason}) async {
+    var result = await MissionRepository.get().changeMissionDatetime(
+      ChangeMissionDatetimeRequest(
+        missionId: mission.id,
+        plannedStart: plannedStart,
+        plannedEnd: plannedEnd,
+        reason: reason,
+      ),
+      loadingMessage: 'loading_change_mission_datetime'.tr,
+    );
+
+    Get.back();
+
+    result.fold(
+      (error) {
+        snackError(message: error.message);
+      },
+      (response) {
+        Navigator.pop(Get.context!, result);
+
+        snackSuccess(message: response.message);
+      },
+    );
+  }
+
+  //</editor-fold>
 
   //<editor-fold desc="Cancel">
   Future<CancelMissionType?> showCancelMissionBottomSheet() async {

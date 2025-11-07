@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
 import 'package:digi_care_pro/app/data/api/api_models/cancel_mission.dart';
+import 'package:digi_care_pro/app/data/api/api_models/change_mission_datetime.dart';
 import 'package:digi_care_pro/app/data/api/api_models/delay_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/report_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/signature_mission.dart';
@@ -39,6 +40,9 @@ class MissionRemoteDataSource extends BaseRemoteDataSource {
 
   Future<Either<ApiError, AppResponse>> createMission(CreateMissionRequest request, {String? loadingMessage}) =>
       api.post(path: '/mission/${request.customerId}/add', body: request.toJson());
+
+  Future<Either<ApiError, AppResponse>> changeMissionDatetime(ChangeMissionDatetimeRequest request, {String? loadingMessage}) =>
+      api.put(path: '/mission/${request.missionId}/update-mission-dateTime', body: request.toJson(), loadingMessage: loadingMessage);
 
   Future<Either<ApiError, AppResponse>> uploadSignature(
     SignatureMissionRequest request, {

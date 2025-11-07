@@ -2,7 +2,6 @@ import 'package:digi_care_pro/app/data/models/support_employee.dart';
 import 'package:digi_care_pro/app/data/repositories/employee_repository.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class EmployeeListLogic extends GetxController {
   List<SupportEmployee> employees = [];
@@ -26,10 +25,5 @@ class EmployeeListLogic extends GetxController {
         update();
       },
     );
-  }
-
-  makeCall(String phoneNumber) async {
-    final Uri launchUri = Uri(scheme: 'tel', path: phoneNumber);
-    await launchUrl(launchUri);
   }
 }

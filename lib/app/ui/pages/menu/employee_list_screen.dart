@@ -2,6 +2,7 @@ import 'package:digi_care_pro/app/data/models/support_employee.dart';
 import 'package:digi_care_pro/app/logic/employee_list_logic.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:digi_care_pro/app/ui/widgets/search_bar_widget.dart';
+import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -75,7 +76,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                     icon: SvgPicture.asset('assets/icons/more-hor.svg'),
                     onSelected: (value) {
                       if (value == 'call') {
-                       logic.makeCall(employee.mobile ?? '');
+                       makeCall(employee.mobile ?? '');
                       }
                     },
                     itemBuilder: (ctx) {

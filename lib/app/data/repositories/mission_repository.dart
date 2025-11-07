@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
 import 'package:digi_care_pro/app/data/api/api_models/cancel_mission.dart';
+import 'package:digi_care_pro/app/data/api/api_models/change_mission_datetime.dart';
 import 'package:digi_care_pro/app/data/api/api_models/delay_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/report_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/signature_mission.dart';
@@ -35,6 +36,9 @@ class MissionRepository {
 
   Future<Either<ApiError, AppResponse>> createMission(CreateMissionRequest request, {String? loadingMessage}) =>
       MissionRemoteDataSource.get().createMission(request, loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse>> changeMissionDatetime(ChangeMissionDatetimeRequest request, {String? loadingMessage}) =>
+      MissionRemoteDataSource.get().changeMissionDatetime(request, loadingMessage: loadingMessage);
 
   Future<Either<ApiError, AppResponse>> uploadSignature(SignatureMissionRequest request, {String? loadingMessage}) =>
       MissionRemoteDataSource.get().uploadSignature(request, loadingMessage: loadingMessage);

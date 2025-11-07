@@ -78,6 +78,7 @@ class _CreateMissionScreenState extends State<CreateMissionScreen> {
                         child: Center(
                           child: TimePickerField(
                             title: 'end'.tr,
+                            initialValue: endTime,
                             onChanged: (time) {
                               setState(() {
                                 endTime = time;

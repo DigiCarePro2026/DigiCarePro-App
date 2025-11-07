@@ -49,7 +49,6 @@ class _LeaveRequestScreenState extends State<LeaveRequestScreen> {
                       setState(() {});
                     },
                   ),
-                  SizedBox(height: 12),
                   Padding(
                     padding: const EdgeInsets.all(bodyPadding),
                     child: AppDropdownField<LeaveType>(

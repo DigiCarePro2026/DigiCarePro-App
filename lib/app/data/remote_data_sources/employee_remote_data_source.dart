@@ -1,10 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
+import 'package:digi_care_pro/app/data/api/api_models/get_day_off.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/models/change_settings.dart';
 import 'package:digi_care_pro/app/data/models/customer.dart';
+import 'package:digi_care_pro/app/data/models/day_off.dart';
 import 'package:digi_care_pro/app/data/models/employee.dart';
-import 'package:digi_care_pro/app/data/models/request_day_off.dart';
+import 'package:digi_care_pro/app/data/api/api_models/request_day_off.dart';
 import 'package:digi_care_pro/app/data/models/support_employee.dart';
 import 'package:digi_care_pro/app/data/remote_data_sources/base_remote_data_source.dart';
 
@@ -29,10 +31,20 @@ class EmployeeRemoteDataSource extends BaseRemoteDataSource {
     fromJson: (json) => (json as List).map((json) => Customer.fromJson(json)).toList(),
   );
 
-  Future<Either<ApiError, AppResponse<List<SupportEmployee>>>> getSupportEmployees( {String? loadingMessage}) => api.get(
+  Future<Either<ApiError, AppResponse<List<SupportEmployee>>>> getSupportEmployees({String? loadingMessage}) => api.get(
     path: '/employee/support-employees',
     loadingMessage: loadingMessage,
     fromJson: (json) => (json as List).map((json) => SupportEmployee.fromJson(json)).toList(),
+  );
+
+  Future<Either<ApiError, AppResponse<List<DayOff>>>> getListOfDayOff(
+    GetDayOffRequest request, {
+    String? loadingMessage,
+  }) => api.get(
+    path: '/employee/list-of-request-day-off',
+    queryParameters: request.toJson(),
+    loadingMessage: loadingMessage,
+    fromJson: (json) => (json as List).map((json) => DayOff.fromJson(json)).toList(),
   );
 
   Future<Either<ApiError, AppResponse>> requestDayOff(RequestDayOffRequest request, {String? loadingMessage}) =>

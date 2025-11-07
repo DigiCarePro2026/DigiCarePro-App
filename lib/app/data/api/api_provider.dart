@@ -213,9 +213,11 @@ class ApiProvider {
           // show403Dialog(message: e.response!.data['message']);
           break;
 
-        // case 500:
-        //   snackError(message: 'Server error 500');
-        //   break;
+        case 500:
+          // snackError(message: 'Server error 500');
+
+          ApiError error = ApiError(code: e.response!.statusCode!, message: 'Server error 500');
+          return Left(error);
 
         case 503:
           logger.i('server is offline');

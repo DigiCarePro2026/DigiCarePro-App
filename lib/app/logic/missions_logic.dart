@@ -3,6 +3,7 @@ import 'package:digi_care_pro/app/data/enum/page_status.dart';
 import 'package:digi_care_pro/app/data/models/mission.dart';
 import 'package:digi_care_pro/app/data/repositories/mission_repository.dart';
 import 'package:digi_care_pro/app/ui/widgets/calendar_widget.dart';
+import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -35,7 +36,10 @@ class MissionsLogic extends GetxController {
 
     Get.back();
 
-    result.fold((error) {}, (response) {
+    result.fold((error) {
+      snackError(message: error.message);
+
+    }, (response) {
       allMissions = response.data!;
       filteredMissions.addAll(allMissions);
 

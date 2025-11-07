@@ -1,10 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
+import 'package:digi_care_pro/app/data/api/api_models/get_day_off.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/models/change_settings.dart';
 import 'package:digi_care_pro/app/data/models/customer.dart';
+import 'package:digi_care_pro/app/data/models/day_off.dart';
 import 'package:digi_care_pro/app/data/models/employee.dart';
-import 'package:digi_care_pro/app/data/models/request_day_off.dart';
+import 'package:digi_care_pro/app/data/api/api_models/request_day_off.dart';
 import 'package:digi_care_pro/app/data/models/support_employee.dart';
 import 'package:digi_care_pro/app/data/remote_data_sources/employee_remote_data_source.dart';
 
@@ -24,6 +26,9 @@ class EmployeeRepository {
 
   Future<Either<ApiError, AppResponse<List<SupportEmployee>>>> getSupportEmployees( {String? loadingMessage}) =>
       EmployeeRemoteDataSource.get().getSupportEmployees(loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse<List<DayOff>>>> getDayOffs(GetDayOffRequest request, {String? loadingMessage}) =>
+      EmployeeRemoteDataSource.get().getListOfDayOff(request, loadingMessage: loadingMessage);
 
   Future<Either<ApiError, AppResponse>> requestDayOff(RequestDayOffRequest request, {String? loadingMessage}) =>
       EmployeeRemoteDataSource.get().requestDayOff(request, loadingMessage: loadingMessage);

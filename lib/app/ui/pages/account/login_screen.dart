@@ -9,6 +9,7 @@ import 'package:digi_care_pro/app/ui/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -143,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                       children: [
                         InkWell(
                           borderRadius: BorderRadius.circular(8),
-                          onTap: () {},
+                          onTap: () => launchUrl(Uri.parse('https://www.facebook.com/share/16gba7n8fi/?mibextid=wwXIfr'), mode: LaunchMode.externalApplication),
                           child: Padding(
                             padding: const EdgeInsets.all(4.0),
                             child: SvgPicture.asset(
@@ -155,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                         SizedBox(width: 16),
                         InkWell(
                           borderRadius: BorderRadius.circular(8),
-                          onTap: () {},
+                          onTap: () => launchUrl(Uri.parse('https://www.facebook.com/share/16gba7n8fi/?mibextid=wwXIfr'), mode: LaunchMode.externalApplication),
                           child: Padding(
                             padding: const EdgeInsets.all(4.0),
                             child: SvgPicture.asset(

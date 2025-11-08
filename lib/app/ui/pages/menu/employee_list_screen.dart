@@ -30,20 +30,13 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
       builder: (logic) {
         return Scaffold(
           appBar: AppBar(title: Text('employee_list'.tr)),
-          body: Column(
+          body: Stack(
             children: [
-              SearchBarWidget(hintText: 'employee_list_search_hint'.tr, onChange: (term) {}),
-              Expanded(
-                child: Stack(
-                  children: [
-                    if (logic.employees.isEmpty) Center(child: CircularProgressIndicator()),
-                    if (logic.employees.isNotEmpty)
-                    ListView.builder(
-                      itemCount: logic.employees.length,
-                      itemBuilder: (ctx, index) => _buildEmployeeItem(logic.employees[index]),
-                    ),
-                  ],
-                ),
+              if (logic.employees.isEmpty) Center(child: CircularProgressIndicator()),
+              if (logic.employees.isNotEmpty)
+              ListView.builder(
+                itemCount: logic.employees.length,
+                itemBuilder: (ctx, index) => _buildEmployeeItem(logic.employees[index]),
               ),
             ],
           ),

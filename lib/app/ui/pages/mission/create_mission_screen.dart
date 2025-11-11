@@ -22,7 +22,7 @@ class _CreateMissionScreenState extends State<CreateMissionScreen> {
 
   String? selectedDate;
   TimeOfDay startTime = TimeOfDay.now();
-  TimeOfDay endTime = TimeOfDay.now();
+  TimeOfDay endTime = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 2);
   TextEditingController descController = TextEditingController();
 
   @override

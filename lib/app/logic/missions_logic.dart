@@ -41,6 +41,8 @@ class MissionsLogic extends GetxController {
 
     }, (response) {
       allMissions = response.data!;
+      filteredMissions.clear();
+
       filteredMissions.addAll(allMissions);
 
       missionCountInDateFilter = allMissions.length;

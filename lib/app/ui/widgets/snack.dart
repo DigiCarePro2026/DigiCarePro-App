@@ -62,7 +62,9 @@ class CustomSnackbarContent extends StatelessWidget {
             child: Text(
               message,
               style: TextStyle(color: Colors.white),
-              overflow: TextOverflow.ellipsis,
+              maxLines: null, // 👈 اجازه نمایش چند خط
+              overflow: TextOverflow.visible, // 👈 متن بریده نشه
+              softWrap: true, // 👈 متن در صورت طولانی بودن، wrap بشه
             ),
           ),
         ],

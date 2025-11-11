@@ -153,6 +153,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month - 1, 1);
             });
           }
+
+          widget.onDateSelected?.call(_focusedMonth, true);
         }
       },
       child: Column(

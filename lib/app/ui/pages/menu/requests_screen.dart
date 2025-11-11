@@ -45,8 +45,12 @@ class _RequestsScreenState extends State<RequestsScreen> {
               borderRadius: BorderRadius.circular(cardRadius),
             ),
             child: InkWell(
-              onTap: () {
-                Get.toNamed(Routes.LEAVE_REQUEST);
+              onTap: () async {
+                bool update = await Get.toNamed(Routes.LEAVE_REQUEST);
+
+                if(update){
+                  logic.getRequests();
+                }
               },
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -98,17 +102,17 @@ class _RequestsScreenState extends State<RequestsScreen> {
                         ],
                       ),
                     ),
-                   /* PopupMenuButton(
+                    PopupMenuButton(
                       icon: SvgPicture.asset('assets/icons/more-hor.svg'),
                       onSelected: (value) {
-                        if (value == 'remove') {
-                          print('Remove selected');
+                        if (value == 'cancel') {
+                          print('Cancel selected');
                         }
                       },
                       itemBuilder: (ctx) {
-                        return [PopupMenuItem(value: 'remove', child: Text('remove'.tr))];
+                        return [PopupMenuItem(value: 'cancel', child: Text('cancel'.tr))];
                       },
-                    ),*/
+                    ),
                   ],
                 ),
                 Text(request.description ?? '', style: Theme.of(context).textTheme.titleMedium),

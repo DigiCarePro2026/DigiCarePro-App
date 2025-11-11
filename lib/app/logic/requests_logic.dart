@@ -10,10 +10,10 @@ class RequestsLogic extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    _getRequests();
+    getRequests();
   }
 
-  _getRequests() async {
+  getRequests() async {
     var result = await EmployeeRepository.get().getDayOffs(
       GetDayOffRequest(month: DateTime.now().toIso8601String()),
       loadingMessage: 'loading_get_requests'.tr,

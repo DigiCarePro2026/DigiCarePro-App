@@ -106,7 +106,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                       icon: SvgPicture.asset('assets/icons/more-hor.svg'),
                       onSelected: (value) {
                         if (value == 'cancel') {
-                          print('Cancel selected');
+                         logic.cancelRequest(request.id);
                         }
                       },
                       itemBuilder: (ctx) {

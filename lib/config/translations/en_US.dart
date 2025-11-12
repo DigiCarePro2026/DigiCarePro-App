@@ -123,4 +123,6 @@ const Map<String, String> enUS = {
   'doctor': 'Doctor',
   'company': 'Company',
   'empty_message': 'No items found',
+  'loading_cancel_request': 'Canceling request',
+  'canceled': 'Canceled',
 };

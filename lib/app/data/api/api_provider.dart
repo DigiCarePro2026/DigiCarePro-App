@@ -170,11 +170,13 @@ class ApiProvider {
   Future<Either<ApiError, AppResponse<T>>> delete<T>({
     required String path,
     Map<String, dynamic>? headers,
-    required int pathParameter,
     T Function(dynamic)? fromJson,
+    String? loadingMessage,
   }) async {
     try {
-      Response response = await dio.delete('$path/$pathParameter', options: Options(headers: headers));
+      DialogHandler.showLoading(loadingMessage ?? 'loading_default_message'.tr);
+
+      Response response = await dio.delete(path, options: Options(headers: headers));
 
       return _handleResponse(response, fromJson);
     } catch (e) {

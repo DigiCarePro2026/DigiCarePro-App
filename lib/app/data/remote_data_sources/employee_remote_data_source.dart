@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
+import 'package:digi_care_pro/app/data/api/api_models/cancel_day_off.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get_day_off.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/models/change_settings.dart';
@@ -49,6 +50,9 @@ class EmployeeRemoteDataSource extends BaseRemoteDataSource {
 
   Future<Either<ApiError, AppResponse>> requestDayOff(RequestDayOffRequest request, {String? loadingMessage}) =>
       api.post(path: '/employee/request-day-off', body: request.toJson(), loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse>> cancelDayOff(CancelDayOffRequest request, {String? loadingMessage}) =>
+      api.delete(path: '/employee/cancel-day-off/${request.id}', loadingMessage: loadingMessage);
 
   Future<Either<ApiError, AppResponse>> changeSettings(ChangeSettingsRequest request, {String? loadingMessage}) =>
       api.put(path: '/employee/settings', body: request.toJson(), loadingMessage: loadingMessage);

@@ -1,3 +1,4 @@
+import 'package:digi_care_pro/app/data/api/api_models/cancel_day_off.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get_day_off.dart';
 import 'package:digi_care_pro/app/data/models/day_off.dart';
 import 'package:digi_care_pro/app/data/repositories/employee_repository.dart';
@@ -29,6 +30,26 @@ class RequestsLogic extends GetxController {
         requests = response.data!;
 
         update();
+      },
+    );
+  }
+
+  cancelRequest(String id) async {
+    var result = await EmployeeRepository.get().cancelDayOff(
+      CancelDayOffRequest(id: id),
+      loadingMessage: 'loading_cancel_request'.tr,
+    );
+
+    Get.back();
+
+    result.fold(
+      (error) {
+        snackError(message: error.message);
+      },
+      (response) {
+        snackSuccess(message: response.message);
+
+        getRequests();
       },
     );
   }

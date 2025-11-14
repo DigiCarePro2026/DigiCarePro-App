@@ -8,6 +8,7 @@ import 'package:digi_care_pro/app/data/api/api_models/report_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/signature_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/start_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/upload_doc_mission.dart';
+import 'package:digi_care_pro/app/data/enum/mission_action_type.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/models/create_mission.dart';
 import 'package:digi_care_pro/app/data/models/customer.dart';
@@ -50,7 +51,7 @@ class MissionRepository {
   Future<Either<ApiError, AppResponse>> uploadDocument(UploadDocMissionRequest request, {String? loadingMessage}) =>
       MissionRemoteDataSource.get().uploadDocument(request, loadingMessage: loadingMessage);
 
-  Future<Either<ApiError, AppResponse>> checkMissionStatus(CheckMissionStatusRequest request, {String? loadingMessage}) =>
+  Future<Either<ApiError, AppResponse<MissionActionType>>> checkMissionStatus(CheckMissionStatusRequest request, {String? loadingMessage}) =>
       MissionRemoteDataSource.get().checkMissionStatus(request, loadingMessage: loadingMessage);
 
   Future<Either<ApiError, AppResponse>> startMission(StartMissionRequest request, {String? loadingMessage}) =>

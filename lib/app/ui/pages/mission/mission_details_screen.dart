@@ -1,3 +1,4 @@
+import 'package:digi_care_pro/app/data/enum/mission_action_type.dart';
 import 'package:digi_care_pro/app/data/models/mission.dart';
 import 'package:digi_care_pro/app/logic/mission_details_logic.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
@@ -79,7 +80,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                 children: [
                   SizedBox(height: MediaQuery.of(context).padding.top + 50),
                   Padding(
-                    padding: const EdgeInsets.only(left: 24, right: 24),
+                    padding: const EdgeInsets.only(left: 20, right: 20),
                     child: SizedBox(
                       width: double.infinity,
                       child: Card.filled(
@@ -188,15 +189,44 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 24, right: 24),
-                        child: GridView.builder(
-                          itemCount: logic.menuItems.length,
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2, // 👈 سه ستون
-                            mainAxisSpacing: 16, // فاصله عمودی بین آیتم‌ها
-                            crossAxisSpacing: 16, // فاصله افقی بین آیتم‌ها
-                            childAspectRatio: 1.3, // نسبت عرض به ارتفاع آیتم‌ها
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              if(logic.actionType != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top:24),
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(cardRadius),
+                                      border: BoxBorder.all(color: Theme.of(context).colorScheme.primary, width: 2)
+                                    ),
+                                    child: InkWell(
+                                      onTap: () => logic.handleActionTap(),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(logic.actionType!.title, style: Theme.of(context).textTheme.labelLarge,),
+                                          ],
+                                        ),
+                                      ),
+                                    )),
+                              ),
+                              GridView.builder(
+                                itemCount: logic.menuItems.length,
+                                shrinkWrap: true,
+                                physics: BouncingScrollPhysics(),
+                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2, // 👈 سه ستون
+                                  mainAxisSpacing: 16, // فاصله عمودی بین آیتم‌ها
+                                  crossAxisSpacing: 16, // فاصله افقی بین آیتم‌ها
+                                  childAspectRatio: 1.3, // نسبت عرض به ارتفاع آیتم‌ها
+                                ),
+                                itemBuilder: (ctx, index) => _buildItem(logic.menuItems[index]),
+                              ),
+                            ],
                           ),
-                          itemBuilder: (ctx, index) => _buildItem(logic.menuItems[index]),
                         ),
                       ),
                     ),

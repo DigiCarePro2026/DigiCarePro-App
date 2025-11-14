@@ -8,6 +8,7 @@ import 'package:digi_care_pro/app/data/api/api_models/report_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/signature_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/start_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/upload_doc_mission.dart';
+import 'package:digi_care_pro/app/data/enum/mission_action_type.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/models/create_mission.dart';
 import 'package:digi_care_pro/app/data/models/mission.dart';
@@ -94,8 +95,15 @@ class MissionRemoteDataSource extends BaseRemoteDataSource {
     );
   }
 
-  Future<Either<ApiError, AppResponse>> checkMissionStatus(CheckMissionStatusRequest request, {String? loadingMessage}) =>
-      api.post(path: '/mission/${request.missionId}/status-check', body: request.toJson(), loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse<MissionActionType>>> checkMissionStatus(
+    CheckMissionStatusRequest request, {
+    String? loadingMessage,
+  }) => api.post<MissionActionType>(
+    path: '/mission/${request.missionId}/status-check',
+    body: request.toJson(),
+    loadingMessage: loadingMessage,
+    fromJson: (actionType) => MissionActionType.values[actionType-1],
+  );
 
   Future<Either<ApiError, AppResponse>> startMission(StartMissionRequest request, {String? loadingMessage}) =>
       api.post(path: '/mission/${request.missionId}/start', body: request.toJson(), loadingMessage: loadingMessage);

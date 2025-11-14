@@ -125,4 +125,8 @@ const Map<String, String> enUS = {
   'empty_message': 'No items found',
   'loading_cancel_request': 'Canceling request',
   'canceled': 'Canceled',
+  'auto_start': 'Auto Start',
+  'manual_start': 'Manual Start',
+  'sign': 'Signature',
+  'start_mission': 'Start mission',
 };

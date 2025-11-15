@@ -129,4 +129,5 @@ const Map<String, String> enUS = {
   'manual_start': 'Manual Start',
   'sign': 'Signature',
   'start_mission': 'Start mission',
+  'manual_end': 'Manual end',
 };

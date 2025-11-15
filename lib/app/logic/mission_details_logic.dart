@@ -4,6 +4,7 @@ import 'package:digi_care_pro/app/data/api/api_models/cancel_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/change_mission_datetime.dart';
 import 'package:digi_care_pro/app/data/api/api_models/check_mission_status.dart';
 import 'package:digi_care_pro/app/data/api/api_models/delay_mission.dart';
+import 'package:digi_care_pro/app/data/api/api_models/manual_end.dart';
 import 'package:digi_care_pro/app/data/api/api_models/report_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/start_mission.dart';
 import 'package:digi_care_pro/app/data/enum/cancel_mission_type.dart';
@@ -185,13 +186,15 @@ class MissionDetailsLogic extends GetxController {
     }
   }
 
-  handleActionTap() {
+  handleActionTap() async {
     switch (actionType!) {
       case MissionActionType.autoStart:
         startMission();
         break;
 
       case MissionActionType.manualStart:
+        String? reason = await showManualEndMissionBottomSheet();
+        manualEnd(reason ?? '');
         break;
 
       case MissionActionType.sign:
@@ -209,11 +212,78 @@ class MissionDetailsLogic extends GetxController {
         missionId: mission.id,
         latitude: userLocation!.latitude,
         longitude: userLocation!.longitude,
-        expectedLat: mission.customerLatitude,
-        expectedLng: mission.customerLongitude,
       ),
       loadingMessage: 'start_mission'.tr
     );
+
+    Get.back();
+
+    result.fold((error) {
+      snackError(message: error.message);
+    }, (response) {
+      snackSuccess(message: response.message);
+    });
+  }
+
+  Future<String?> showManualEndMissionBottomSheet() async {
+    String? value;
+
+    return await showModalBottomSheet<String>(
+      context: Get.context!,
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
+            left: 16,
+            right: 16,
+            top: 20,
+          ),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('manual_end'.tr, style: Theme.of(context).textTheme.headlineMedium),
+                  const SizedBox(height: 16),
+                  AppTextAreaField(title: 'reason'.tr, onChanged: (value) => setState(() => value)),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SecondaryButton(label: 'cancel'.tr, onPressed: () => Navigator.pop(context, null)),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: PrimaryButton(
+                          label: 'confirm'.tr,
+                          onPressed: () => Navigator.pop(context, value),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  manualEnd(String reason) async {
+    var result = await MissionRepository.get().manualEnd(
+        ManualEndRequest(
+          missionId: mission.id,
+          reason: reason,
+        ),
+        loadingMessage: 'Manual ending'.tr
+    );
+
+    Get.back();
 
     result.fold((error) {
       snackError(message: error.message);

@@ -7,16 +7,14 @@ class MainLogic extends GetxController{
   List<Customer> employeeCustomers = [];
 
   @override
-  Future<void> onInit() async {
-    super.onInit();
-
+  Future<void> onReady() async {
     await _getEmployeeCustomers();
+
+    super.onReady();
   }
 
   Future<void> _getEmployeeCustomers() async {
     var result = await EmployeeRepository.get().getCustomers();
-
-    Get.back();
 
     result.fold((error){
 

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:digi_care_pro/app/logic/create_mission_logic.dart';
 import 'package:digi_care_pro/app/logic/missions_logic.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
@@ -22,7 +24,7 @@ class _CreateMissionScreenState extends State<CreateMissionScreen> {
 
   String? selectedDate;
   TimeOfDay startTime = TimeOfDay.now();
-  TimeOfDay endTime = TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 2);
+  TimeOfDay endTime = TimeOfDay.now().replacing(hour: min(TimeOfDay.now().hour + 2, 23));
   TextEditingController descController = TextEditingController();
 
   @override

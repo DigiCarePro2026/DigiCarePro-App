@@ -10,8 +10,6 @@ class SupportLogic extends GetxController {
       loadingMessage: 'loading_send_message'.tr,
     );
 
-    Get.back();
-
     result.fold(
       (error) {
         snackError(message: error.message);

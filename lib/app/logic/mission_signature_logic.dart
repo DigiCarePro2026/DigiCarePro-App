@@ -10,8 +10,6 @@ class MissionSignatureLogic extends GetxController {
       loadingMessage: 'Uploading signature',
     );
 
-    Get.back();
-
     result.fold(
       (error) {
         snackError(message: error.message);

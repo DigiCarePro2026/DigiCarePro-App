@@ -20,8 +20,6 @@ class RequestsLogic extends GetxController {
       loadingMessage: 'loading_get_requests'.tr,
     );
 
-    Get.back();
-
     result.fold(
       (error) {
         snackError(message: error.message);
@@ -39,8 +37,6 @@ class RequestsLogic extends GetxController {
       CancelDayOffRequest(id: id),
       loadingMessage: 'loading_cancel_request'.tr,
     );
-
-    Get.back();
 
     result.fold(
       (error) {

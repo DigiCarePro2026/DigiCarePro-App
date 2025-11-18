@@ -18,8 +18,6 @@ class LoginLogic extends GetxController {
 
     var result = await AccountRepository.get().login(request, loadingMessage: 'loading_message_login'.tr);
 
-    Get.back();
-
     result.fold(
       (error) {
         snackError(message: error.message);
@@ -45,15 +43,11 @@ class LoginLogic extends GetxController {
       RegisterDeviceRequest(deviceId: deviceId, deviceType: Platform.isAndroid ? 'Android' : 'Ios', token: fbToken),
     );
 
-    Get.back();
-
     result.fold((error) {}, (response) {});
   }
 
   _getProfile() async {
     var result = await AccountRepository.get().getProfile(loadingMessage: 'loading_message_get_profile'.tr);
-
-    Get.back();
 
     result.fold(
       (error) {

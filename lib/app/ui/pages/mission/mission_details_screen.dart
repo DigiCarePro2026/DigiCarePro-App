@@ -182,7 +182,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                         right: bodyPadding * 2,
                       ),
                       child: SecondaryButton(label: 'Location access', onPressed: () {
-                        logic.checkMissionStatus();
+                        logic.checkMissionStatus(true);
                       }),
                     )
                   else

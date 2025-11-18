@@ -19,8 +19,6 @@ class CreateMissionLogic extends GetxController {
       ),
     );
 
-    Get.back();
-
     result.fold(
       (error) {
         snackError(message: error.message);

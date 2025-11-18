@@ -14,7 +14,7 @@ class RequestDayOffRequest {
   });
 
   Map<String, dynamic> toJson() => {
-    'employeeId': employeeId,
+    'employeeId': null,
     'leaveTypeId': leaveTypeId,
     'startDate': startDate,
     'endDate': endDate,

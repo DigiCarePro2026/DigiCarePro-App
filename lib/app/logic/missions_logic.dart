@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MissionsLogic extends GetxController {
-  PageStatus pageStatus = PageStatus.loading;
   DateTime _selectedDateTime = DateTime.now();
   int? _selectedDay;
   List<Mission> allMissions = [], filteredMissions = [];
@@ -17,24 +16,17 @@ class MissionsLogic extends GetxController {
   int missionCountInDateFilter = 0;
 
   @override
-  Future<void> onInit() async {
-    super.onInit();
+  void onReady() {
+    getMissions();
 
-    Future.delayed(Duration(milliseconds: 200), () {
-      getMissions();
-    });
+    super.onReady();
   }
 
   getMissions() async {
-    // pageStatus = PageStatus.loading;
-    // update();
-
     var result = await MissionRepository.get().getMissions(
       year: _selectedDateTime.year,
       month: _selectedDateTime.month,
     );
-
-    Get.back();
 
     result.fold((error) {
       snackError(message: error.message);
@@ -47,7 +39,6 @@ class MissionsLogic extends GetxController {
 
       missionCountInDateFilter = allMissions.length;
 
-      pageStatus = PageStatus.loaded;
       update();
     });
   }

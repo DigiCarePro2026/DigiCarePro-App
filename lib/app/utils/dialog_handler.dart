@@ -5,10 +5,11 @@ import 'package:get/get.dart';
 
 class DialogHandler {
   static showLoading(String message) {
-    showDialog(
-      context: Get.context!,
+    if (Get.isDialogOpen == true) return;
+
+    Get.dialog(
+      LoadingScreen(message: message),
       barrierDismissible: false,
-      builder: (context) => LoadingScreen(message: message),
     );
   }
 

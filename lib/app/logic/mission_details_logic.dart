@@ -44,7 +44,7 @@ class MissionDetailsLogic extends GetxController {
   void onReady() {
     _prepareMenuItems();
 
-    checkMissionStatus();
+    checkMissionStatus(true);
 
     super.onReady();
   }
@@ -82,14 +82,14 @@ class MissionDetailsLogic extends GetxController {
           Get.toNamed(Routes.CREATE_MISSION, arguments: mission.customerId);
         },
       ),
-      MenuModel(
+ /*     MenuModel(
         title: 'customer_signature'.tr,
         icon: 'assets/icons/signature.svg',
         color: AppColors.signatureColor,
         callback: () {
           Get.toNamed(Routes.MISSION_SIGNATURE, arguments: mission.id);
         },
-      ),
+      ),*/
       MenuModel(
         title: 'submit_report'.tr,
         icon: 'assets/icons/report.svg',
@@ -117,7 +117,7 @@ class MissionDetailsLogic extends GetxController {
       MenuModel(
         title: 'change_date_time'.tr,
         icon: 'assets/icons/calendar-setting.svg',
-        color: AppColors.delayReportColor,
+        color: AppColors.changeDateAndTimeColor,
         callback: () async {
           String? result = await showChangeDateAndTimeBottomSheet();
         },
@@ -125,7 +125,7 @@ class MissionDetailsLogic extends GetxController {
       MenuModel(
         title: 'cancel_mission'.tr,
         icon: 'assets/icons/cancel.svg',
-        color: AppColors.delayReportColor,
+        color: AppColors.cancelMissionColor,
         callback: () async {
           CancelMissionType? reason = await showCancelMissionBottomSheet();
 
@@ -137,18 +137,22 @@ class MissionDetailsLogic extends GetxController {
     ];
   }
 
-  Future<bool> findUserLocation() async {
-    final completer = Completer<bool>();
+  Future<bool> findUserLocation(bool hasLoading) async {
+    var completer = Completer<bool>();
 
     isLocationServiceOk = await LocationService.instance.ensurePermissionAndService(context: Get.context!);
 
     update();
     if (isLocationServiceOk) {
-      DialogHandler.showLoading('finding_location'.tr);
+      if(hasLoading) {
+        DialogHandler.showLoading('finding_location'.tr);
+      }
 
       userLocation = await LocationService.instance.getCurrentLocation(context: Get.context!);
 
-      Get.back();
+      if(hasLoading) {
+        Get.back();
+      }
 
       if (!completer.isCompleted) completer.complete(true);
     } else {
@@ -158,8 +162,8 @@ class MissionDetailsLogic extends GetxController {
     return completer.future;
   }
 
-  checkMissionStatus() async {
-    await findUserLocation();
+  checkMissionStatus(bool hasLoadingForLocation) async {
+    await findUserLocation(hasLoadingForLocation);
 
     if (isLocationServiceOk) {
       var result = await MissionRepository.get().checkMissionStatus(
@@ -170,8 +174,6 @@ class MissionDetailsLogic extends GetxController {
         ),
         loadingMessage: 'loading_check_mission_status'.tr,
       );
-
-      Get.back();
 
       result.fold(
         (error) {
@@ -216,8 +218,6 @@ class MissionDetailsLogic extends GetxController {
       loadingMessage: 'start_mission'.tr
     );
 
-    Get.back();
-
     result.fold((error) {
       snackError(message: error.message);
     }, (response) {
@@ -226,6 +226,8 @@ class MissionDetailsLogic extends GetxController {
   }
 
   Future<String?> showManualEndMissionBottomSheet() async {
+    TextEditingController controller = TextEditingController();
+
     String? value;
 
     return await showModalBottomSheet<String>(
@@ -246,9 +248,9 @@ class MissionDetailsLogic extends GetxController {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('manual_end'.tr, style: Theme.of(context).textTheme.headlineMedium),
+                  Text('manual_start'.tr, style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 16),
-                  AppTextAreaField(title: 'reason'.tr, onChanged: (value) => setState(() => value)),
+                  AppTextAreaField(title: 'reason'.tr, onChanged: (text) => setState(() => value), controller: controller,),
                   const SizedBox(height: 24),
                   Row(
                     children: [
@@ -259,7 +261,7 @@ class MissionDetailsLogic extends GetxController {
                       Expanded(
                         child: PrimaryButton(
                           label: 'confirm'.tr,
-                          onPressed: () => Navigator.pop(context, value),
+                          onPressed: () => Navigator.pop(context, controller.text),
                         ),
                       ),
                     ],
@@ -280,15 +282,15 @@ class MissionDetailsLogic extends GetxController {
           missionId: mission.id,
           reason: reason,
         ),
-        loadingMessage: 'Manual ending'.tr
+        loadingMessage: 'Manual start'.tr
     );
-
-    Get.back();
 
     result.fold((error) {
       snackError(message: error.message);
     }, (response) {
       snackSuccess(message: response.message);
+
+      checkMissionStatus(false);
     });
   }
 
@@ -354,8 +356,6 @@ class MissionDetailsLogic extends GetxController {
       DelayMissionRequest(missionId: mission.id, delayMinutes: minutes),
       loadingMessage: 'loading_delay_mission'.tr,
     );
-
-    Get.back();
 
     result.fold(
       (error) {
@@ -428,8 +428,6 @@ class MissionDetailsLogic extends GetxController {
       ReportMissionRequest(missionId: mission.id, report: report),
       loadingMessage: 'loading_report_mission'.tr,
     );
-
-    Get.back();
 
     result.fold(
       (error) {
@@ -588,8 +586,6 @@ class MissionDetailsLogic extends GetxController {
       loadingMessage: 'loading_change_mission_datetime'.tr,
     );
 
-    Get.back();
-
     result.fold(
       (error) {
         snackError(message: error.message);
@@ -672,8 +668,6 @@ class MissionDetailsLogic extends GetxController {
       CancelMissionRequest(missionId: mission.id, reason: reason),
       loadingMessage: 'loading_cancel_mission'.tr,
     );
-
-    Get.back();
 
     result.fold(
       (error) {

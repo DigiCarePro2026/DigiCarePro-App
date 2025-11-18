@@ -58,6 +58,8 @@ class AppColors {
   static const signatureColor = Color(0xFF93308E);
   static const reportColor = Color(0xFF00ABD3);
   static const delayReportColor = Color(0xFFD2323D);
+  static const cancelMissionColor = Color(0xFF100C0D);
+  static const changeDateAndTimeColor = Color(0xFF93308E);
 
 
 

@@ -31,8 +31,11 @@ class ApiProvider {
 
   factory ApiProvider() => _instance;
 
+  int _requestCount = 0;
+  String? loadingMessage;
+
   ApiProvider._() {
-    dio.options.headers['locale'] = 'fa';
+    // dio.options.headers['locale'] = 'fa';
 
     final token = Pref.getString(PrefKey.accessToken);
     if (token != null) {
@@ -50,7 +53,13 @@ class ApiProvider {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          bool netAvailable = await isNetworkAvailable();
+          _requestCount++;
+
+          if (_requestCount == 1) {
+            _showLoading(loadingMessage ?? 'loading_default_message'.tr);
+          }
+
+      /*    bool netAvailable = await isNetworkAvailable();
 
           if (netAvailable) {
             logger.i('onRequest: ${options.path}\n${options.data.toString()}');
@@ -59,17 +68,29 @@ class ApiProvider {
           } else {
             getX.Get.back();
             showOfflineBottomSheet();
-          }
+          }*/
+
+          return handler.next(options);
         },
         onResponse: (response, handler) {
-          // getX.Get.back();
+          _requestCount--;
+
+          if (_requestCount <= 0) {
+            _requestCount = 0;
+            _hideLoading();
+          }
 
           logger.i('onResponse : ${response.data.toString().substring(0, min(response.data.toString().length-1, 300))}');
 
           return handler.next(response);
         },
         onError: (error, handler) {
-          // getX.Get.back();
+          _requestCount--;
+
+          if (_requestCount <= 0) {
+            _requestCount = 0;
+            _hideLoading();
+          }
 
           logger.e('Error occurred: ${error.message}');
 
@@ -77,6 +98,22 @@ class ApiProvider {
         },
       ),
     );
+  }
+
+  void _showLoading(String message) {
+    Future.microtask(() {
+      if (!getX.Get.isDialogOpen!) {
+        DialogHandler.showLoading(message);
+      }
+    });
+  }
+
+  void _hideLoading() {
+    Future.microtask(() {
+      if (getX.Get.isDialogOpen!) {
+        getX.Get.back(); // Safe close
+      }
+    });
   }
 
   Future<Either<ApiError, AppResponse<T>>> get<T>({
@@ -87,9 +124,7 @@ class ApiProvider {
     required T Function(dynamic) fromJson,
     String? loadingMessage,
   }) async {
-    if (loadingMessage != null) {
-      DialogHandler.showLoading(loadingMessage ?? 'loading_default_message'.tr);
-    }
+    this.loadingMessage = loadingMessage;
 
     try {
       Response response = await dio.get(
@@ -111,7 +146,7 @@ class ApiProvider {
     T Function(dynamic)? fromJson,
     String? loadingMessage,
   }) async {
-    DialogHandler.showLoading(loadingMessage ?? 'loading_default_message'.tr);
+    this.loadingMessage = loadingMessage;
 
     try {
       Response response = await dio.post(
@@ -133,7 +168,7 @@ class ApiProvider {
     T Function(dynamic)? fromJson,
     String? loadingMessage,
   }) async {
-    DialogHandler.showLoading(loadingMessage ?? 'loading_default_message'.tr);
+    this.loadingMessage = loadingMessage;
 
     try {
       Response response = await dio.put(
@@ -173,9 +208,9 @@ class ApiProvider {
     T Function(dynamic)? fromJson,
     String? loadingMessage,
   }) async {
-    try {
-      DialogHandler.showLoading(loadingMessage ?? 'loading_default_message'.tr);
+    this.loadingMessage = loadingMessage;
 
+    try {
       Response response = await dio.delete(path, options: Options(headers: headers));
 
       return _handleResponse(response, fromJson);

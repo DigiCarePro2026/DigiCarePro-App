@@ -11,8 +11,6 @@ class UploadDocumentLogic extends GetxController {
       loadingMessage: 'Uploading document',
     );
 
-    Get.back();
-
     result.fold(
       (error) {
         snackError(message: error.message);

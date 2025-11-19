@@ -143,18 +143,24 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
     return GestureDetector(
       onHorizontalDragEnd: (details) {
+        bool changed = false;
+
         if (details.primaryVelocity != null) {
           if (details.primaryVelocity! < 0 && _focusedMonth.isBefore(_maxMonth)) {
             setState(() {
               _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month + 1, 1);
+              changed = true;
             });
           } else if (details.primaryVelocity! > 0 && _focusedMonth.isAfter(_minMonth)) {
             setState(() {
               _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month - 1, 1);
+              changed = true;
             });
           }
 
-          widget.onDateSelected?.call(_focusedMonth, true);
+          if(changed) {
+            widget.onDateSelected?.call(_focusedMonth, true);
+          }
         }
       },
       child: Column(

@@ -17,5 +17,6 @@ abstract class Routes {
   static const REQUESTS = '/requests';
   static const LEAVE_REQUEST = '/requests/leave-request';
   static const SUPPORT = '/support';
+  static const TIMESHEET = '/timesheet';
 
 }

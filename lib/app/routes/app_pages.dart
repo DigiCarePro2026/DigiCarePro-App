@@ -12,6 +12,7 @@ import 'package:digi_care_pro/app/ui/pages/menu/employee_profile_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/leave_request_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/requests_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/support_screen.dart';
+import 'package:digi_care_pro/app/ui/pages/menu/timesheet_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/create_mission_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/mission_details_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/signature_screen.dart';
@@ -54,5 +55,7 @@ class AppPages {
     GetPage(name: Routes.REQUESTS, page: () => const RequestsScreen()),
     GetPage(name: Routes.LEAVE_REQUEST, page: () => const LeaveRequestScreen()),
     GetPage(name: Routes.SUPPORT, page: () => const SupportScreen()),
+    GetPage(name: Routes.TIMESHEET, page: () => const TimesheetScreen()),
+
   ];
 }

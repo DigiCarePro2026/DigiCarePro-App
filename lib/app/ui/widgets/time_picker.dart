@@ -34,7 +34,7 @@ class _TimePickerFieldState extends State<TimePickerField> {
     super.initState();
     final init = widget.initialValue ?? TimeOfDay.now();
     _hour = init.hour;
-    _minute = 0;
+    _minute = init.minute;
   }
 
   void _updateValue() {

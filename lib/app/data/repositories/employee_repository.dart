@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
 import 'package:digi_care_pro/app/data/api/api_models/cancel_day_off.dart';
+import 'package:digi_care_pro/app/data/api/api_models/get-timesheet.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get_day_off.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/models/change_settings.dart';
@@ -9,6 +10,7 @@ import 'package:digi_care_pro/app/data/models/day_off.dart';
 import 'package:digi_care_pro/app/data/models/employee.dart';
 import 'package:digi_care_pro/app/data/api/api_models/request_day_off.dart';
 import 'package:digi_care_pro/app/data/models/support_employee.dart';
+import 'package:digi_care_pro/app/data/models/timesheet_record.dart';
 import 'package:digi_care_pro/app/data/remote_data_sources/employee_remote_data_source.dart';
 
 class EmployeeRepository {
@@ -25,7 +27,7 @@ class EmployeeRepository {
 
   Future<Either<ApiError, AppResponse<List<Customer>>>> getCustomers() => EmployeeRemoteDataSource.get().getCustomers();
 
-  Future<Either<ApiError, AppResponse<List<SupportEmployee>>>> getSupportEmployees( {String? loadingMessage}) =>
+  Future<Either<ApiError, AppResponse<List<SupportEmployee>>>> getSupportEmployees({String? loadingMessage}) =>
       EmployeeRemoteDataSource.get().getSupportEmployees(loadingMessage: loadingMessage);
 
   Future<Either<ApiError, AppResponse<List<DayOff>>>> getDayOffs(GetDayOffRequest request, {String? loadingMessage}) =>
@@ -39,4 +41,10 @@ class EmployeeRepository {
 
   Future<Either<ApiError, AppResponse>> changeSettings(ChangeSettingsRequest request, {String? loadingMessage}) =>
       EmployeeRemoteDataSource.get().changeSettings(request, loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse<List<String>>>> getTimesheetMonths({String? loadingMessage}) =>
+      EmployeeRemoteDataSource.get().getTimesheetMonths(loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse<List<TimesheetRecord>>>> getTimesheet(GetTimesheetRequest request, {String? loadingMessage}) =>
+      EmployeeRemoteDataSource.get().getTimeSheet(request, loadingMessage: loadingMessage);
 }

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
 import 'package:digi_care_pro/app/data/api/api_models/cancel_day_off.dart';
+import 'package:digi_care_pro/app/data/api/api_models/get-timesheet.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get_day_off.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/models/change_settings.dart';
@@ -9,6 +10,7 @@ import 'package:digi_care_pro/app/data/models/day_off.dart';
 import 'package:digi_care_pro/app/data/models/employee.dart';
 import 'package:digi_care_pro/app/data/api/api_models/request_day_off.dart';
 import 'package:digi_care_pro/app/data/models/support_employee.dart';
+import 'package:digi_care_pro/app/data/models/timesheet_record.dart';
 import 'package:digi_care_pro/app/data/remote_data_sources/base_remote_data_source.dart';
 
 class EmployeeRemoteDataSource extends BaseRemoteDataSource {
@@ -56,4 +58,18 @@ class EmployeeRemoteDataSource extends BaseRemoteDataSource {
 
   Future<Either<ApiError, AppResponse>> changeSettings(ChangeSettingsRequest request, {String? loadingMessage}) =>
       api.put(path: '/employee/settings', body: request.toJson(), loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse<List<String>>>> getTimesheetMonths({String? loadingMessage}) => api.get(
+    path: '/employeeTimeSheet/months',
+    fromJson: (json) => (json as List).map((json) => json as String).toList(),
+  );
+
+  Future<Either<ApiError, AppResponse<List<TimesheetRecord>>>> getTimeSheet(
+    GetTimesheetRequest request, {
+    String? loadingMessage,
+  }) => api.get(
+    path: '/employeeTimeSheet/monthly',
+    queryParameters: request.toJson(),
+    fromJson: (json) => (json as List).map((json) => TimesheetRecord.fromJson(json)).toList(),
+  );
 }

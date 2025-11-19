@@ -238,6 +238,8 @@ class ApiProvider {
   }
 
   Future<Either<ApiError, T>> _handleError<T>(dynamic e) async {
+    _hideLoading();
+
     if (e is DioError && e.response != null) {
       switch (e.response!.statusCode) {
         case 401:
@@ -251,8 +253,6 @@ class ApiProvider {
           break;
 
         case 500:
-          // snackError(message: 'Server error 500');
-
           ApiError error = ApiError(code: e.response!.statusCode!, message: 'Server error 500');
           return Left(error);
 

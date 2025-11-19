@@ -72,7 +72,14 @@ class Mission {
     customerName: json['customerName']?.toString() ?? '',
     customerPhone: json['customerPhone']?.toString() ?? '',
     customerAddress: json['customerAddress']?.toString() ?? '',
-    customerLatitude: json['customerLatitude'],
-    customerLongitude: json['customerLongitude'],
+    customerLatitude: parseDouble(json['customerLatitude']),
+    customerLongitude: parseDouble(json['customerLongitude']),
   );
+
+  static double? parseDouble(dynamic value) {
+    if (value == null) return null;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    return null;
+  }
 }

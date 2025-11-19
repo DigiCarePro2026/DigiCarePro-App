@@ -132,7 +132,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           endIndent: profileItemPadding,
                         ),
                         InkWell(
-                          onTap: () {},
+                          onTap: () => Get.toNamed(Routes.TIMESHEET),
                           borderRadius: BorderRadius.circular(12),
                           child: Padding(
                             padding: const EdgeInsets.all(profileItemPadding),

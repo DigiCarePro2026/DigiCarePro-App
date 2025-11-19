@@ -130,4 +130,5 @@ const Map<String, String> enUS = {
   'sign': 'Signature',
   'start_mission': 'Start mission',
   'manual_end': 'Manual end',
+  'timesheet_month_title': 'Month',
 };

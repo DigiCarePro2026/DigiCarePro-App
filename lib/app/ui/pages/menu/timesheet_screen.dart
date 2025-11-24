@@ -40,6 +40,8 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
                   items: logic.months.map((m) => DropdownMenuItem<String>(value: m, child: Text(m))).toList(),
                   onChanged: (item) {
                     selectedMonth = item;
+
+                    logic.getTimesheet(selectedMonth!.substring(0, 10));
                   },
                 ),
                 SizedBox(height: 12),
@@ -48,7 +50,7 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
                   child: Table(
                     border: TableBorder.all(color: Colors.grey.shade300),
                     columnWidths: const {
-                      0: FlexColumnWidth(1.5), // Date
+                      0: FlexColumnWidth(2), // Date
                       1: FlexColumnWidth(1.3), // Start
                       2: FlexColumnWidth(1.3), // End
                       3: FlexColumnWidth(1.3), // Total

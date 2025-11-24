@@ -75,10 +75,10 @@ class ApiProvider {
         onResponse: (response, handler) {
           _requestCount--;
 
-          if (_requestCount <= 0) {
-            _requestCount = 0;
+          // if (_requestCount <= 0) {
+          //   _requestCount = 0;
             _hideLoading();
-          }
+          // }
 
           logger.i('onResponse : ${response.data.toString().substring(0, min(response.data.toString().length-1, 300))}');
 
@@ -87,10 +87,10 @@ class ApiProvider {
         onError: (error, handler) {
           _requestCount--;
 
-          if (_requestCount <= 0) {
-            _requestCount = 0;
+          // if (_requestCount <= 0) {
+          //   _requestCount = 0;
             _hideLoading();
-          }
+          // }
 
           logger.e('Error occurred: ${error.message}');
 

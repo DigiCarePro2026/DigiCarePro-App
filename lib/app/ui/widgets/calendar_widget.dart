@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Event {
   final String title;
@@ -50,7 +51,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
 
-  final List<String> _weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  final List<String> _weekDays = ['mon'.tr, 'tue'.tr, 'wed'.tr, 'thu'.tr, 'fri'.tr, 'sat'.tr, 'sun'.tr];
 
   @override
   void initState() {
@@ -64,9 +65,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   String _getMonthName(int month) {
-    const months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
+    final months = [
+      'january'.tr, 'february'.tr, 'march'.tr, 'april'.tr, 'may'.tr, 'june'.tr,
+      'july'.tr, 'august'.tr, 'september'.tr, 'october'.tr, 'november'.tr, 'december'.tr
     ];
     return months[month - 1];
   }

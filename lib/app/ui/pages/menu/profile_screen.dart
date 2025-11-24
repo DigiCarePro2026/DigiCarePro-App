@@ -41,7 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Row(
                     children: [
-                      CircleAvatar(radius: 24, backgroundImage: AssetImage('assets/images/profile-sample.jpg')),
+                      CircleAvatar(radius: 24, backgroundImage: NetworkImage('')),
                       SizedBox(width: 12),
                       Expanded(
                         child: Column(
@@ -155,24 +155,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           indent: profileItemPadding,
                           endIndent: profileItemPadding,
                         ),
-                        InkWell(
-                          onTap: () {},
-                          borderRadius: BorderRadius.circular(12),
-                          child: Padding(
-                            padding: const EdgeInsets.all(profileItemPadding),
-                            child: Row(
-                              children: [
-                                SvgPicture.asset('assets/icons/money-send.svg', color: Color(0xFFF4B5A5)),
-                                SizedBox(width: 12),
-                                Expanded(child: Text('payroll'.tr, style: Theme.of(context).textTheme.labelMedium)),
-                                SvgPicture.asset(
-                                  'assets/icons/arrow-right.svg',
-                                  color: Theme.of(context).disabledColor,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        // InkWell(
+                        //   onTap: () {},
+                        //   borderRadius: BorderRadius.circular(12),
+                        //   child: Padding(
+                        //     padding: const EdgeInsets.all(profileItemPadding),
+                        //     child: Row(
+                        //       children: [
+                        //         SvgPicture.asset('assets/icons/money-send.svg', color: Color(0xFFF4B5A5)),
+                        //         SizedBox(width: 12),
+                        //         Expanded(child: Text('payroll'.tr, style: Theme.of(context).textTheme.labelMedium)),
+                        //         SvgPicture.asset(
+                        //           'assets/icons/arrow-right.svg',
+                        //           color: Theme.of(context).disabledColor,
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
                         Divider(
                           height: 1,
                           color: Theme.of(context).dividerColor,

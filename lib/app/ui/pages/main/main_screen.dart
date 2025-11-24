@@ -79,7 +79,7 @@ class _MainScreenState extends State<MainScreen> {
                             minWidth: 16, minHeight: 16),
                         child: Center(
                           child: Text(
-                            '23',
+                            logic.unSeenMessageCount.toString(),
                             style: TextStyle(color: Colors.white,
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold),

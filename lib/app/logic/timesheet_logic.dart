@@ -24,14 +24,16 @@ class TimeSheetLogic extends GetxController {
     }, (response) {
       months = response.data ?? [];
 
-      getTimesheet();
+      if(months.isNotEmpty) {
+        getTimesheet(months[0].substring(0, 10));
+      }
 
       update();
     });
   }
 
-  getTimesheet() async {
-    var result = await EmployeeRepository.get().getTimesheet(GetTimesheetRequest(month: '2025-11-01'));
+  getTimesheet(String month) async {
+    var result = await EmployeeRepository.get().getTimesheet(GetTimesheetRequest(month: month));
 
     result.fold((error) {
       snackError(message: error.message);

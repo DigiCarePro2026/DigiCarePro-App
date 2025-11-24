@@ -102,6 +102,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                         ],
                       ),
                     ),
+                    if(request.status != LeaveStatus.canceled)
                     PopupMenuButton(
                       icon: SvgPicture.asset('assets/icons/more-hor.svg'),
                       onSelected: (value) {

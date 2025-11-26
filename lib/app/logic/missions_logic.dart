@@ -103,7 +103,7 @@ class MissionsLogic extends GetxController {
           break;
 
         case MissionType.todo:
-          if (mission.realStartTime == null) {
+          if (mission.realStartTime == null && mission.realEndTime == null) {
             tempList.add(mission);
           }
           break;

@@ -37,13 +37,16 @@ class LoginLogic extends GetxController {
 
   _registerDevice() async {
     String? deviceId = await getDeviceUniqueId();
-    final String? fbToken = await FirebaseMessaging.instance.getToken();
 
-    var result = await AccountRepository.get().registerDevice(
-      RegisterDeviceRequest(deviceId: deviceId, deviceType: Platform.isAndroid ? 'Android' : 'Ios', token: fbToken),
-    );
+    if(Platform.isAndroid) {
+      final String? fbToken = await FirebaseMessaging.instance.getToken();
 
-    result.fold((error) {}, (response) {});
+      var result = await AccountRepository.get().registerDevice(
+        RegisterDeviceRequest(deviceId: deviceId, deviceType: Platform.isAndroid ? 'Android' : 'Ios', token: fbToken),
+      );
+
+      result.fold((error) {}, (response) {});
+    }
   }
 
   _getProfile() async {

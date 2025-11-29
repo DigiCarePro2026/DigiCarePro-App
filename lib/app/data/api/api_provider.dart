@@ -220,6 +220,8 @@ class ApiProvider {
   }
 
   Future<Either<ApiError, AppResponse<T>>> _handleResponse<T>(Response response, T Function(dynamic)? fromJson) async {
+    _hideLoading();
+
     if (!response.data['isSuccess']) {
       return Left(ApiError(code: response.statusCode!, message: response.data['message']));
     }

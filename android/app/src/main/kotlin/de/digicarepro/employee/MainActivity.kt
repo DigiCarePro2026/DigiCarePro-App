@@ -1,4 +1,4 @@
-package de.digicarepro.app.digi_care_pro
+package de.digicarepro.employee
 
 import io.flutter.embedding.android.FlutterActivity
 

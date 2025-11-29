@@ -6,6 +6,7 @@ import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:digi_care_pro/app/ui/theme/app_theme.dart';
 import 'package:digi_care_pro/app/ui/widgets/app_text_field.dart';
 import 'package:digi_care_pro/app/ui/widgets/primary_button.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -22,8 +23,8 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
   LoginLogic logic = LoginLogic();
   bool _isKeyboardVisible = false;
 
-  final _emailController = TextEditingController(text: 'admin@digicarepro.com');
-  final _passwordController = TextEditingController(text: '123456');
+  final _emailController = TextEditingController(text: kDebugMode ? 'admin@digicarepro.com' : '');
+  final _passwordController = TextEditingController(text: kDebugMode ? '123456' : '');
 
   @override
   void initState() {
@@ -144,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                       children: [
                         InkWell(
                           borderRadius: BorderRadius.circular(8),
-                          onTap: () => launchUrl(Uri.parse('https://www.facebook.com/share/16gba7n8fi/?mibextid=wwXIfr'), mode: LaunchMode.externalApplication),
+                          onTap: () => launchUrl(Uri.parse('https://www.instagram.com/digicarepro?igsh=MWpueGV5Z3FrOXlibQ=='), mode: LaunchMode.externalApplication),
                           child: Padding(
                             padding: const EdgeInsets.all(4.0),
                             child: SvgPicture.asset(

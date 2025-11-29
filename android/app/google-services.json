@@ -26,9 +26,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:52634179125:android:a1b14a8cdf1dc633f1837c",
+        "mobilesdk_app_id": "1:52634179125:android:a3e68ee4c4264624f1837c",
         "android_client_info": {
-          "package_name": "de.digicarepro.app.digi_care_pro"
+          "package_name": "de.digicarepro.employee"
         }
       },
       "oauth_client": [],

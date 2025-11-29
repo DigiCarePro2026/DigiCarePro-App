@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "de.digicarepro.app.digi_care_pro"
+    namespace = "de.digicarepro.employee"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "de.digicarepro.app.digi_care_pro"
+        applicationId = "de.digicarepro.employee"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

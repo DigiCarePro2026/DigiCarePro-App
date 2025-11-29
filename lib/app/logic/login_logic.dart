@@ -10,6 +10,7 @@ import 'package:digi_care_pro/app/utils/globals.dart';
 import 'package:digi_care_pro/app/utils/dialog_handler.dart';
 import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginLogic extends GetxController {
@@ -40,6 +41,8 @@ class LoginLogic extends GetxController {
 
     if(Platform.isAndroid) {
       final String? fbToken = await FirebaseMessaging.instance.getToken();
+
+      debugPrint('firebase token : $fbToken');
 
       var result = await AccountRepository.get().registerDevice(
         RegisterDeviceRequest(deviceId: deviceId, deviceType: Platform.isAndroid ? 'Android' : 'Ios', token: fbToken),

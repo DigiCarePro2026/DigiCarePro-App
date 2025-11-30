@@ -28,6 +28,10 @@ class MissionsLogic extends GetxController {
       GetMissionsRequest(year: _selectedDateTime.year, month: _selectedDateTime.month, ),
     );
 
+    if (Get.isDialogOpen!) {
+      Get.back();
+    }
+
     result.fold(
       (error) {
         snackError(message: error.message);

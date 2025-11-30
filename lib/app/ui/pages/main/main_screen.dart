@@ -15,7 +15,6 @@ class MainScreen extends StatefulWidget {
   int currentPage = 1;
   Function(Customer c)? callback;
 
-
   List<Widget> _pages = [];
 
   MainScreen({super.key});

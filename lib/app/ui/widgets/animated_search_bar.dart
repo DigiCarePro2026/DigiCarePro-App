@@ -1,3 +1,5 @@
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
+
 import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,8 +8,9 @@ import 'package:dropdown_search/dropdown_search.dart';
 class AnimatedSearchField extends StatefulWidget {
 
   List<Customer> employeeCustomers = [];
+  Function(Customer c)? callback;
 
-  AnimatedSearchField({super.key, required this.employeeCustomers});
+  AnimatedSearchField({super.key, required this.employeeCustomers, this.callback});
 
   @override
   State<AnimatedSearchField> createState() => _AnimatedSearchFieldState();
@@ -69,6 +72,10 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField> {
                       onChanged: (value) {
                         setState(() {
                           selectedItem = value;
+
+                          if(widget.callback != null) {
+                            widget.callback!(value!);
+                          }
                         });
                       },
                       popupProps: PopupProps.menu(

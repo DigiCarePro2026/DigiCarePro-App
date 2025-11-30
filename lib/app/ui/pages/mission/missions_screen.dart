@@ -1,5 +1,6 @@
 import 'package:digi_care_pro/app/data/enum/mission_type.dart';
 import 'package:digi_care_pro/app/data/enum/page_status.dart';
+import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:digi_care_pro/app/data/models/mission.dart';
 import 'package:digi_care_pro/app/logic/missions_logic.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
@@ -12,7 +13,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class MissionsScreen extends StatefulWidget {
-  const MissionsScreen({super.key});
+  MissionsScreen({super.key, this.callback});
+
+  Function(Customer c)? callback;
 
   @override
   State<MissionsScreen> createState() => _MissionsScreenState();
@@ -24,6 +27,10 @@ class _MissionsScreenState extends State<MissionsScreen> {
   @override
   void initState() {
     super.initState();
+
+    widget.callback = (selectedCustomer){
+      debugPrint(selectedCustomer.getFullName());
+    };
 
     Get.put(logic);
   }

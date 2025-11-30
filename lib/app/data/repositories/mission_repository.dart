@@ -4,6 +4,7 @@ import 'package:digi_care_pro/app/data/api/api_models/cancel_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/change_mission_datetime.dart';
 import 'package:digi_care_pro/app/data/api/api_models/check_mission_status.dart';
 import 'package:digi_care_pro/app/data/api/api_models/delay_mission.dart';
+import 'package:digi_care_pro/app/data/api/api_models/get_missions.dart';
 import 'package:digi_care_pro/app/data/api/api_models/manual_end.dart';
 import 'package:digi_care_pro/app/data/api/api_models/report_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/signature_mission.dart';
@@ -26,8 +27,8 @@ class MissionRepository {
     return _instance!;
   }
 
-  Future<Either<ApiError, AppResponse<List<Mission>>>> getMissions({required int year, required int month}) async =>
-      MissionRemoteDataSource.get().getMissions(year: year, month: month);
+  Future<Either<ApiError, AppResponse<List<Mission>>>> getMissions(GetMissionsRequest request) async =>
+      MissionRemoteDataSource.get().getMissions(request);
 
   Future<Either<ApiError, AppResponse>> cancelMission(CancelMissionRequest request, {String? loadingMessage}) =>
       MissionRemoteDataSource.get().cancel(request, loadingMessage: loadingMessage);

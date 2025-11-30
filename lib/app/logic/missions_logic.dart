@@ -1,3 +1,4 @@
+import 'package:digi_care_pro/app/data/api/api_models/get_missions.dart';
 import 'package:digi_care_pro/app/data/enum/mission_type.dart';
 import 'package:digi_care_pro/app/data/enum/page_status.dart';
 import 'package:digi_care_pro/app/data/models/mission.dart';
@@ -24,23 +25,24 @@ class MissionsLogic extends GetxController {
 
   getMissions() async {
     var result = await MissionRepository.get().getMissions(
-      year: _selectedDateTime.year,
-      month: _selectedDateTime.month,
+      GetMissionsRequest(year: _selectedDateTime.year, month: _selectedDateTime.month, ),
     );
 
-    result.fold((error) {
-      snackError(message: error.message);
+    result.fold(
+      (error) {
+        snackError(message: error.message);
+      },
+      (response) {
+        allMissions = response.data!;
+        filteredMissions.clear();
 
-    }, (response) {
-      allMissions = response.data!;
-      filteredMissions.clear();
+        filteredMissions.addAll(allMissions);
 
-      filteredMissions.addAll(allMissions);
+        missionCountInDateFilter = allMissions.length;
 
-      missionCountInDateFilter = allMissions.length;
-
-      update();
-    });
+        update();
+      },
+    );
   }
 
   Map<DateTime, List<Event>> groupMissionsByDate() {
@@ -75,18 +77,18 @@ class MissionsLogic extends GetxController {
     getMissions();
   }
 
-  innerFilterMissions({int? day, MissionType? missionType}){
-    if(day != null){
+  innerFilterMissions({int? day, MissionType? missionType}) {
+    if (day != null) {
       _selectedDay = day;
     }
 
-    if(_selectedDay != null){
+    if (_selectedDay != null) {
       _changeDay(_selectedDay!);
-    }else{
+    } else {
       filteredMissions.addAll(allMissions);
     }
 
-    if(missionType != null){
+    if (missionType != null) {
       selectedMissionType = missionType;
     }
 

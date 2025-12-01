@@ -11,6 +11,8 @@ import 'package:get/get.dart';
 
 class MissionsLogic extends GetxController {
   DateTime _selectedDateTime = DateTime.now();
+  Customer? selectedCustomer;
+
   int? _selectedDay;
   List<Mission> allMissions = [], filteredMissions = [];
   MissionType selectedMissionType = MissionType.all;
@@ -24,9 +26,19 @@ class MissionsLogic extends GetxController {
     super.onReady();
   }
 
+  void onCustomerSelected(customer) {
+    selectedCustomer = customer;
+
+    getMissions();
+  }
+
   getMissions() async {
     var result = await MissionRepository.get().getMissions(
-      GetMissionsRequest(year: _selectedDateTime.year, month: _selectedDateTime.month, ),
+      GetMissionsRequest(
+        year: _selectedDateTime.year,
+        month: _selectedDateTime.month,
+        customerId: selectedCustomer?.id,
+      ),
     );
 
     result.fold(

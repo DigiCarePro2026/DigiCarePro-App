@@ -1,13 +1,14 @@
 import 'package:digi_care_pro/app/data/models/customer.dart';
+import 'package:digi_care_pro/app/logic/missions_logic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:get/get.dart';
 
 class AnimatedSearchField extends StatefulWidget {
   List<Customer> employeeCustomers = [];
-  final Function(Customer?) onCustomerSelected;
 
-  AnimatedSearchField({super.key, required this.employeeCustomers, required this.onCustomerSelected});
+  AnimatedSearchField({super.key, required this.employeeCustomers});
 
   @override
   State<AnimatedSearchField> createState() => _AnimatedSearchFieldState();
@@ -30,6 +31,10 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField> {
 
           if (isExpanded) {
             animationEnd = false;
+          }else{
+            selectedItem = null;
+
+            Get.find<MissionsLogic>().onCustomerSelected(selectedItem);
           }
         });
       },
@@ -71,7 +76,7 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField> {
                           selectedItem = value;
                         });
 
-                        widget.onCustomerSelected(value);
+                        Get.find<MissionsLogic>().onCustomerSelected(value);
                       },
                       popupProps: PopupProps.menu(
                         showSearchBox: true,

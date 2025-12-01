@@ -33,9 +33,7 @@ class _MainScreenState extends State<MainScreen> {
 
     widget._pages = [
       CustomerListScreen(),
-      MissionsScreen(onCustomerSelected: (customer) {
-        onCustomerSelected!.call(customer);
-      },),
+      MissionsScreen(),
       ProfileScreen()
     ];
 
@@ -165,7 +163,7 @@ class _MainScreenState extends State<MainScreen> {
         return Text('customer_list'.tr);
 
       case 1:
-        return AnimatedSearchField(employeeCustomers: logic.employeeCustomers, onCustomerSelected: onCustomerSelected!);
+        return AnimatedSearchField(employeeCustomers: logic.employeeCustomers);
 
       case 2:
         return Text('profile'.tr);

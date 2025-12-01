@@ -14,9 +14,7 @@ import 'package:get/get.dart';
 
 class MissionsScreen extends StatefulWidget {
 
-  Function(Customer)? onCustomerSelected;
-
-   MissionsScreen({super.key,this.onCustomerSelected});
+   MissionsScreen({super.key});
 
   @override
   State<MissionsScreen> createState() => _MissionsScreenState();
@@ -28,10 +26,6 @@ class _MissionsScreenState extends State<MissionsScreen> {
   @override
   void initState() {
     super.initState();
-
-    widget.onCustomerSelected = (customer){
-      debugPrint(customer.getFullName());
-    };
 
     Get.put(logic);
   }

@@ -1,6 +1,7 @@
 import 'package:digi_care_pro/app/data/api/api_models/get_missions.dart';
 import 'package:digi_care_pro/app/data/enum/mission_type.dart';
 import 'package:digi_care_pro/app/data/enum/page_status.dart';
+import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:digi_care_pro/app/data/models/mission.dart';
 import 'package:digi_care_pro/app/data/repositories/mission_repository.dart';
 import 'package:digi_care_pro/app/ui/widgets/calendar_widget.dart';

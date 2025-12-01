@@ -13,9 +13,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class MissionsScreen extends StatefulWidget {
-  MissionsScreen({super.key, this.callback});
 
-  Function(Customer c)? callback;
+  Function(Customer)? onCustomerSelected;
+
+   MissionsScreen({super.key,this.onCustomerSelected});
 
   @override
   State<MissionsScreen> createState() => _MissionsScreenState();
@@ -28,8 +29,8 @@ class _MissionsScreenState extends State<MissionsScreen> {
   void initState() {
     super.initState();
 
-    widget.callback = (selectedCustomer){
-      debugPrint(selectedCustomer.getFullName());
+    widget.onCustomerSelected = (customer){
+      debugPrint(customer.getFullName());
     };
 
     Get.put(logic);

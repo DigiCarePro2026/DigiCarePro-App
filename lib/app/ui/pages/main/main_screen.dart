@@ -1,7 +1,6 @@
 import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:digi_care_pro/app/logic/main_logic.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
-import 'package:digi_care_pro/app/ui/pages/main/home_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/customer_list_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/profile_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/missions_screen.dart';
@@ -13,8 +12,6 @@ import 'package:get/get.dart';
 
 class MainScreen extends StatefulWidget {
   int currentPage = 1;
-  Function(Customer c)? callback;
-
 
   List<Widget> _pages = [];
 
@@ -28,13 +25,17 @@ class _MainScreenState extends State<MainScreen> {
 
   MainLogic logic = MainLogic();
 
+  Function(Customer?)? onCustomerSelected;
+
   @override
   void initState() {
     Get.put(logic);
 
     widget._pages = [
       CustomerListScreen(),
-      MissionsScreen(callback: widget.callback,),
+      MissionsScreen(onCustomerSelected: (customer) {
+        onCustomerSelected!.call(customer);
+      },),
       ProfileScreen()
     ];
 
@@ -164,7 +165,7 @@ class _MainScreenState extends State<MainScreen> {
         return Text('customer_list'.tr);
 
       case 1:
-        return AnimatedSearchField(employeeCustomers: logic.employeeCustomers,callback: widget.callback,);
+        return AnimatedSearchField(employeeCustomers: logic.employeeCustomers, onCustomerSelected: onCustomerSelected!);
 
       case 2:
         return Text('profile'.tr);

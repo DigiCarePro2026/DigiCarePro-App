@@ -150,4 +150,6 @@ const Map<String, String> deDE = {
   "october": "Oktober",
   "november": "November",
   "december": "Dezember",
+  'employee': 'Mitarbeiter',
+  'manager': 'Manager',
 };

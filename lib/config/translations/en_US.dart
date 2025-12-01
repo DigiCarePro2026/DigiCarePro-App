@@ -150,5 +150,10 @@ const Map<String, String> enUS = {
   'october': 'October',
   'november':'November',
   'december': 'December',
+  'employee': 'Employee',
+  'manager': 'Manager',
 
+  'submit_sign': 'Submit sign',
+  'clear': 'Clear',
+  'sign2':'Sign',
 };

@@ -150,4 +150,6 @@ const Map<String, String> frFR = {
   "october": "Octobre",
   "november": "Novembre",
   "december": "Décembre",
+  'employee': 'Employé',
+  'manager': 'Manager',
 };

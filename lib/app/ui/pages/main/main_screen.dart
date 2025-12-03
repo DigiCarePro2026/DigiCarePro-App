@@ -75,18 +75,21 @@ class _MainScreenState extends State<MainScreen> {
                             .colorScheme
                             .onSurface,
                       ),
-                      SizedBox(width: 8),
-                      Container(
-                        decoration: BoxDecoration(
-                            color: AppColors.red, shape: BoxShape.circle),
-                        constraints: BoxConstraints(
-                            minWidth: 16, minHeight: 16),
-                        child: Center(
-                          child: Text(
-                            logic.unSeenMessageCount.toString(),
-                            style: TextStyle(color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold),
+                      SizedBox(width: logic.unSeenMessageCount > 0 ? 8 : 0),
+                      Visibility(
+                        visible: logic.unSeenMessageCount > 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: AppColors.red, shape: BoxShape.circle),
+                          constraints: BoxConstraints(
+                              minWidth: 16, minHeight: 16),
+                          child: Center(
+                            child: Text(
+                              logic.unSeenMessageCount.toString(),
+                              style: TextStyle(color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                       ),

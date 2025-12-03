@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 class MainLogic extends GetxController{
 
   List<Customer> employeeCustomers = [];
-  int unSeenMessageCount = 34;
+  int unSeenMessageCount = 0;
 
   @override
   Future<void> onReady() async {

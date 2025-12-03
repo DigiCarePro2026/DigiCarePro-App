@@ -59,7 +59,9 @@ class _CreateMissionScreenState extends State<CreateMissionScreen> {
                     onDateSelected: (date, isChangedMonth) {
                       setState(() {
                         if (!isChangedMonth) {
-                          selectedDate = date.toIso8601String();
+                          if(date != null) {
+                            selectedDate = date.toIso8601String();
+                          }
                         }
                       });
                     },

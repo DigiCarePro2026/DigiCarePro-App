@@ -47,9 +47,9 @@ class _MissionsScreenState extends State<MissionsScreen> {
                         activeMinMaxMonth: 2,
                         onDateSelected: (date, isChangedMonth) {
                           if (isChangedMonth) {
-                            logic.changeMonth(date);
+                            logic.changeMonth(date!);
                           }else{
-                            logic.innerFilterMissions(day: date.day);
+                            logic.innerFilterMissions(day: date?.day);
                           }
                         },
                         events: logic.groupMissionsByDate(),

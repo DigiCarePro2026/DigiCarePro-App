@@ -4,6 +4,7 @@ import 'package:digi_care_pro/app/data/repositories/account_repository.dart';
 import 'package:digi_care_pro/app/data/repositories/employee_repository.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
+import 'package:digi_care_pro/app/utils/dialog_handler.dart';
 import 'package:get/get.dart';
 
 class ProfileLogic extends GetxController {
@@ -23,10 +24,13 @@ class ProfileLogic extends GetxController {
   }
 
   changeEmployeeSettings(bool value) async {
+    // DialogHandler.showLoading('change_employee_settings_message'.tr);
+
     var result = await EmployeeRepository.get().changeSettings(
       ChangeSettingsRequest(receiveNotifications: value),
-      loadingMessage: 'change_employee_settings_message'.tr,
     );
+
+    // DialogHandler.hideLoading();
 
     result.fold((error) {}, (response) {
       profile.receiveNotifications = value;

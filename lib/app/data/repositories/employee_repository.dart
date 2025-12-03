@@ -32,6 +32,9 @@ class EmployeeRepository {
   Future<Either<ApiError, AppResponse<List<SupportEmployee>>>> getSupportEmployees({String? loadingMessage}) =>
       EmployeeRemoteDataSource.get().getSupportEmployees(loadingMessage: loadingMessage);
 
+  Future<Either<ApiError, AppResponse<List<String>>>> getDayOffMonths({String? loadingMessage}) =>
+      EmployeeRemoteDataSource.get().getDayOffMonths(loadingMessage: loadingMessage);
+
   Future<Either<ApiError, AppResponse<List<DayOff>>>> getDayOffs(GetDayOffRequest request, {String? loadingMessage}) =>
       EmployeeRemoteDataSource.get().getListOfDayOff(request, loadingMessage: loadingMessage);
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:digi_care_pro/app/data/api/api_models/cancel_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/change_mission_datetime.dart';
@@ -82,7 +83,7 @@ class MissionDetailsLogic extends GetxController {
           Get.toNamed(Routes.CREATE_MISSION, arguments: mission.customerId);
         },
       ),
- /*     MenuModel(
+      /*     MenuModel(
         title: 'customer_signature'.tr,
         icon: 'assets/icons/signature.svg',
         color: AppColors.signatureColor,
@@ -144,15 +145,13 @@ class MissionDetailsLogic extends GetxController {
 
     update();
     if (isLocationServiceOk) {
-      if(hasLoading) {
+      if (hasLoading) {
         DialogHandler.showLoading('finding_location'.tr);
       }
 
       userLocation = await LocationService.instance.getCurrentLocation(context: Get.context!);
 
-      if(hasLoading) {
-        Get.back();
-      }
+      DialogHandler.hideLoading();
 
       if (!completer.isCompleted) completer.complete(true);
     } else {
@@ -163,6 +162,8 @@ class MissionDetailsLogic extends GetxController {
   }
 
   checkMissionStatus(bool hasLoadingForLocation) async {
+    DialogHandler.showLoading('loading_check_mission_status'.tr);
+
     await findUserLocation(hasLoadingForLocation);
 
     if (isLocationServiceOk) {
@@ -172,8 +173,9 @@ class MissionDetailsLogic extends GetxController {
           latitude: userLocation!.latitude,
           longitude: userLocation!.longitude,
         ),
-        loadingMessage: 'loading_check_mission_status'.tr,
       );
+
+      DialogHandler.hideLoading();
 
       result.fold(
         (error) {
@@ -196,11 +198,16 @@ class MissionDetailsLogic extends GetxController {
 
       case MissionActionType.manualStart:
         String? reason = await showManualEndMissionBottomSheet();
-        manualEnd(reason ?? '');
+        if (reason != null) {
+          manualEnd(reason);
+        }
         break;
 
       case MissionActionType.sign:
-        Get.toNamed(Routes.MISSION_SIGNATURE, arguments: mission.id);
+        bool needRefresh = await Get.toNamed(Routes.MISSION_SIGNATURE, arguments: mission.id);
+        if (needRefresh) {
+          checkMissionStatus(false);
+        }
         break;
 
       case MissionActionType.done:
@@ -209,20 +216,24 @@ class MissionDetailsLogic extends GetxController {
   }
 
   startMission() async {
+    DialogHandler.showLoading('start_mission'.tr);
+
     var result = await MissionRepository.get().startMission(
-      StartMissionRequest(
-        missionId: mission.id,
-        latitude: userLocation!.latitude,
-        longitude: userLocation!.longitude,
-      ),
-      loadingMessage: 'start_mission'.tr
+      StartMissionRequest(missionId: mission.id, latitude: userLocation!.latitude, longitude: userLocation!.longitude),
     );
 
-    result.fold((error) {
-      snackError(message: error.message);
-    }, (response) {
-      snackSuccess(message: response.message);
-    });
+    DialogHandler.hideLoading();
+
+    result.fold(
+      (error) {
+        snackError(message: error.message);
+      },
+      (response) {
+        snackSuccess(message: response.message);
+
+        checkMissionStatus(false);
+      },
+    );
   }
 
   Future<String?> showManualEndMissionBottomSheet() async {
@@ -250,7 +261,11 @@ class MissionDetailsLogic extends GetxController {
                 children: [
                   Text('manual_start'.tr, style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 16),
-                  AppTextAreaField(title: 'reason'.tr, onChanged: (text) => setState(() => value), controller: controller,),
+                  AppTextAreaField(
+                    title: 'reason'.tr,
+                    onChanged: (text) => setState(() => value),
+                    controller: controller,
+                  ),
                   const SizedBox(height: 24),
                   Row(
                     children: [
@@ -277,21 +292,25 @@ class MissionDetailsLogic extends GetxController {
   }
 
   manualEnd(String reason) async {
+    DialogHandler.showLoading('manual_start'.tr);
+
     var result = await MissionRepository.get().manualEnd(
-        ManualEndRequest(
-          missionId: mission.id,
-          reason: reason,
-        ),
-        loadingMessage: 'Manual start'.tr
+      ManualEndRequest(missionId: mission.id, reason: reason),
+      loadingMessage: 'Manual start'.tr,
     );
 
-    result.fold((error) {
-      snackError(message: error.message);
-    }, (response) {
-      snackSuccess(message: response.message);
+    DialogHandler.hideLoading();
 
-      checkMissionStatus(false);
-    });
+    result.fold(
+      (error) {
+        snackError(message: error.message);
+      },
+      (response) {
+        snackSuccess(message: response.message);
+
+        checkMissionStatus(false);
+      },
+    );
   }
 
   //<editor-fold desc="Delay">
@@ -364,7 +383,11 @@ class MissionDetailsLogic extends GetxController {
       (response) {
         snackSuccess(message: response.message);
 
-        //todo: what todo?
+        if (response.data != null) {
+          mission.plannedStartDateTime = response.data!.plannedStartDateTime;
+
+          update();
+        }
       },
     );
   }
@@ -492,7 +515,10 @@ class MissionDetailsLogic extends GetxController {
                                   child: Center(
                                     child: TimePickerField(
                                       title: 'start'.tr,
-                                      initialValue: TimeOfDay.now(),
+                                      initialValue: TimeOfDay.now().replacing(
+                                        hour: TimeOfDay.now().hour,
+                                        minute: ((TimeOfDay.now().minute) / 15).toInt() * 15,
+                                      ),
                                       onChanged: (time) {
                                         setState(() {
                                           startTime = time;
@@ -506,6 +532,10 @@ class MissionDetailsLogic extends GetxController {
                                   child: Center(
                                     child: TimePickerField(
                                       title: 'end'.tr,
+                                      initialValue: TimeOfDay.now().replacing(
+                                        hour: min(TimeOfDay.now().hour + 2, 23),
+                                        minute: TimeOfDay.now().hour == 23 ? 55 : 0,
+                                      ),
                                       onChanged: (time) {
                                         setState(() {
                                           endTime = time;
@@ -576,6 +606,8 @@ class MissionDetailsLogic extends GetxController {
   }
 
   _changeMissionDatetimeApi({required String plannedStart, required String plannedEnd, required String reason}) async {
+    DialogHandler.showLoading('loading_change_mission_datetime'.tr);
+
     var result = await MissionRepository.get().changeMissionDatetime(
       ChangeMissionDatetimeRequest(
         missionId: mission.id,
@@ -583,8 +615,9 @@ class MissionDetailsLogic extends GetxController {
         plannedEnd: plannedEnd,
         reason: reason,
       ),
-      loadingMessage: 'loading_change_mission_datetime'.tr,
     );
+
+    DialogHandler.hideLoading();
 
     result.fold(
       (error) {
@@ -674,9 +707,9 @@ class MissionDetailsLogic extends GetxController {
         snackError(message: error.message);
       },
       (response) {
-        snackSuccess(message: response.message);
+        Get.back(result: true);
 
-        //todo: what todo?
+        snackSuccess(message: response.message);
       },
     );
   }

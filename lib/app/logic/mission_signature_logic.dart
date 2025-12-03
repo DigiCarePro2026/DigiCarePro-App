@@ -15,6 +15,8 @@ class MissionSignatureLogic extends GetxController {
         snackError(message: error.message);
       },
       (response) {
+        Get.back(result: true);
+
         snackSuccess(message: response.message);
       },
     );

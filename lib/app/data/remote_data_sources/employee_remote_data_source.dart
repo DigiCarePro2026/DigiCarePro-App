@@ -43,6 +43,11 @@ class EmployeeRemoteDataSource extends BaseRemoteDataSource {
     fromJson: (json) => (json as List).map((json) => SupportEmployee.fromJson(json)).toList(),
   );
 
+  Future<Either<ApiError, AppResponse<List<String>>>> getDayOffMonths( {String? loadingMessage}) => api.get(
+    path: '/employee/get-available-months',
+    fromJson: (json) => (json as List).map((json) => (json as String).substring(0,7)).toList(),
+  );
+
   Future<Either<ApiError, AppResponse<List<DayOff>>>> getListOfDayOff(
     GetDayOffRequest request, {
     String? loadingMessage,
@@ -64,7 +69,7 @@ class EmployeeRemoteDataSource extends BaseRemoteDataSource {
 
   Future<Either<ApiError, AppResponse<List<String>>>> getTimesheetMonths({String? loadingMessage}) => api.get(
     path: '/employeeTimeSheet/months',
-    fromJson: (json) => (json as List).map((json) => json as String).toList(),
+    fromJson: (json) => (json as List).map((json) => (json as String).substring(0,7)).toList(),
   );
 
   Future<Either<ApiError, AppResponse<List<TimesheetRecord>>>> getTimeSheet(

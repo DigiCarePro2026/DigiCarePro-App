@@ -6,6 +6,6 @@ class GetDayOffRequest {
   });
 
   Map<String, dynamic> toJson() => {
-    'month': month,
+    'date': month,
   };
 }

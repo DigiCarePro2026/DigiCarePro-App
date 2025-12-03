@@ -53,13 +53,15 @@ class ApiProvider {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          _requestCount++;
+          logger.t('onRequest: url: ${options.path}\n ${options.data.toString()}');
+
+          /*_requestCount++;
 
           if (_requestCount == 1) {
             _showLoading(loadingMessage ?? 'loading_default_message'.tr);
-          }
+          }*/
 
-      /*    bool netAvailable = await isNetworkAvailable();
+          /*    bool netAvailable = await isNetworkAvailable();
 
           if (netAvailable) {
             logger.i('onRequest: ${options.path}\n${options.data.toString()}');
@@ -73,24 +75,23 @@ class ApiProvider {
           return handler.next(options);
         },
         onResponse: (response, handler) {
-          _requestCount--;
+         /* _requestCount--;
 
           // if (_requestCount <= 0) {
           //   _requestCount = 0;
-            _hideLoading();
+          _hideLoading();*/
           // }
 
-          logger.i('onResponse : ${response.data.toString().substring(0, min(response.data.toString().length-1, 300))}');
+          logger.i(
+            'onResponse : ${response.data.toString().substring(0, min(response.data.toString().length - 1, 300))}',
+          );
 
           return handler.next(response);
         },
         onError: (error, handler) {
-          _requestCount--;
+         /* _requestCount--;
 
-          // if (_requestCount <= 0) {
-          //   _requestCount = 0;
-            _hideLoading();
-          // }
+          _hideLoading();*/
 
           logger.e('Error occurred: ${error.message}');
 
@@ -110,8 +111,8 @@ class ApiProvider {
 
   void _hideLoading() {
     Future.microtask(() {
-      if (getX.Get.isDialogOpen!) {
-        getX.Get.back(); // Safe close
+      if (getX.Get.isDialogOpen == true && getX.Get.isSnackbarOpen == false) {
+        getX.Get.back();
       }
     });
   }
@@ -220,7 +221,7 @@ class ApiProvider {
   }
 
   Future<Either<ApiError, AppResponse<T>>> _handleResponse<T>(Response response, T Function(dynamic)? fromJson) async {
-    _hideLoading();
+    // _hideLoading();
 
     if (!response.data['isSuccess']) {
       return Left(ApiError(code: response.statusCode!, message: response.data['message']));
@@ -240,7 +241,7 @@ class ApiProvider {
   }
 
   Future<Either<ApiError, T>> _handleError<T>(dynamic e) async {
-    _hideLoading();
+    // _hideLoading();
 
     if (e is DioError && e.response != null) {
       switch (e.response!.statusCode) {
@@ -265,7 +266,7 @@ class ApiProvider {
           break;
       }
 
-      ApiError error = ApiError(code: e.response!.statusCode!, message: e.response!.data ['message']);
+      ApiError error = ApiError(code: e.response!.statusCode!, message: e.response!.data['message']);
       return Left(error);
     } else {
       // Handle other types of errors if needed

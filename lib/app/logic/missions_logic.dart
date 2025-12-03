@@ -6,6 +6,7 @@ import 'package:digi_care_pro/app/data/models/mission.dart';
 import 'package:digi_care_pro/app/data/repositories/mission_repository.dart';
 import 'package:digi_care_pro/app/ui/widgets/calendar_widget.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
+import 'package:digi_care_pro/app/utils/dialog_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -33,6 +34,8 @@ class MissionsLogic extends GetxController {
   }
 
   getMissions() async {
+    DialogHandler.showLoading('loading_missions'.tr);
+
     var result = await MissionRepository.get().getMissions(
       GetMissionsRequest(
         year: _selectedDateTime.year,
@@ -40,6 +43,8 @@ class MissionsLogic extends GetxController {
         customerId: selectedCustomer?.id,
       ),
     );
+
+    DialogHandler.hideLoading();
 
     result.fold(
       (error) {

@@ -33,7 +33,7 @@ class MissionRepository {
   Future<Either<ApiError, AppResponse>> cancelMission(CancelMissionRequest request, {String? loadingMessage}) =>
       MissionRemoteDataSource.get().cancel(request, loadingMessage: loadingMessage);
 
-  Future<Either<ApiError, AppResponse>> delayReport(DelayMissionRequest request, {String? loadingMessage}) =>
+  Future<Either<ApiError, AppResponse<Mission>>> delayReport(DelayMissionRequest request, {String? loadingMessage}) =>
       MissionRemoteDataSource.get().delayReport(request, loadingMessage: loadingMessage);
 
   Future<Either<ApiError, AppResponse>> reportMission(ReportMissionRequest request, {String? loadingMessage}) =>

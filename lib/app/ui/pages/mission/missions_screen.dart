@@ -89,8 +89,12 @@ class _MissionsScreenState extends State<MissionsScreen> {
       child: Card.filled(
         child: InkWell(
           borderRadius: BorderRadius.circular(cardRadius),
-          onTap: () {
-            Get.toNamed(Routes.MISSION_DETAILS, arguments: mission);
+          onTap: () async {
+            bool needRefresh = await Get.toNamed(Routes.MISSION_DETAILS, arguments: mission);
+
+            if(needRefresh){
+              logic.getMissions();
+            }
           },
           child: Padding(
             padding: const EdgeInsets.all(cardPadding),
@@ -110,14 +114,18 @@ class _MissionsScreenState extends State<MissionsScreen> {
                     ),
                     PopupMenuButton(
                       icon: SvgPicture.asset('assets/icons/more-hor.svg'),
-                      onSelected: (value) {
+                      onSelected: (value) async {
                         // عمل مورد نظر برای هر آیتم
                         if (value == 'call') {
                           makeCall(mission.customerPhone ?? '');
                         } else if (value == 'routing') {
                           openNavigation(mission.customerLatitude ?? 0, mission.customerLongitude ?? 0);
                         } else if (value == 'add_mission') {
-                          Get.toNamed(Routes.CREATE_MISSION, arguments: mission.customerId!);
+                          bool result = await Get.toNamed(Routes.CREATE_MISSION, arguments: mission.customerId!);
+
+                          if(result){
+                            logic.getMissions();
+                          }
                         }
                       },
                       itemBuilder: (ctx) {

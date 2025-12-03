@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DialogHandler {
+
   static showLoading(String message) {
     if (Get.isDialogOpen == true) return;
 
@@ -11,6 +12,14 @@ class DialogHandler {
       LoadingScreen(message: message),
       barrierDismissible: false,
     );
+  }
+
+  static hideLoading() {
+    Future.microtask(() {
+      if (Get.isDialogOpen == true) {
+        Get.back();
+      }
+    });
   }
 
   static showConfirm({required String title, required String message, required List<DialogButtonModel> buttons}) {

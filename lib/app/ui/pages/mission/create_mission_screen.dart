@@ -23,8 +23,14 @@ class _CreateMissionScreenState extends State<CreateMissionScreen> {
   late CreateMissionLogic logic;
 
   String? selectedDate;
-  TimeOfDay startTime = TimeOfDay.now();
-  TimeOfDay endTime = TimeOfDay.now().replacing(hour: min(TimeOfDay.now().hour + 2, 23), minute: TimeOfDay.now().hour == 23 ? 55 : 0);
+  TimeOfDay startTime = TimeOfDay.now().replacing(
+    hour: TimeOfDay.now().hour,
+    minute: ((TimeOfDay.now().minute) / 15).toInt() * 15,
+  );
+  TimeOfDay endTime = TimeOfDay.now().replacing(
+    hour: min(TimeOfDay.now().hour + 2, 23),
+    minute: TimeOfDay.now().hour == 23 ? 55 : 0,
+  );
   TextEditingController descController = TextEditingController();
 
   @override
@@ -111,8 +117,7 @@ class _CreateMissionScreenState extends State<CreateMissionScreen> {
                   date: selectedDate!,
                   startTime:
                       '${startTime.hour.toString().padLeft(2, '0')}:${startTime.minute.toString().padLeft(2, '0')}:00',
-                  endTime:
-                      '${endTime.hour.toString().padLeft(2, '0')}:${endTime.minute.toString().padLeft(2, '0')}:00',
+                  endTime: '${endTime.hour.toString().padLeft(2, '0')}:${endTime.minute.toString().padLeft(2, '0')}:00',
                   comment: descController.text,
                 );
               },

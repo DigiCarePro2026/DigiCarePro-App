@@ -4,6 +4,7 @@ import 'package:digi_care_pro/app/data/models/timesheet_record.dart';
 import 'package:digi_care_pro/app/data/models/timesheet_signature.dart';
 import 'package:digi_care_pro/app/data/repositories/employee_repository.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
+import 'package:digi_care_pro/app/utils/dialog_handler.dart';
 import 'package:get/get.dart';
 
 class TimeSheetLogic extends GetxController {
@@ -21,6 +22,8 @@ class TimeSheetLogic extends GetxController {
   }
 
   _getMonths() async {
+    DialogHandler.showLoading('loading_default_message'.tr);
+
     var result = await EmployeeRepository.get().getTimesheetMonths();
 
     result.fold(
@@ -44,8 +47,10 @@ class TimeSheetLogic extends GetxController {
 
   getTimesheet() async {
     var result = await EmployeeRepository.get().getTimesheet(
-      GetTimesheetRequest(month: selectedMonth!.substring(0, 10)),
+      GetTimesheetRequest(month: selectedMonth!),
     );
+
+    DialogHandler.hideLoading();
 
     result.fold(
       (error) {

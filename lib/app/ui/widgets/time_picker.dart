@@ -77,8 +77,8 @@ class _TimePickerFieldState extends State<TimePickerField> {
               ),
               _buildNumberSpinner(
                 value: _minute,
-                step: 5,
-                max: 55,
+                step: 15,
+                max: 45,
                 onChanged: (val) {
                   setState(() => _minute = val);
                   _updateValue();

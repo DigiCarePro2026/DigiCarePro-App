@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 
 enum MissionActionType{
-  autoStart(1),
-  manualStart(2),
-  sign(3),
-  done(4);
+  autoStart(0),
+  manualStart(1),
+  sign(2),
+  done(3);
 
   final int code;
 

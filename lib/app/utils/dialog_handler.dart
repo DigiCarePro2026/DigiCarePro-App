@@ -18,6 +18,8 @@ class DialogHandler {
     Future.microtask(() {
       if (Get.isDialogOpen == true) {
         Get.back();
+
+        Future.delayed(Duration(milliseconds: 200), () => hideLoading());
       }
     });
   }

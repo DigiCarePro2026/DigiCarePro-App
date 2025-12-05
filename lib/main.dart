@@ -5,12 +5,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'app/data/pref.dart';
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
+import 'app/utils/mission_event_bus.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -18,6 +20,8 @@ Future<void> main() async {
 
   await Pref.init();
   _initFirebaseServices();
+
+  Get.put(MissionEventBus());
 
   runApp(const MyApp());
 }

@@ -39,7 +39,12 @@ class MissionRemoteDataSource extends BaseRemoteDataSource {
       api.post(path: '/mission/${request.missionId}/cancel', body: request.toJson(), loadingMessage: loadingMessage);
 
   Future<Either<ApiError, AppResponse<Mission>>> delayReport(DelayMissionRequest request, {String? loadingMessage}) =>
-      api.post(path: '/mission/${request.missionId}/delay', body: request.toJson(), loadingMessage: loadingMessage);
+      api.post(
+        path: '/mission/${request.missionId}/delay',
+        body: request.toJson(),
+        fromJson: (json) => Mission.fromJson(json),
+        loadingMessage: loadingMessage,
+      );
 
   Future<Either<ApiError, AppResponse>> reportMission(ReportMissionRequest request, {String? loadingMessage}) =>
       api.post(path: '/mission/${request.missionId}/report', body: request.toJson(), loadingMessage: loadingMessage);

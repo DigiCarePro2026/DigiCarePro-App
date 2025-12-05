@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -39,4 +40,14 @@ Future<String?> getDeviceUniqueId() async {
   }
 
   return null;
+}
+
+TimeOfDay? parseTime(String? isoString) {
+  if (isoString == null) return null;
+  try {
+    final dt = DateTime.parse(isoString);
+    return TimeOfDay(hour: dt.hour, minute: dt.minute);
+  } catch (e) {
+    return null;
+  }
 }

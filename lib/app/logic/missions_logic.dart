@@ -7,6 +7,7 @@ import 'package:digi_care_pro/app/data/repositories/mission_repository.dart';
 import 'package:digi_care_pro/app/ui/widgets/calendar_widget.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:digi_care_pro/app/utils/dialog_handler.dart';
+import 'package:digi_care_pro/app/utils/mission_event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,6 +24,16 @@ class MissionsLogic extends GetxController {
   @override
   void onReady() {
     getMissions();
+
+    MissionEventBus eventBus = Get.find();
+
+    eventBus.delayUpdated.stream.listen((reloadMissions) {
+      if (reloadMissions) {
+        getMissions();
+      } else {
+        update();
+      }
+    });
 
     super.onReady();
   }
@@ -101,15 +112,16 @@ class MissionsLogic extends GetxController {
     if (_selectedDay != null) {
       _changeDay(_selectedDay!);
     } else {
+      filteredMissions.clear();
       filteredMissions.addAll(allMissions);
       missionCountInDateFilter = filteredMissions.length;
     }
 
     if (missionType != null) {
       selectedMissionType = missionType;
-    }
 
-    _filterMissionType();
+      _filterMissionType();
+    }
   }
 
   _filterMissionType() {

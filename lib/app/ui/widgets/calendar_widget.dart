@@ -18,7 +18,7 @@ class CalendarWidget extends StatefulWidget {
   final void Function(DateTime start, DateTime? end)? onRangeSelected;
   final Map<DateTime, List<Event>> events;
   final DateTime? baseMonth;
-
+  final DateTime? initialDate;
   final DateTime? minDate;
   final DateTime? maxDate;
 
@@ -30,6 +30,7 @@ class CalendarWidget extends StatefulWidget {
     this.onRangeSelected,
     this.events = const {},
     this.baseMonth,
+    this.initialDate,
     this.minDate,
     this.maxDate,
   }) : super(key: key);
@@ -54,7 +55,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   @override
   void initState() {
     super.initState();
-    final bm = widget.baseMonth ?? DateTime.now();
+    final DateTime bm = widget.initialDate ?? widget.baseMonth ?? DateTime.now();
+
     _baseMonth = DateTime(bm.year, bm.month, 1);
     _focusedMonth = DateTime(_baseMonth.year, _baseMonth.month, 1);
 
@@ -62,6 +64,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         DateTime(_baseMonth.year, _baseMonth.month - (widget.activeMinMaxMonth ?? 20), 1);
     _maxMonth =
         DateTime(_baseMonth.year, _baseMonth.month + (widget.activeMinMaxMonth ?? 20), 1);
+
+    if (widget.initialDate != null) {
+      _selectedDate = widget.initialDate;
+    }
   }
 
   String _getMonthName(int month) {

@@ -37,6 +37,7 @@ class _TimePickerFieldState extends State<TimePickerField> {
     _minute = init.minute;
   }
 
+
   void _updateValue() {
     final timeOfDay = TimeOfDay(hour: _hour, minute: _minute);
     widget.onChanged?.call(timeOfDay);
@@ -80,7 +81,12 @@ class _TimePickerFieldState extends State<TimePickerField> {
                 step: 15,
                 max: 45,
                 onChanged: (val) {
-                  setState(() => _minute = val);
+                  int rounded = (val / 15).round() * 15;
+
+                  if (rounded == 60) rounded = 45; // جلوگیری از 60
+
+                  setState(() => _minute = rounded);
+
                   _updateValue();
                 },
                 textColor: textColor,

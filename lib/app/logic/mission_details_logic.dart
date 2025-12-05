@@ -25,6 +25,7 @@ import 'package:digi_care_pro/app/ui/widgets/delay_time_picker.dart';
 import 'package:digi_care_pro/app/ui/widgets/time_picker.dart';
 import 'package:digi_care_pro/app/utils/dialog_handler.dart';
 import 'package:digi_care_pro/app/utils/location_service.dart';
+import 'package:digi_care_pro/app/utils/mission_event_bus.dart';
 import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -43,99 +44,9 @@ class MissionDetailsLogic extends GetxController {
 
   @override
   void onReady() {
-    _prepareMenuItems();
-
     checkMissionStatus(true);
 
     super.onReady();
-  }
-
-  _prepareMenuItems() {
-    menuItems = [
-      MenuModel(
-        title: 'routing'.tr,
-        icon: 'assets/icons/routing.svg',
-        color: AppColors.routingColor,
-        callback: () => openNavigation(mission.customerLatitude ?? 0, mission.customerLongitude ?? 0),
-      ),
-      MenuModel(
-        title: 'call'.tr,
-        icon: 'assets/icons/call.svg',
-        color: AppColors.callColor,
-        callback: () => makeCall(mission.customerPhone ?? ''),
-      ),
-      MenuModel(
-        title: 'upload_document'.tr,
-        icon: 'assets/icons/upload.svg',
-        color: AppColors.uploadColor,
-        callback: () {
-          Get.toNamed(
-            Routes.MISSION_UPLOAD_DOC,
-            arguments: {'missionId': mission.id, 'customerId': mission.customerId},
-          );
-        },
-      ),
-      MenuModel(
-        title: 'add_mission'.tr,
-        icon: 'assets/icons/add-mission.svg',
-        color: AppColors.addMissionColor,
-        callback: () {
-          Get.toNamed(Routes.CREATE_MISSION, arguments: mission.customerId);
-        },
-      ),
-      /*     MenuModel(
-        title: 'customer_signature'.tr,
-        icon: 'assets/icons/signature.svg',
-        color: AppColors.signatureColor,
-        callback: () {
-          Get.toNamed(Routes.MISSION_SIGNATURE, arguments: mission.id);
-        },
-      ),*/
-      MenuModel(
-        title: 'submit_report'.tr,
-        icon: 'assets/icons/report.svg',
-        color: AppColors.reportColor,
-        callback: () async {
-          String? report = await showMissionReportBottomSheet();
-
-          if (report != null) {
-            _reportMissionApi(report);
-          }
-        },
-      ),
-      MenuModel(
-        title: 'delay_report'.tr,
-        icon: 'assets/icons/delay-report.svg',
-        color: AppColors.delayReportColor,
-        callback: () async {
-          Duration? duration = await showDelayTimeBottomSheet();
-
-          if (duration != null) {
-            _delayReportApi(duration.inMinutes);
-          }
-        },
-      ),
-      MenuModel(
-        title: 'change_date_time'.tr,
-        icon: 'assets/icons/calendar-setting.svg',
-        color: AppColors.changeDateAndTimeColor,
-        callback: () async {
-          String? result = await showChangeDateAndTimeBottomSheet();
-        },
-      ),
-      MenuModel(
-        title: 'cancel_mission'.tr,
-        icon: 'assets/icons/cancel.svg',
-        color: AppColors.cancelMissionColor,
-        callback: () async {
-          CancelMissionType? reason = await showCancelMissionBottomSheet();
-
-          if (reason != null) {
-            _cancelMissionApi(reason.title);
-          }
-        },
-      ),
-    ];
   }
 
   Future<bool> findUserLocation(bool hasLoading) async {
@@ -184,10 +95,105 @@ class MissionDetailsLogic extends GetxController {
         (response) {
           actionType = response.data;
 
-          update();
+          _prepareMenuItems();
         },
       );
     }
+  }
+
+  _prepareMenuItems() {
+    menuItems = [
+      MenuModel(
+        title: 'routing'.tr,
+        icon: 'assets/icons/routing.svg',
+        color: AppColors.routingColor,
+        callback: () => openNavigation(mission.customerLatitude ?? 0, mission.customerLongitude ?? 0),
+      ),
+      MenuModel(
+        title: 'call'.tr,
+        icon: 'assets/icons/call.svg',
+        color: AppColors.callColor,
+        callback: () => makeCall(mission.customerPhone ?? ''),
+      ),
+      MenuModel(
+        title: 'add_mission'.tr,
+        icon: 'assets/icons/add-mission.svg',
+        color: AppColors.addMissionColor,
+        callback: () {
+          Get.toNamed(Routes.CREATE_MISSION, arguments: mission.customerId);
+        },
+      ),
+    ];
+
+    if (actionType != MissionActionType.done) {
+      menuItems.add(
+        MenuModel(
+          title: 'submit_report'.tr,
+          icon: 'assets/icons/report.svg',
+          color: AppColors.reportColor,
+          callback: () async {
+            String? report = await showMissionReportBottomSheet();
+
+            if (report != null) {
+              _reportMissionApi(report);
+            }
+          },
+        ),
+      );
+      menuItems.add(
+        MenuModel(
+          title: 'delay_report'.tr,
+          icon: 'assets/icons/delay-report.svg',
+          color: AppColors.delayReportColor,
+          callback: () async {
+            Duration? duration = await showDelayTimeBottomSheet();
+
+            if (duration != null) {
+              _delayReportApi(duration.inMinutes);
+            }
+          },
+        ),
+      );
+      menuItems.add(
+        MenuModel(
+          title: 'change_date_time'.tr,
+          icon: 'assets/icons/calendar-setting.svg',
+          color: AppColors.changeDateAndTimeColor,
+          callback: () async {
+            String? result = await showChangeDateAndTimeBottomSheet();
+          },
+        ),
+      );
+      menuItems.add(
+        MenuModel(
+          title: 'cancel_mission'.tr,
+          icon: 'assets/icons/cancel.svg',
+          color: AppColors.cancelMissionColor,
+          callback: () async {
+            CancelMissionType? reason = await showCancelMissionBottomSheet();
+
+            if (reason != null) {
+              _cancelMissionApi(reason.title);
+            }
+          },
+        ),
+      );
+      menuItems.add(
+        MenuModel(
+          title: 'upload_document'.tr,
+          icon: 'assets/icons/upload.svg',
+          color: AppColors.uploadColor,
+          callback: () {
+            Get.toNamed(
+              Routes.MISSION_UPLOAD_DOC,
+              arguments: {'missionId': mission.id, 'customerId': mission.customerId},
+            );
+          },
+        ),
+      );
+    }
+
+    update();
   }
 
   handleActionTap() async {
@@ -371,10 +377,13 @@ class MissionDetailsLogic extends GetxController {
   }
 
   _delayReportApi(int minutes) async {
+    DialogHandler.showLoading('loading_delay_mission'.tr);
+
     var result = await MissionRepository.get().delayReport(
       DelayMissionRequest(missionId: mission.id, delayMinutes: minutes),
-      loadingMessage: 'loading_delay_mission'.tr,
     );
+
+    DialogHandler.hideLoading();
 
     result.fold(
       (error) {
@@ -385,6 +394,9 @@ class MissionDetailsLogic extends GetxController {
 
         if (response.data != null) {
           mission.plannedStartDateTime = response.data!.plannedStartDateTime;
+
+          MissionEventBus eventBus = Get.find();
+          eventBus.sendUpdate(false);
 
           update();
         }
@@ -464,7 +476,7 @@ class MissionDetailsLogic extends GetxController {
 
   //</editor-fold>
 
-  //<editor-fold desc="change datetime">
+  //<editor-fold desc="Change datetime">
   Future<String?> showChangeDateAndTimeBottomSheet() async {
     DateTime? selectedDate;
     TimeOfDay startTime = TimeOfDay.now();
@@ -501,6 +513,8 @@ class MissionDetailsLogic extends GetxController {
                           children: [
                             CalendarWidget(
                               selectionMode: CalendarSelectionMode.single,
+                              initialDate: DateTime.tryParse(mission.plannedStartDateTime!),
+                              minDate: DateTime.now().subtract(const Duration(days: 1)),
                               onDateSelected: (date, isChangedMonth) {
                                 if (!isChangedMonth) {
                                   selectedDate = date;
@@ -515,9 +529,9 @@ class MissionDetailsLogic extends GetxController {
                                   child: Center(
                                     child: TimePickerField(
                                       title: 'start'.tr,
-                                      initialValue: TimeOfDay.now().replacing(
+                                      initialValue: parseTime(mission.plannedStartDateTime) ?? TimeOfDay.now().replacing(
                                         hour: TimeOfDay.now().hour,
-                                        minute: ((TimeOfDay.now().minute) / 15).toInt() * 15,
+                                        minute: (TimeOfDay.now().minute / 15).floor() * 15,
                                       ),
                                       onChanged: (time) {
                                         setState(() {
@@ -532,7 +546,7 @@ class MissionDetailsLogic extends GetxController {
                                   child: Center(
                                     child: TimePickerField(
                                       title: 'end'.tr,
-                                      initialValue: TimeOfDay.now().replacing(
+                                      initialValue: parseTime(mission.plannedEndDateTime) ?? TimeOfDay.now().replacing(
                                         hour: min(TimeOfDay.now().hour + 2, 23),
                                         minute: TimeOfDay.now().hour == 23 ? 55 : 0,
                                       ),
@@ -697,17 +711,23 @@ class MissionDetailsLogic extends GetxController {
   }
 
   _cancelMissionApi(String reason) async {
+    DialogHandler.showLoading('loading_cancel_mission'.tr);
+
     var result = await MissionRepository.get().cancelMission(
       CancelMissionRequest(missionId: mission.id, reason: reason),
-      loadingMessage: 'loading_cancel_mission'.tr,
     );
+
+    DialogHandler.hideLoading();
 
     result.fold(
       (error) {
         snackError(message: error.message);
       },
       (response) {
-        Get.back(result: true);
+        MissionEventBus eventBus = Get.find();
+        eventBus.sendUpdate(false);
+
+        Get.back();
 
         snackSuccess(message: response.message);
       },

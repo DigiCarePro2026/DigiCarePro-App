@@ -383,7 +383,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       child: Text(
         "+$extra",
         style: const TextStyle(
-            fontSize: 8, color: Colors.white, fontWeight: FontWeight.bold),
+            fontSize: 7, color: Colors.white, fontWeight: FontWeight.bold),
       ),
     );
   }

@@ -44,6 +44,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: CalendarWidget(
                         selectionMode: CalendarSelectionMode.single,
+                        initialDate: DateTime.now(),
                         activeMinMaxMonth: 2,
                         onDateSelected: (date, isChangedMonth) {
                           if (isChangedMonth) {

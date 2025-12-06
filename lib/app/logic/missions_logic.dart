@@ -63,13 +63,16 @@ class MissionsLogic extends GetxController {
       },
       (response) {
         allMissions = response.data!;
-        filteredMissions.clear();
 
-        filteredMissions.addAll(allMissions);
-
-        missionCountInDateFilter = allMissions.length;
-
-        update();
+        DateTime now = DateTime.now();
+        if(now.month == _selectedDateTime.month) {
+          innerFilterMissions(day: now.day);
+        }else{
+          filteredMissions.clear();
+          filteredMissions.addAll(allMissions);
+          missionCountInDateFilter = allMissions.length;
+          update();
+        }
       },
     );
   }
@@ -107,7 +110,9 @@ class MissionsLogic extends GetxController {
   }
 
   innerFilterMissions({int? day, MissionType? missionType}) {
-    _selectedDay = day;
+    if(day != null){
+      _selectedDay = day;
+    }
 
     if (_selectedDay != null) {
       _changeDay(_selectedDay!);

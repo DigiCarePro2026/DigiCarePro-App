@@ -245,6 +245,10 @@ class ApiProvider {
 
     if (e is DioError && e.response != null) {
       switch (e.response!.statusCode) {
+        case 400:
+          ApiError error = ApiError(code: e.response!.statusCode!, message: 'Bad request');
+          return Left(error);
+
         case 401:
           logger.e('Unauthorized error, call refreshToken...');
 

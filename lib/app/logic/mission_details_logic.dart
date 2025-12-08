@@ -213,6 +213,9 @@ class MissionDetailsLogic extends GetxController {
         bool needRefresh = await Get.toNamed(Routes.MISSION_SIGNATURE, arguments: mission.id);
         if (needRefresh) {
           checkMissionStatus(false);
+
+          MissionEventBus eventBus = Get.find();
+          eventBus.sendUpdate(true);
         }
         break;
 
@@ -282,7 +285,14 @@ class MissionDetailsLogic extends GetxController {
                       Expanded(
                         child: PrimaryButton(
                           label: 'confirm'.tr,
-                          onPressed: () => Navigator.pop(context, controller.text),
+                          onPressed: () {
+                            if(controller.text.isEmpty){
+                              snackError(message: 'reason_required'.tr);
+                              return;
+                            }
+
+                            Navigator.pop(context, controller.text);
+                          }
                         ),
                       ),
                     ],

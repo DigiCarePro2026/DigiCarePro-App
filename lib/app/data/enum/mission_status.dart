@@ -1,9 +1,7 @@
 enum MissionStatus{
-  notPlanned(0),
-  manualStart(1),
-  autoStart(2),
-  getSignature(3),
-  done(4);
+  draft(1),
+  inProgress(2),
+  completed(3);
 
   final int code;
 

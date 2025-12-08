@@ -156,4 +156,5 @@ const Map<String, String> enUS = {
   'submit_sign': 'Submit sign',
   'clear': 'Clear',
   'sign2':'Sign',
+  'reason_required': 'Reason required',
 };

@@ -50,7 +50,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
                           if (isChangedMonth) {
                             logic.changeMonth(date!);
                           }else{
-                            logic.innerFilterMissions(day: date?.day);
+                            logic.innerFilterMissions(day: date?.day, missionType: logic.selectedMissionType);
                           }
                         },
                         events: logic.groupMissionsByDate(),

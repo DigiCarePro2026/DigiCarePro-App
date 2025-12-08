@@ -1,4 +1,5 @@
 import 'package:digi_care_pro/app/data/api/api_models/get_missions.dart';
+import 'package:digi_care_pro/app/data/enum/mission_status.dart';
 import 'package:digi_care_pro/app/data/enum/mission_type.dart';
 import 'package:digi_care_pro/app/data/enum/page_status.dart';
 import 'package:digi_care_pro/app/data/models/customer.dart';
@@ -65,9 +66,9 @@ class MissionsLogic extends GetxController {
         allMissions = response.data!;
 
         DateTime now = DateTime.now();
-        if(now.month == _selectedDateTime.month) {
-          innerFilterMissions(day: now.day);
-        }else{
+        if (now.month == _selectedDateTime.month) {
+          innerFilterMissions(day: _selectedDay, missionType: selectedMissionType);
+        } else {
           filteredMissions.clear();
           filteredMissions.addAll(allMissions);
           missionCountInDateFilter = allMissions.length;
@@ -110,7 +111,7 @@ class MissionsLogic extends GetxController {
   }
 
   innerFilterMissions({int? day, MissionType? missionType}) {
-    if(day != null){
+    if (day != null) {
       _selectedDay = day;
     }
 
@@ -139,19 +140,29 @@ class MissionsLogic extends GetxController {
           break;
 
         case MissionType.todo:
-          if (mission.realStartTime == null && mission.realEndTime == null) {
+          /* if (mission.realStartTime == null && mission.realEndTime == null) {
+            tempList.add(mission);
+          }*/
+
+          if (mission.status == MissionStatus.draft.code) {
             tempList.add(mission);
           }
           break;
 
         case MissionType.inProgress:
-          if (mission.realStartTime != null && mission.realEndTime == null) {
+          /*if (mission.realStartTime != null && mission.realEndTime == null) {
+            tempList.add(mission);
+          }*/
+          if (mission.status == MissionStatus.inProgress.code) {
             tempList.add(mission);
           }
           break;
 
         case MissionType.done:
-          if (mission.realStartTime != null && mission.realEndTime != null) {
+          /*if (mission.realStartTime != null && mission.realEndTime != null) {
+            tempList.add(mission);
+          }*/
+          if (mission.status == MissionStatus.completed.code) {
             tempList.add(mission);
           }
           break;

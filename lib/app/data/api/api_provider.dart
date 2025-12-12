@@ -12,6 +12,7 @@ import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:digi_care_pro/app/utils/globals.dart';
 import 'package:digi_care_pro/app/utils/dialog_handler.dart';
 import 'package:digi_care_pro/app/utils/utils.dart';
+import 'package:digi_care_pro/config/app_config.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as getX;
@@ -23,7 +24,9 @@ class ApiProvider {
     BaseOptions(
       connectTimeout: const Duration(seconds: 15),
       receiveTimeout: const Duration(seconds: 15),
-      baseUrl: 'https://mobileapi.demostage.ir/api',
+      baseUrl: Pref.getString(PrefKey.baseUrl) ?? defaultServerUrl
+      //'https://mobileapi.demostage.ir/api',
+      // https://appapi.digicarepro.de/api
     ),
   );
 
@@ -31,7 +34,6 @@ class ApiProvider {
 
   factory ApiProvider() => _instance;
 
-  int _requestCount = 0;
   String? loadingMessage;
 
   ApiProvider._() {
@@ -43,6 +45,10 @@ class ApiProvider {
     }
 
     _addInterceptors();
+  }
+
+  setBaseUrl(url) {
+    dio.options.baseUrl = url;
   }
 
   setToken(token) {
@@ -99,22 +105,6 @@ class ApiProvider {
         },
       ),
     );
-  }
-
-  void _showLoading(String message) {
-    Future.microtask(() {
-      if (!getX.Get.isDialogOpen!) {
-        DialogHandler.showLoading(message);
-      }
-    });
-  }
-
-  void _hideLoading() {
-    Future.microtask(() {
-      if (getX.Get.isDialogOpen == true && getX.Get.isSnackbarOpen == false) {
-        getX.Get.back();
-      }
-    });
   }
 
   Future<Either<ApiError, AppResponse<T>>> get<T>({

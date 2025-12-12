@@ -22,6 +22,8 @@ class LoginLogic extends GetxController {
 
     result.fold(
       (error) {
+        DialogHandler.hideLoading();
+
         snackError(message: error.message);
       },
       (response) async {

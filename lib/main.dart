@@ -12,6 +12,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app/data/pref.dart';
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
+import 'app/utils/hardware_button_combo_listener.dart';
 import 'app/utils/mission_event_bus.dart';
 import 'firebase_options.dart';
 
@@ -19,6 +20,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Pref.init();
+  HardwareButtonComboListener().startListening();
   _initFirebaseServices();
 
   Get.put(MissionEventBus());

@@ -75,7 +75,9 @@ class MissionDetailsLogic extends GetxController {
   checkMissionStatus(bool hasLoadingForLocation) async {
     DialogHandler.showLoading('loading_check_mission_status'.tr);
 
-    await findUserLocation(hasLoadingForLocation);
+    if(hasLoadingForLocation) {
+      await findUserLocation(hasLoadingForLocation);
+    }
 
     if (isLocationServiceOk) {
       var result = await MissionRepository.get().checkMissionStatus(
@@ -323,6 +325,9 @@ class MissionDetailsLogic extends GetxController {
       },
       (response) {
         snackSuccess(message: response.message);
+
+        MissionEventBus eventBus = Get.find();
+        eventBus.sendUpdate(true);
 
         checkMissionStatus(false);
       },

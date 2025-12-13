@@ -124,7 +124,6 @@ class _MissionsScreenState extends State<MissionsScreen> {
                             PopupMenuButton(
                               icon: SvgPicture.asset('assets/icons/more-hor.svg'),
                               onSelected: (value) async {
-                                // عمل مورد نظر برای هر آیتم
                                 if (value == 'call') {
                                   makeCall(mission.customerPhone ?? '');
                                 } else if (value == 'routing') {
@@ -182,7 +181,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
                             SvgPicture.asset(MissionStatus.fromCode(mission.status!).icon, width: 14, color: MissionStatus.fromCode(mission.status!).color,),
                             SizedBox(width: 4),
                             Text(
-                              mission.statusName!,
+                              MissionStatus.fromCode(mission.status!).title,
                               style: Theme.of(context).textTheme.titleSmall!.copyWith(color: MissionStatus.fromCode(mission.status!).color),
                             ),
                           ],

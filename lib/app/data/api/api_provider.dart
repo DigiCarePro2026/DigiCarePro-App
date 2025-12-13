@@ -236,7 +236,7 @@ class ApiProvider {
     if (e is DioError && e.response != null) {
       switch (e.response!.statusCode) {
         case 400:
-          ApiError error = ApiError(code: e.response!.statusCode!, message: 'Bad request');
+          ApiError error = ApiError(code: e.response!.statusCode!, message: e.response!.data['message']);
           return Left(error);
 
         case 401:

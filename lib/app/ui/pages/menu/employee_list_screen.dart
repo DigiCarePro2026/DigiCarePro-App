@@ -59,7 +59,16 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                   Expanded(
                     child: Row(
                       children: [
-                        CircleAvatar(radius: 24, backgroundImage: AssetImage('assets/images/profile-sample.jpg')),
+                        Container(
+                          width: 24,
+                          height: 24,
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.outline,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: SvgPicture.asset('assets/icons/user.svg', color: Theme.of(context).colorScheme.primary,),
+                        ),
                         SizedBox(width: 12),
                         Text(employee.fullName, style: Theme.of(context).textTheme.labelLarge),
                       ],

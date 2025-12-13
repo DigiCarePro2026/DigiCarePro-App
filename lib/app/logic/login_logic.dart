@@ -10,6 +10,7 @@ import 'package:digi_care_pro/app/utils/dialog_handler.dart';
 import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class LoginLogic extends GetxController {
@@ -32,6 +33,8 @@ class LoginLogic extends GetxController {
         AccountRepository.get().saveLoginInfo(response.data!);
 
         ApiProvider().setToken(response.data?.accessToken);
+
+        TextInput.finishAutofillContext();
 
         await _registerDevice();
         await _getProfile();

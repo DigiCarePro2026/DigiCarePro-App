@@ -152,10 +152,12 @@ const Map<String, String> enUS = {
   'december': 'December',
   'employee': 'Employee',
   'manager': 'Manager',
-
   'submit_sign': 'Submit sign',
   'clear': 'Clear',
   'sign2':'Sign',
   'reason_required': 'Reason required',
   'save': 'Save',
+  'mission_status_todo': 'Draft',
+  'mission_status_in_progress': 'In progress',
+  'mission_status_done': 'Completed',
 };

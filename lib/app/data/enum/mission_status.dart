@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
+import 'package:get/get.dart';
 
 enum MissionStatus {
   draft(1),
@@ -30,6 +31,19 @@ extension MissionStatusExtension on MissionStatus {
 
       case MissionStatus.completed:
         return 'assets/icons/done-status.svg';
+    }
+  }
+
+  String get title {
+    switch (this) {
+      case MissionStatus.draft:
+        return 'mission_status_todo'.tr;
+
+      case MissionStatus.inProgress:
+        return 'mission_status_in_progress'.tr;
+
+      case MissionStatus.completed:
+        return 'mission_status_done'.tr;
     }
   }
 

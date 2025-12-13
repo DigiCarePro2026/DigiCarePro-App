@@ -29,20 +29,20 @@ class _SignatureScreenState extends State<SignatureScreen> {
     Get.put(logic);
 
     super.initState();
-    SystemChrome.setPreferredOrientations([
+/*    SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
-    ]);
+    ]);*/
   }
 
-  @override
+/*  @override
   void dispose() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
     super.dispose();
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -66,86 +66,43 @@ class _SignatureScreenState extends State<SignatureScreen> {
                   ),
                 ),
                 PositionedDirectional(
-                  end: 0, bottom: 0,
+                  end: 0, bottom: 0,start: 0,
                   child: Padding(
                     padding: const EdgeInsets.all(bodyPadding),
-                    child: Column(
+                    child: Row(
                       children: [
-                        InkWell(
+                        _button(
+                          context,
+                          color: AppColors.green,
+                          icon: 'assets/icons/tick.svg',
+                          label: 'submit'.tr,
                           onTap: () async {
                             final signature = signatureGlobalKey.currentState!;
-                            final image = await signature.toImage(); // ui.Image
+                            final image = await signature.toImage();
                             final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
                             final Uint8List pngBytes = byteData!.buffer.asUint8List();
-
                             logic.upload(widget.missionId, pngBytes.toList());
                           },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.green,
-                              borderRadius: BorderRadius.circular(cardRadius),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: SvgPicture.asset(
-                                'assets/icons/tick.svg',
-                                width: 32,
-                                height: 32,
-                                color: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .onPrimary,
-                              ),
-                            ),
-                          ),
                         ),
-                        SizedBox(height: 12),
-                        InkWell(
+                        const SizedBox(width: 12),
+                        _button(
+                          context,
+                          color: AppColors.yellow,
+                          icon: 'assets/icons/eraser.svg',
+                          label: 'clear'.tr,
                           onTap: () {
                             signatureGlobalKey.currentState!.clear();
                           },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.yellow,
-                              borderRadius: BorderRadius.circular(cardRadius),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: SvgPicture.asset(
-                                'assets/icons/eraser.svg',
-                                width: 32,
-                                height: 32,
-                                color: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .onPrimary,
-                              ),
-                            ),
-                          ),
                         ),
-                        SizedBox(height: 12),
-                        InkWell(
+                        const SizedBox(width: 12),
+                        _button(
+                          context,
+                          color: AppColors.red,
+                          icon: 'assets/icons/mul.svg',
+                          label: 'cancel'.tr,
                           onTap: () {
                             Get.back();
                           },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.red,
-                              borderRadius: BorderRadius.circular(cardRadius),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: SvgPicture.asset(
-                                'assets/icons/mul.svg',
-                                width: 32,
-                                height: 32,
-                                color: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .onPrimary,
-                              ),
-                            ),
-                          ),
                         ),
                       ],
                     ),
@@ -158,4 +115,49 @@ class _SignatureScreenState extends State<SignatureScreen> {
       );
     });
   }
+
+  Widget _button(
+      BuildContext context, {
+        required Color color,
+        required String icon,
+        required String label,
+        required VoidCallback onTap,
+      }) {
+    return Flexible(
+      fit: FlexFit.tight,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(cardRadius),
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 12),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(cardRadius),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                icon,
+                width: 24,
+                height: 24,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                label,
+                style: Theme.of(context)
+                    .textTheme
+                    .labelSmall!
+                    .copyWith(color: Colors.white),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
 }

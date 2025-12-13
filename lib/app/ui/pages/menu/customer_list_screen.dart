@@ -2,6 +2,7 @@ import 'package:digi_care_pro/app/data/enum/page_status.dart';
 import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:digi_care_pro/app/logic/customers_logic.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
+import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:digi_care_pro/app/ui/theme/app_theme.dart';
 import 'package:digi_care_pro/app/ui/widgets/search_bar_widget.dart';
@@ -49,7 +50,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                           logic.paging.page++;
                           logic.pageStatus = PageStatus.loadMore;
 
-                         logic.getCustomers();
+                          logic.getCustomers();
                         }
 
                         return _buildCustomerItem(logic.customers[index]);
@@ -81,7 +82,16 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                   Expanded(
                     child: Row(
                       children: [
-                        CircleAvatar(radius: 24, backgroundImage: NetworkImage(customer.profileImageUrl ?? '')),
+                        Container(
+                          width: 24,
+                          height: 24,
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.outline,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: SvgPicture.asset('assets/icons/user.svg', color: Theme.of(context).colorScheme.primary,),
+                        ),
                         SizedBox(width: 12),
                         Text(customer.getFullName(), style: Theme.of(context).textTheme.labelLarge),
                       ],

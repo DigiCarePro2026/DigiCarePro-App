@@ -152,4 +152,12 @@ const Map<String, String> frFR = {
   "december": "Décembre",
   'employee': 'Employé',
   'manager': 'Manager',
+  "submit_sign": "Soumettre la signature",
+  "clear": "Effacer",
+  "sign2": "Signer",
+  "reason_required": "Motif requis",
+  "save": "Enregistrer",
+  "mission_status_todo": "Brouillon",
+  "mission_status_in_progress": "En cours",
+  "mission_status_done": "Terminé",
 };

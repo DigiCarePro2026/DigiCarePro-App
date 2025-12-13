@@ -92,9 +92,19 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                             children: [
                               Row(
                                 children: [
-                                  CircleAvatar(
+                                  /*CircleAvatar(
                                     radius: 32,
                                     backgroundImage: NetworkImage(logic.mission.customerAvatar ?? ''),
+                                  ),*/
+                                  Container(
+                                    width: 42,
+                                    height: 42,
+                                    padding: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).colorScheme.outline,
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: SvgPicture.asset('assets/icons/user.svg', color: Theme.of(context).colorScheme.primary,),
                                   ),
                                   SizedBox(width: 12),
                                   Text(

@@ -15,6 +15,7 @@ class AppTextField extends StatefulWidget {
     this.enabled = true,
     this.focusNode,
     this.keyboardType,
+    this.autofillHints,
   });
 
   final String title;
@@ -25,6 +26,7 @@ class AppTextField extends StatefulWidget {
   final bool enabled;
   final FocusNode? focusNode;
   final TextInputType? keyboardType;
+  final Iterable<String>? autofillHints;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -45,8 +47,11 @@ class _AppTextFieldState extends State<AppTextField> {
           controller: widget.controller,
           focusNode: widget.focusNode,
           enabled: widget.enabled,
+          autofillHints: widget.autofillHints,
           keyboardType: widget.keyboardType ?? TextInputType.text,
-          obscureText: widget.keyboardType == TextInputType.visiblePassword ? _obscureText : false,
+          obscureText: widget.keyboardType == TextInputType.visiblePassword && _obscureText,
+          enableSuggestions: widget.keyboardType != TextInputType.visiblePassword,
+          autocorrect: widget.keyboardType != TextInputType.visiblePassword,
           textInputAction: TextInputAction.next,
           decoration: InputDecoration(
             hintText: widget.hint,

@@ -8,6 +8,7 @@ import 'package:digi_care_pro/app/ui/widgets/app_text_field.dart';
 import 'package:digi_care_pro/app/ui/widgets/primary_button.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -90,18 +91,26 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         SizedBox(height: 32),
-                        AppTextField(
-                          controller: _emailController,
-                          title: 'email'.tr,
-                          hint: 'email_hint'.tr,
-                          keyboardType: TextInputType.emailAddress,
-                        ),
-                        SizedBox(height: 16),
-                        AppTextField(
-                          controller: _passwordController,
-                          title: 'password'.tr,
-                          hint: 'password_hint'.tr,
-                          keyboardType: TextInputType.visiblePassword,
+                        AutofillGroup(
+                          child: Column(
+                            children: [
+                              AppTextField(
+                                controller: _emailController,
+                                title: 'email'.tr,
+                                hint: 'email_hint'.tr,
+                                keyboardType: TextInputType.emailAddress,
+                                autofillHints: const [AutofillHints.email],
+                              ),
+                              SizedBox(height: 16),
+                              AppTextField(
+                                controller: _passwordController,
+                                title: 'password'.tr,
+                                hint: 'password_hint'.tr,
+                                keyboardType: TextInputType.visiblePassword,
+                                autofillHints: const [AutofillHints.password],
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(height: 4),
                         Row(

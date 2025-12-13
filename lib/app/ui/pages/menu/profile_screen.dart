@@ -41,7 +41,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Row(
                     children: [
-                      CircleAvatar(radius: 24, backgroundImage: NetworkImage('')),
+                      // CircleAvatar(radius: 24, backgroundImage: NetworkImage('')),
+                      Container(
+                        width: 48,
+                        height: 48,
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.outline,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: SvgPicture.asset('assets/icons/user.svg', color: Theme.of(context).colorScheme.primary,),
+                      ),
                       SizedBox(width: 12),
                       Expanded(
                         child: Column(
@@ -60,7 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       InkWell(
                         borderRadius: BorderRadius.circular(12),
-                        onTap: () => Get.toNamed(Routes.EMPLOYEE_PROFILE),
+                        // onTap: () => Get.toNamed(Routes.EMPLOYEE_PROFILE),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: SvgPicture.asset(
@@ -320,7 +330,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 32),
+                  SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -344,7 +354,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 32, right: 32, top: 12.0, bottom: 12),
                           child: Wrap(
-                            alignment: WrapAlignment.center,
+                            crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               SvgPicture.asset('assets/icons/logout.svg', color: AppColors.red),
                               SizedBox(width: 16),

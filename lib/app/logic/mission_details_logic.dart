@@ -493,7 +493,7 @@ class MissionDetailsLogic extends GetxController {
 
   //<editor-fold desc="Change datetime">
   Future<String?> showChangeDateAndTimeBottomSheet() async {
-    DateTime? selectedDate;
+    DateTime? selectedDate = DateTime.tryParse(mission.plannedStartDateTime!);
     TimeOfDay startTime = TimeOfDay.now();
     TimeOfDay endTime = TimeOfDay.now();
     TextEditingController reasonController = TextEditingController();
@@ -528,7 +528,7 @@ class MissionDetailsLogic extends GetxController {
                           children: [
                             CalendarWidget(
                               selectionMode: CalendarSelectionMode.single,
-                              initialDate: DateTime.tryParse(mission.plannedStartDateTime!),
+                              initialDate: selectedDate,
                               minDate: DateTime.now().subtract(const Duration(days: 1)),
                               onDateSelected: (date, isChangedMonth) {
                                 if (!isChangedMonth) {

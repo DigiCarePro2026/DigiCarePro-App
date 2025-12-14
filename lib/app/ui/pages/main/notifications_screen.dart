@@ -1,3 +1,4 @@
+import 'package:digi_care_pro/app/data/enum/page_status.dart';
 import 'package:digi_care_pro/app/data/models/message.dart';
 import 'package:digi_care_pro/app/logic/notifications_logic.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
@@ -29,8 +30,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           appBar: AppBar(title: Text('notifications'.tr)),
           body: Stack(
             children: [
-              if (logic.messages.isEmpty) Center(child: CircularProgressIndicator()),
-              if (logic.messages.isNotEmpty)
+              if (logic.pageStatus == PageStatus.loading) Center(child: CircularProgressIndicator()),
+              if(logic.pageStatus == PageStatus.empty) Center(child: Text('empty_message'.tr,style: Theme.of(context).textTheme.titleMedium),),
+              if (logic.pageStatus == PageStatus.loaded)
               ListView.builder(
                 itemCount: logic.messages.length,
                 itemBuilder: (ctx, index) {

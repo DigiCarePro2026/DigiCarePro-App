@@ -160,4 +160,5 @@ const Map<String, String> enUS = {
   'mission_status_todo': 'Draft',
   'mission_status_in_progress': 'In progress',
   'mission_status_done': 'Completed',
+  'comment': 'Comment',
 };

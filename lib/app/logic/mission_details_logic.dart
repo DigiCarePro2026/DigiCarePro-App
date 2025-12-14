@@ -15,6 +15,7 @@ import 'package:digi_care_pro/app/data/repositories/mission_repository.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/mission_details_screen.dart';
 import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
+import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:digi_care_pro/app/ui/widgets/app_dropdown_field.dart';
 import 'package:digi_care_pro/app/ui/widgets/app_text_area_field.dart';
 import 'package:digi_care_pro/app/ui/widgets/calendar_widget.dart';
@@ -75,7 +76,7 @@ class MissionDetailsLogic extends GetxController {
   checkMissionStatus(bool hasLoadingForLocation) async {
     DialogHandler.showLoading('loading_check_mission_status'.tr);
 
-    if(hasLoadingForLocation) {
+    if (hasLoadingForLocation) {
       await findUserLocation(hasLoadingForLocation);
     }
 
@@ -106,16 +107,12 @@ class MissionDetailsLogic extends GetxController {
   _prepareMenuItems() {
     menuItems = [
       MenuModel(
-        title: 'routing'.tr,
-        icon: 'assets/icons/routing.svg',
-        color: AppColors.routingColor,
-        callback: () => openNavigation(mission.customerLatitude ?? 0, mission.customerLongitude ?? 0),
-      ),
-      MenuModel(
-        title: 'call'.tr,
-        icon: 'assets/icons/call.svg',
-        color: AppColors.callColor,
-        callback: () => makeCall(mission.customerPhone ?? ''),
+        title: 'customer_signature'.tr,
+        icon: 'assets/icons/signature.svg',
+        color: AppColors.signatureColor,
+        callback: () {
+          Get.toNamed(Routes.MISSION_SIGNATURE, arguments: mission.id);
+        },
       ),
       MenuModel(
         title: 'add_mission'.tr,
@@ -156,26 +153,17 @@ class MissionDetailsLogic extends GetxController {
           },
         ),
       );
-      menuItems.add(
-        MenuModel(
-          title: 'change_date_time'.tr,
-          icon: 'assets/icons/calendar-setting.svg',
-          color: AppColors.changeDateAndTimeColor,
-          callback: () async {
-            String? result = await showChangeDateAndTimeBottomSheet();
-          },
-        ),
-      );
+
       menuItems.add(
         MenuModel(
           title: 'cancel_mission'.tr,
           icon: 'assets/icons/cancel.svg',
           color: AppColors.cancelMissionColor,
           callback: () async {
-            CancelMissionType? reason = await showCancelMissionBottomSheet();
+            CancelMissionRequest? request = await showCancelMissionBottomSheet();
 
-            if (reason != null) {
-              _cancelMissionApi(reason.title);
+            if (request != null) {
+              _cancelMissionApi(request);
             }
           },
         ),
@@ -288,13 +276,13 @@ class MissionDetailsLogic extends GetxController {
                         child: PrimaryButton(
                           label: 'confirm'.tr,
                           onPressed: () {
-                            if(controller.text.isEmpty){
+                            if (controller.text.isEmpty) {
                               snackError(message: 'reason_required'.tr);
                               return;
                             }
 
                             Navigator.pop(context, controller.text);
-                          }
+                          },
                         ),
                       ),
                     ],
@@ -494,8 +482,12 @@ class MissionDetailsLogic extends GetxController {
   //<editor-fold desc="Change datetime">
   Future<String?> showChangeDateAndTimeBottomSheet() async {
     DateTime? selectedDate = DateTime.tryParse(mission.plannedStartDateTime!);
-    TimeOfDay startTime = TimeOfDay.now();
-    TimeOfDay endTime = TimeOfDay.now();
+    TimeOfDay startTime =
+        parseTime(mission.plannedStartDateTime) ??
+        TimeOfDay.now().replacing(hour: TimeOfDay.now().hour, minute: (TimeOfDay.now().minute / 15).floor() * 15);
+    TimeOfDay endTime =
+        parseTime(mission.plannedEndDateTime) ??
+        TimeOfDay.now().replacing(hour: min(TimeOfDay.now().hour + 2, 23), minute: TimeOfDay.now().hour == 23 ? 55 : 0);
     TextEditingController reasonController = TextEditingController();
 
     return await showModalBottomSheet<String>(
@@ -544,10 +536,7 @@ class MissionDetailsLogic extends GetxController {
                                   child: Center(
                                     child: TimePickerField(
                                       title: 'start'.tr,
-                                      initialValue: parseTime(mission.plannedStartDateTime) ?? TimeOfDay.now().replacing(
-                                        hour: TimeOfDay.now().hour,
-                                        minute: (TimeOfDay.now().minute / 15).floor() * 15,
-                                      ),
+                                      initialValue: startTime,
                                       onChanged: (time) {
                                         setState(() {
                                           startTime = time;
@@ -561,10 +550,7 @@ class MissionDetailsLogic extends GetxController {
                                   child: Center(
                                     child: TimePickerField(
                                       title: 'end'.tr,
-                                      initialValue: parseTime(mission.plannedEndDateTime) ?? TimeOfDay.now().replacing(
-                                        hour: min(TimeOfDay.now().hour + 2, 23),
-                                        minute: TimeOfDay.now().hour == 23 ? 55 : 0,
-                                      ),
+                                      initialValue: endTime,
                                       onChanged: (time) {
                                         setState(() {
                                           endTime = time;
@@ -663,10 +649,11 @@ class MissionDetailsLogic extends GetxController {
   //</editor-fold>
 
   //<editor-fold desc="Cancel">
-  Future<CancelMissionType?> showCancelMissionBottomSheet() async {
+  Future<CancelMissionRequest?> showCancelMissionBottomSheet() async {
     CancelMissionType? selectedValue;
+    TextEditingController commentController = TextEditingController();
 
-    return await showModalBottomSheet<CancelMissionType>(
+    return await showModalBottomSheet<CancelMissionRequest>(
       context: Get.context!,
       isScrollControlled: true,
       useSafeArea: true,
@@ -700,6 +687,8 @@ class MissionDetailsLogic extends GetxController {
                       );
                     }).toList(),
                   ),
+                  SizedBox(height: fieldSpace),
+                  AppTextAreaField(title: 'comment'.tr, controller: commentController),
                   const SizedBox(height: 24),
                   Row(
                     children: [
@@ -710,7 +699,14 @@ class MissionDetailsLogic extends GetxController {
                       Expanded(
                         child: PrimaryButton(
                           label: 'confirm'.tr,
-                          onPressed: () => Navigator.pop(context, selectedValue),
+                          onPressed: () => Navigator.pop(
+                            context,
+                            CancelMissionRequest(
+                              missionId: mission.id,
+                              reason: selectedValue!.title,
+                              comment: commentController.text,
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -725,12 +721,10 @@ class MissionDetailsLogic extends GetxController {
     );
   }
 
-  _cancelMissionApi(String reason) async {
+  _cancelMissionApi(CancelMissionRequest request) async {
     DialogHandler.showLoading('loading_cancel_mission'.tr);
 
-    var result = await MissionRepository.get().cancelMission(
-      CancelMissionRequest(missionId: mission.id, reason: reason),
-    );
+    var result = await MissionRepository.get().cancelMission(request);
 
     DialogHandler.hideLoading();
 

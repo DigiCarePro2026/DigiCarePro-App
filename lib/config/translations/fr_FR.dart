@@ -160,4 +160,5 @@ const Map<String, String> frFR = {
   "mission_status_todo": "Brouillon",
   "mission_status_in_progress": "En cours",
   "mission_status_done": "Terminé",
+  'comment': 'commentaire',
 };

@@ -160,4 +160,5 @@ const Map<String, String> deDE = {
   'mission_status_todo': 'Entwurf',
   'mission_status_in_progress': 'In Bearbeitung',
   'mission_status_done': 'Abgeschlossen',
+  'comment': 'Kommentar',
 };

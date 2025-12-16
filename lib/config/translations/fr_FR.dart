@@ -161,4 +161,5 @@ const Map<String, String> frFR = {
   "mission_status_in_progress": "En cours",
   "mission_status_done": "Terminé",
   'comment': 'commentaire',
+  'manual_start_caption': "Vous avez l'intention d'accomplir la mission manuellement car vous serez indisponible au moment et à l'endroit prévus pour la mission.",
 };

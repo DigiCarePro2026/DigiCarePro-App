@@ -4,7 +4,8 @@ enum MissionActionType{
   autoStart(0),
   manualStart(1),
   sign(2),
-  done(3);
+  done(3),
+  canceled(4);
 
   final int code;
 
@@ -22,6 +23,9 @@ extension MissionActionTypeExtension on MissionActionType {
         return 'sign'.tr;
       case MissionActionType.done:
         return 'done'.tr;
+      case MissionActionType.canceled:
+        return 'canceled'.tr;
+        break;
     }
   }
 }

@@ -161,4 +161,6 @@ const Map<String, String> deDE = {
   'mission_status_in_progress': 'In Bearbeitung',
   'mission_status_done': 'Abgeschlossen',
   'comment': 'Kommentar',
+  'manual_start_caption': "Sie beabsichtigen, die Mission manuell abzuschließen, da Sie zum Zeitpunkt und am Ort der Mission nicht verfügbar sind.",
+
 };

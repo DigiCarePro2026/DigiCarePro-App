@@ -40,4 +40,8 @@ class NotificationsLogic extends GetxController {
       },
     );
   }
+
+  markAsRead({required String messageId}){
+    NotificationRepository.get().markAsRead(messageId: messageId);
+  }
 }

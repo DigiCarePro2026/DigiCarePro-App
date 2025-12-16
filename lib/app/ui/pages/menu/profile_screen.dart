@@ -68,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ],
                         ),
                       ),
-                      InkWell(
+                  /*    InkWell(
                         borderRadius: BorderRadius.circular(12),
                         // onTap: () => Get.toNamed(Routes.EMPLOYEE_PROFILE),
                         child: Padding(
@@ -78,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
-                      ),
+                      ),*/
                     ],
                   ),
                   SizedBox(height: 32),

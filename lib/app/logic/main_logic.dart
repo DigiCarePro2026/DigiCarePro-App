@@ -1,5 +1,7 @@
 import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:digi_care_pro/app/data/repositories/employee_repository.dart';
+import 'package:digi_care_pro/app/data/repositories/notification_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MainLogic extends GetxController{
@@ -11,6 +13,8 @@ class MainLogic extends GetxController{
   Future<void> onReady() async {
     await _getEmployeeCustomers();
 
+    getUnreadMessagesCount();
+
     super.onReady();
   }
 
@@ -21,6 +25,16 @@ class MainLogic extends GetxController{
 
     }, (response){
       employeeCustomers = response.data!;
+
+      update();
+    });
+  }
+
+  getUnreadMessagesCount() async {
+    var result = await NotificationRepository.get().getUnreadMessagesCount();
+
+    result.fold((error){}, (response){
+      unSeenMessageCount = response.data ?? 0;
 
       update();
     });

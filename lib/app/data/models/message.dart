@@ -4,7 +4,7 @@ class Message {
   final String subject;
   final String? body;
   final String sentAt;
-  final bool isRead;
+  bool isRead;
 
   Message({
     required this.id,

@@ -290,6 +290,27 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                     ),
                                   ),
                                 ),
+                              if (logic.actionType != null && logic.actionType == MissionActionType.canceled)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 24),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(cardRadius),
+                                      border: BoxBorder.all(color: Theme.of(context).colorScheme.primary, width: 2),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset('assets/icons/cancel.svg',color: AppColors.red, width: 22),
+                                          SizedBox(width: 8),
+                                          Text(logic.actionType!.title, style: Theme.of(context).textTheme.labelLarge),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               if (logic.actionType != null && logic.actionType != MissionActionType.done)
                                 Padding(
                                   padding: const EdgeInsets.only(top: 24),

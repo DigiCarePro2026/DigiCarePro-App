@@ -31,20 +31,26 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           body: Stack(
             children: [
               if (logic.pageStatus == PageStatus.loading) Center(child: CircularProgressIndicator()),
-              if(logic.pageStatus == PageStatus.empty) Center(child: Text('empty_message'.tr,style: Theme.of(context).textTheme.titleMedium),),
+              if (logic.pageStatus == PageStatus.empty)
+                Center(child: Text('empty_message'.tr, style: Theme.of(context).textTheme.titleMedium)),
               if (logic.pageStatus == PageStatus.loaded)
-              ListView.builder(
-                itemCount: logic.messages.length,
-                itemBuilder: (ctx, index) {
-                  if(index == logic.messages.length - 1){
-                    logic.paging.page ++;
+                ListView.builder(
+                  itemCount: logic.messages.length,
+                  itemBuilder: (ctx, index) {
+                    if (index == logic.messages.length - 1) {
+                      logic.paging.page++;
 
-                    logic.getMessages();
-                  }
+                      logic.getMessages();
+                    }
 
-                  return MessageItem(message: logic.messages[index]);
-                },
-              ),
+                    return MessageItem(
+                      message: logic.messages[index],
+                      readCallback: (String messageId) {
+                        logic.markAsRead(messageId: messageId);
+                      },
+                    );
+                  },
+                ),
             ],
           ),
         );
@@ -55,8 +61,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
 class MessageItem extends StatefulWidget {
   final Message message;
+  final Function(String messageId) readCallback;
 
-  const MessageItem({super.key, required this.message});
+  const MessageItem({super.key, required this.message, required this.readCallback});
 
   @override
   State<MessageItem> createState() => _MessageItemState();
@@ -77,6 +84,12 @@ class _MessageItemState extends State<MessageItem> {
           child: InkWell(
             borderRadius: BorderRadius.circular(cardRadius),
             onTap: () {
+              if (!widget.message.isRead) {
+                widget.readCallback.call(widget.message.id);
+
+                widget.message.isRead = true;
+              }
+
               setState(() {
                 isExpanded = !isExpanded;
               });

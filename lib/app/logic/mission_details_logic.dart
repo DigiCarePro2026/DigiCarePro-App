@@ -211,6 +211,9 @@ class MissionDetailsLogic extends GetxController {
 
       case MissionActionType.done:
         break;
+
+      case MissionActionType.canceled:
+        break;
     }
   }
 
@@ -257,8 +260,11 @@ class MissionDetailsLogic extends GetxController {
             builder: (context, setState) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('manual_start'.tr, style: Theme.of(context).textTheme.headlineMedium),
+                  const SizedBox(height: 8),
+                  Text('manual_start_caption'.tr, style: Theme.of(context).textTheme.bodyMedium),
                   const SizedBox(height: 16),
                   AppTextAreaField(
                     title: 'reason'.tr,
@@ -733,12 +739,14 @@ class MissionDetailsLogic extends GetxController {
         snackError(message: error.message);
       },
       (response) {
-        MissionEventBus eventBus = Get.find();
-        eventBus.sendUpdate(false);
+/*        MissionEventBus eventBus = Get.find();
+        eventBus.sendUpdate(true);*/
 
-        Get.back();
+        Future.delayed(Duration(milliseconds: 200), (){
+          Get.back(result: true);
 
-        snackSuccess(message: response.message);
+          snackSuccess(message: response.message);
+        });
       },
     );
   }

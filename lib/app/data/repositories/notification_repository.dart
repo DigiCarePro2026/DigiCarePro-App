@@ -17,8 +17,16 @@ class NotificationRepository {
     return _instance!;
   }
 
-  Future<Either<ApiError, AppResponse<GetMessagesResponse>>> getMessages({required PagingModel pagingModel, String? loadingMessage}) =>
-      NotificationRemoteDataSource.get().getMessages(pagingModel: pagingModel, loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse<int>>> getUnreadMessagesCount() =>
+      NotificationRemoteDataSource.get().getUnreadMessagesCount();
+
+  Future<Either<ApiError, AppResponse<GetMessagesResponse>>> getMessages({
+    required PagingModel pagingModel,
+    String? loadingMessage,
+  }) => NotificationRemoteDataSource.get().getMessages(pagingModel: pagingModel, loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse>> markAsRead({required String messageId}) =>
+      NotificationRemoteDataSource.get().markAsRead(messageId: messageId);
 
   Future<Either<ApiError, AppResponse>> sendMessage(SendMessageRequest request, {String? loadingMessage}) =>
       NotificationRemoteDataSource.get().sendMessage(request, loadingMessage: loadingMessage);

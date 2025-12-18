@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:digi_care_pro/app/logic/mission_signature_logic.dart';
@@ -29,20 +28,20 @@ class _SignatureScreenState extends State<SignatureScreen> {
     Get.put(logic);
 
     super.initState();
-/*    SystemChrome.setPreferredOrientations([
+    SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
-    ]);*/
+    ]);
   }
 
-/*  @override
+  @override
   void dispose() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
     super.dispose();
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,61 +50,60 @@ class _SignatureScreenState extends State<SignatureScreen> {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(bodyPadding),
-            child: Stack(
+            child: Row(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Theme
-                        .of(context)
-                        .disabledColor),
-                  ),
-                  child: SfSignaturePad(
-                    key: signatureGlobalKey,
-                    strokeColor: Colors.black,
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Theme
+                          .of(context)
+                          .disabledColor),
+                    ),
+                    child: SfSignaturePad(
+                      key: signatureGlobalKey,
+                      strokeColor: Colors.black,
+                    ),
                   ),
                 ),
-                PositionedDirectional(
-                  end: 0, bottom: 0,start: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(bodyPadding),
-                    child: Row(
-                      children: [
-                        _button(
-                          context,
-                          color: AppColors.green,
-                          icon: 'assets/icons/tick.svg',
-                          label: 'submit'.tr,
-                          onTap: () async {
-                            final signature = signatureGlobalKey.currentState!;
-                            final image = await signature.toImage();
-                            final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-                            final Uint8List pngBytes = byteData!.buffer.asUint8List();
-                            logic.upload(widget.missionId, pngBytes.toList());
-                          },
-                        ),
-                        const SizedBox(width: 12),
-                        _button(
-                          context,
-                          color: AppColors.yellow,
-                          icon: 'assets/icons/eraser.svg',
-                          label: 'clear'.tr,
-                          onTap: () {
-                            signatureGlobalKey.currentState!.clear();
-                          },
-                        ),
-                        const SizedBox(width: 12),
-                        _button(
-                          context,
-                          color: AppColors.red,
-                          icon: 'assets/icons/mul.svg',
-                          label: 'cancel'.tr,
-                          onTap: () {
-                            Get.back();
-                          },
-                        ),
-                      ],
-                    ),
+                Padding(
+                  padding: const EdgeInsets.all(bodyPadding),
+                  child: Column(
+                    children: [
+                      _button(
+                        context,
+                        color: AppColors.green,
+                        icon: 'assets/icons/tick.svg',
+                        label: 'submit'.tr,
+                        onTap: () async {
+                          final signature = signatureGlobalKey.currentState!;
+                          final image = await signature.toImage();
+                          final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+                          final Uint8List pngBytes = byteData!.buffer.asUint8List();
+                          logic.upload(widget.missionId, pngBytes.toList());
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      _button(
+                        context,
+                        color: AppColors.yellow,
+                        icon: 'assets/icons/eraser.svg',
+                        label: 'clear'.tr,
+                        onTap: () {
+                          signatureGlobalKey.currentState!.clear();
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      _button(
+                        context,
+                        color: AppColors.red,
+                        icon: 'assets/icons/mul.svg',
+                        label: 'cancel'.tr,
+                        onTap: () {
+                          Get.back();
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -130,7 +128,7 @@ class _SignatureScreenState extends State<SignatureScreen> {
         borderRadius: BorderRadius.circular(cardRadius),
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 12),
-          width: double.infinity,
+          width: 100,
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(cardRadius),

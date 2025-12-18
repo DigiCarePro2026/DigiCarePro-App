@@ -105,15 +105,29 @@ class MissionDetailsLogic extends GetxController {
   }
 
   _prepareMenuItems() {
-    menuItems = [
-      MenuModel(
-        title: 'customer_signature'.tr,
-        icon: 'assets/icons/signature.svg',
-        color: AppColors.signatureColor,
-        callback: () {
-          Get.toNamed(Routes.MISSION_SIGNATURE, arguments: mission.id);
-        },
-      ),
+    menuItems = [];
+
+    if (actionType == MissionActionType.done && (mission.signaturePath == null || mission.signaturePath == '')) { // fixme: add flag when back from signature
+      menuItems.add(
+        MenuModel(
+          title: 'customer_signature'.tr,
+          icon: 'assets/icons/signature.svg',
+          color: AppColors.signatureColor,
+          callback: () async {
+            bool needRefresh = await Get.toNamed(Routes.MISSION_SIGNATURE, arguments: mission.id);
+
+            if (needRefresh) {
+              checkMissionStatus(false);
+
+              MissionEventBus eventBus = Get.find();
+              eventBus.sendUpdate(true);
+            }
+          },
+        ),
+      );
+    }
+
+    menuItems.add(
       MenuModel(
         title: 'add_mission'.tr,
         icon: 'assets/icons/add-mission.svg',
@@ -122,23 +136,9 @@ class MissionDetailsLogic extends GetxController {
           Get.toNamed(Routes.CREATE_MISSION, arguments: mission.customerId);
         },
       ),
-    ];
+    );
 
     if (actionType != MissionActionType.done) {
-      menuItems.add(
-        MenuModel(
-          title: 'submit_report'.tr,
-          icon: 'assets/icons/report.svg',
-          color: AppColors.reportColor,
-          callback: () async {
-            String? report = await showMissionReportBottomSheet();
-
-            if (report != null) {
-              _reportMissionApi(report);
-            }
-          },
-        ),
-      );
       menuItems.add(
         MenuModel(
           title: 'delay_report'.tr,
@@ -168,20 +168,33 @@ class MissionDetailsLogic extends GetxController {
           },
         ),
       );
-      menuItems.add(
-        MenuModel(
-          title: 'upload_document'.tr,
-          icon: 'assets/icons/upload.svg',
-          color: AppColors.uploadColor,
-          callback: () {
-            Get.toNamed(
-              Routes.MISSION_UPLOAD_DOC,
-              arguments: {'missionId': mission.id, 'customerId': mission.customerId},
-            );
-          },
-        ),
-      );
     }
+
+    menuItems.addAll([
+      MenuModel(
+        title: 'upload_document'.tr,
+        icon: 'assets/icons/upload.svg',
+        color: AppColors.uploadColor,
+        callback: () {
+          Get.toNamed(
+            Routes.MISSION_UPLOAD_DOC,
+            arguments: {'missionId': mission.id, 'customerId': mission.customerId},
+          );
+        },
+      ),
+      MenuModel(
+        title: 'submit_report'.tr,
+        icon: 'assets/icons/report.svg',
+        color: AppColors.reportColor,
+        callback: () async {
+          String? report = await showMissionReportBottomSheet();
+
+          if (report != null) {
+            _reportMissionApi(report);
+          }
+        },
+      ),
+    ]);
 
     update();
   }
@@ -739,10 +752,10 @@ class MissionDetailsLogic extends GetxController {
         snackError(message: error.message);
       },
       (response) {
-/*        MissionEventBus eventBus = Get.find();
+        /*        MissionEventBus eventBus = Get.find();
         eventBus.sendUpdate(true);*/
 
-        Future.delayed(Duration(milliseconds: 200), (){
+        Future.delayed(Duration(milliseconds: 200), () {
           Get.back(result: true);
 
           snackSuccess(message: response.message);

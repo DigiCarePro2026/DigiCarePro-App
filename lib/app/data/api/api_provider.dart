@@ -24,7 +24,7 @@ class ApiProvider {
     BaseOptions(
       connectTimeout: const Duration(seconds: 15),
       receiveTimeout: const Duration(seconds: 15),
-      baseUrl: Pref.getString(PrefKey.baseUrl) ?? defaultServerUrl
+      baseUrl: Pref.getString(PrefKey.baseUrl) ?? defaultServerUrl,
       //'https://mobileapi.demostage.ir/api',
       // https://appapi.digicarepro.de/api
     ),
@@ -35,6 +35,9 @@ class ApiProvider {
   factory ApiProvider() => _instance;
 
   String? loadingMessage;
+
+  bool _isRefreshing = false;
+  List<Function()> _retryQueue = [];
 
   ApiProvider._() {
     // dio.options.headers['locale'] = 'fa';
@@ -81,23 +84,16 @@ class ApiProvider {
           return handler.next(options);
         },
         onResponse: (response, handler) {
-         /* _requestCount--;
-
-          // if (_requestCount <= 0) {
-          //   _requestCount = 0;
-          _hideLoading();*/
-          // }
-
           logger.i(
             'onResponse : ${response.data.toString().substring(0, min(response.data.toString().length - 1, 300))}',
           );
 
           return handler.next(response);
         },
-        onError: (error, handler) {
-         /* _requestCount--;
-
-          _hideLoading();*/
+        onError: (error, handler) async{
+          if (error.response?.statusCode == 401) {
+            return _handle401(error, handler);
+          }
 
           logger.e('Error occurred: ${error.message}');
 
@@ -239,11 +235,12 @@ class ApiProvider {
           ApiError error = ApiError(code: e.response!.statusCode!, message: e.response!.data['message'] ?? '');
           return Left(error);
 
-        case 401:
+       /* case 401:
           logger.e('Unauthorized error, call refreshToken...');
 
-          refreshToken();
-          break;
+          _handle401(error, handler);
+          // refreshToken();
+          break;*/
 
         case 403:
           // show403Dialog(message: e.response!.data['message']);
@@ -290,10 +287,75 @@ class ApiProvider {
         }
       },
       (response) {
-        logger.i('refreshToken success : ${response.message}');
+        logger.i('refreshToken success : ${response.data!.accessToken}');
       },
     );
   }
+
+  Future<void> _handle401(DioError error, ErrorInterceptorHandler handler) async {
+    final requestOptions = error.requestOptions;
+
+    if (_isRefreshing) {
+      // اگر refresh در حال انجام است → درخواست را در صف بگذار
+      _retryQueue.add(() async {
+        final response = await dio.fetch(requestOptions);
+        handler.resolve(response);
+      });
+      return;
+    }
+
+    _isRefreshing = true;
+
+    final refreshResult = await _refreshTokenInternal();
+
+    refreshResult.fold(
+      (err) {
+        _isRefreshing = false;
+        _retryQueue.clear();
+        handler.next(error);
+      },
+      (token) async {
+        dio.options.headers['Authorization'] = 'Bearer $token';
+        requestOptions.headers['Authorization'] = 'Bearer $token';
+
+        final response = await dio.fetch(requestOptions);
+
+        for (final retry in _retryQueue) {
+          retry();
+        }
+
+        _retryQueue.clear();
+        _isRefreshing = false;
+
+        handler.resolve(response);
+      },
+    );
+  }
+
+  Future<Either<ApiError, String>> _refreshTokenInternal() async {
+    try {
+      final refreshToken = Pref.getString(PrefKey.refreshToken);
+
+      final response = await Dio().post(
+        '${dio.options.baseUrl}/auth/refresh-token',
+        data: {'refreshToken': refreshToken},
+      );
+
+      final newToken = response.data['data']['accessToken'];
+
+      Pref.setString(PrefKey.accessToken, newToken);
+
+      return Right(newToken);
+    } catch (e) {
+      Pref.setString(PrefKey.accessToken, null);
+      Pref.setString(PrefKey.refreshToken, null);
+
+      getX.Get.offAllNamed(Routes.LOGIN);
+
+      return Left(ApiError(code: 401, message: 'Session expired'));
+    }
+  }
+
 
   bool _isBottomSheetOpen = false;
 

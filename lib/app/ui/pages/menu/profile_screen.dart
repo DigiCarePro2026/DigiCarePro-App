@@ -50,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: Theme.of(context).colorScheme.outline,
                           borderRadius: BorderRadius.circular(50),
                         ),
-                        child: SvgPicture.asset('assets/icons/user.svg', color: Theme.of(context).colorScheme.primary,),
+                        child: SvgPicture.asset('assets/icons/user.svg', color: Theme.of(context).colorScheme.primary),
                       ),
                       SizedBox(width: 12),
                       Expanded(
@@ -68,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ],
                         ),
                       ),
-                  /*    InkWell(
+                      /*    InkWell(
                         borderRadius: BorderRadius.circular(12),
                         // onTap: () => Get.toNamed(Routes.EMPLOYEE_PROFILE),
                         child: Padding(
@@ -165,24 +165,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           indent: profileItemPadding,
                           endIndent: profileItemPadding,
                         ),
-                        // InkWell(
-                        //   onTap: () {},
-                        //   borderRadius: BorderRadius.circular(12),
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.all(profileItemPadding),
-                        //     child: Row(
-                        //       children: [
-                        //         SvgPicture.asset('assets/icons/money-send.svg', color: Color(0xFFF4B5A5)),
-                        //         SizedBox(width: 12),
-                        //         Expanded(child: Text('payroll'.tr, style: Theme.of(context).textTheme.labelMedium)),
-                        //         SvgPicture.asset(
-                        //           'assets/icons/arrow-right.svg',
-                        //           color: Theme.of(context).disabledColor,
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
+                        InkWell(
+                          onTap: () {},
+                          borderRadius: BorderRadius.circular(12),
+                          child: Padding(
+                            padding: const EdgeInsets.all(profileItemPadding),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset('assets/icons/money-send.svg', color: Theme.of(context).disabledColor),
+                                SizedBox(width: 12),
+                                Expanded(
+                                  child: Text(
+                                    'payroll'.tr,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelMedium!.copyWith(color: Theme.of(context).disabledColor),
+                                  ),
+                                ),
+                                SvgPicture.asset(
+                                  'assets/icons/arrow-right.svg',
+                                  color: Theme.of(context).disabledColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                         Divider(
                           height: 1,
                           color: Theme.of(context).dividerColor,
@@ -424,7 +431,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
           child: Padding(
             padding: const EdgeInsets.all(cardPadding),
-            child: Row(children: [SvgPicture.asset(icon,width:36,), SizedBox(width: 16), Text(title, style: Theme.of(context).textTheme.labelLarge,)]),
+            child: Row(
+              children: [
+                SvgPicture.asset(icon, width: 36),
+                SizedBox(width: 16),
+                Text(title, style: Theme.of(context).textTheme.labelLarge),
+              ],
+            ),
           ),
         ),
       ),

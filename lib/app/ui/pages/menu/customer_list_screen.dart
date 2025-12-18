@@ -5,11 +5,13 @@ import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:digi_care_pro/app/ui/theme/app_theme.dart';
+import 'package:digi_care_pro/app/ui/widgets/app_popup_menu.dart';
 import 'package:digi_care_pro/app/ui/widgets/search_bar_widget.dart';
 import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:popup_menu_plus/popup_menu_plus.dart';
 
 class CustomerListScreen extends StatefulWidget {
   const CustomerListScreen({super.key});
@@ -69,6 +71,34 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
   }
 
   Widget _buildCustomerItem(Customer customer) {
+    final GlobalKey moreKey = GlobalKey();
+
+    PopupMenu menu = PopupMenu(
+      context: context,
+      config: MenuConfig(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        lineColor: Color(0x33FFFFFF),
+        highlightColor: Color(0x33FFFFFF),
+      ),
+      items: [
+        PopUpMenuItem(
+          title: 'call'.tr,
+          image: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: SvgPicture.asset('assets/icons/call.svg', color: Theme.of(context).colorScheme.onPrimary,),
+          ),
+          textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+        ),
+        PopUpMenuItem(
+          title: 'add_mission'.tr,
+          image: Icon(Icons.traffic, color: Colors.white),
+        ),
+      ],
+      onClickMenu: (item) {},
+      onShow: () {},
+      onDismiss: () {},
+    );
+
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
       child: Card.filled(
@@ -90,28 +120,40 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                             color: Theme.of(context).colorScheme.outline,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: SvgPicture.asset('assets/icons/user.svg', color: Theme.of(context).colorScheme.primary,),
+                          child: SvgPicture.asset(
+                            'assets/icons/user.svg',
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
                         SizedBox(width: 12),
                         Text(customer.getFullName(), style: Theme.of(context).textTheme.labelLarge),
                       ],
                     ),
                   ),
-                  PopupMenuButton(
-                    icon: SvgPicture.asset('assets/icons/more-hor.svg'),
-                    onSelected: (value) {
-                      if (value == 'call') {
-                        makeCall(customer.mobile ?? customer.phone!);
-                      } else if (value == 'add_mission') {
-                        Get.toNamed(Routes.CREATE_MISSION, arguments: customer.id);
-                      }
-                    },
-                    itemBuilder: (ctx) {
-                      return [
-                        PopupMenuItem(value: 'call', child: Text('call'.tr)),
-                        PopupMenuItem(value: 'add_mission', child: Text('add_mission'.tr)),
-                      ];
-                    },
+                  AppPopupMenu(
+                    items: [
+                      AppPopupMenuItem(
+                        title: 'call'.tr,
+                        icon: SvgPicture.asset(
+                          'assets/icons/call.svg',
+                          color: Colors.white,
+                        ),
+                        onTap: () {
+                          makeCall(customer.mobile ?? customer.phone!);
+                        },
+                      ),
+                      AppPopupMenuItem(
+                        title: 'add_mission'.tr,
+                        icon: SvgPicture.asset(
+                          'assets/icons/calendar-add.svg',
+                          color: Colors.white,
+                        ),
+                        onTap: () {
+                          Get.toNamed(Routes.CREATE_MISSION, arguments: customer.id);
+                        },
+                      ),
+                    ],
+                    child: SvgPicture.asset('assets/icons/more-hor.svg'),
                   ),
                 ],
               ),

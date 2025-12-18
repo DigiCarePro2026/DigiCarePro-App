@@ -64,7 +64,7 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
                   ),
                 ),
                 SizedBox(height: bodyPadding),
-                if (logic.signatures != null)
+                // if (logic.signatures != null)
                   Container(
                     decoration: BoxDecoration(border: BoxBorder.all(color: Theme.of(context).dividerColor, width: 1)),
                     child: Row(
@@ -79,39 +79,41 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
                                 Text('employee'.tr, style: Theme.of(context).textTheme.labelMedium),
                                 SizedBox(height: 4),
                                 Text(
-                                  logic.signatures!.employeeSignDate ?? '',
+                                  /*logic.signatures!.employeeSignDate ?? ''*/'2025/12/06',
                                   style: Theme.of(context).textTheme.titleSmall,
                                 ),
                                 SizedBox(height: fieldSpace),
-                                Image.network(
-                                  logic.signatures!.employeeSignaturePath ?? '',
-                                  width: 150,
-                                  height: 150,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (ctx, _, __) {
-                                    return Container(
-                                      width: 150,
-                                      height: 150,
-                                      /*color: Theme
-                                        .of(context)
-                                        .dividerColor,*/
-                                      child: SecondaryButton(
-                                        label: 'submit_sign'.tr,
-                                        onPressed: () async {
-                                          final signatureBytes = await showSignatureSheet(context);
-                                          if (signatureBytes != null) {
-                                            logic.uploadSign(signatureBytes);
-                                          }
-                                        },
-                                      ),
-                                    );
-                                  },
+                                Center(
+                                  child: Image.network(
+                                    /*logic.signatures!.employeeSignaturePath ?? ''*/ '',
+                                    width: 200,
+                                    height: 200,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (ctx, _, __) {
+                                      return Container(
+                                        width: 200,
+                                        height: 200,
+                                        /*color: Theme
+                                          .of(context)
+                                          .dividerColor,*/
+                                        child: SecondaryButton(
+                                          label: 'submit_sign'.tr,
+                                          onPressed: () async {
+                                            final signatureBytes = await showSignatureSheet(context);
+                                            if (signatureBytes != null) {
+                                              logic.uploadSign(signatureBytes);
+                                            }
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        Expanded(
+                        /*Expanded(
                           flex: 1,
                           child: Container(
                             padding: EdgeInsets.all(12),
@@ -121,12 +123,12 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
                                 Text('manager'.tr, style: Theme.of(context).textTheme.labelMedium),
                                 SizedBox(height: 4),
                                 Text(
-                                  logic.signatures!.managerSignDate ?? '',
+                                  *//*logic.signatures!.managerSignDate ?? ''*//*'2025/12/28',
                                   style: Theme.of(context).textTheme.titleSmall,
                                 ),
                                 SizedBox(height: fieldSpace),
                                 Image.network(
-                                  logic.signatures!.managerSignaturePath ?? '',
+                                  *//*logic.signatures!.managerSignaturePath ?? ''*//* '',
                                   width: 150,
                                   height: 150,
                                   fit: BoxFit.cover,
@@ -137,7 +139,7 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
                               ],
                             ),
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
                   ),
@@ -157,7 +159,7 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
         _HeaderCell("Date"),
         _HeaderCell("Start"),
         _HeaderCell("End"),
-        _HeaderCell("Total"),
+        // _HeaderCell("Total"),
         _HeaderCell("Work"),
         _HeaderCell("Pause"),
       ],
@@ -171,7 +173,7 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
         _Cell(r.date.substring(0, 10)),
         _Cell(r.startTime.substring(r.startTime.indexOf('T') + 1, r.startTime.indexOf('T') + 6)),
         _Cell(r.endTime.substring(r.endTime.indexOf('T') + 1, r.endTime.indexOf('T') + 6)),
-        _Cell(r.totalTimeDisplay),
+        // _Cell(r.totalTimeDisplay),
         _Cell(r.workTimeDisplay),
         _Cell(r.pauseTimeDisplay),
       ],

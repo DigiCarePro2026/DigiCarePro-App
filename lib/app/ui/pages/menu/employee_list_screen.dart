@@ -1,6 +1,7 @@
 import 'package:digi_care_pro/app/data/models/support_employee.dart';
 import 'package:digi_care_pro/app/logic/employee_list_logic.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
+import 'package:digi_care_pro/app/ui/widgets/app_popup_menu.dart';
 import 'package:digi_care_pro/app/ui/widgets/search_bar_widget.dart';
 import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -34,10 +35,10 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
             children: [
               if (logic.employees.isEmpty) Center(child: CircularProgressIndicator()),
               if (logic.employees.isNotEmpty)
-              ListView.builder(
-                itemCount: logic.employees.length,
-                itemBuilder: (ctx, index) => _buildEmployeeItem(logic.employees[index]),
-              ),
+                ListView.builder(
+                  itemCount: logic.employees.length,
+                  itemBuilder: (ctx, index) => _buildEmployeeItem(logic.employees[index]),
+                ),
             ],
           ),
         );
@@ -67,23 +68,27 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                             color: Theme.of(context).colorScheme.outline,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: SvgPicture.asset('assets/icons/user.svg', color: Theme.of(context).colorScheme.primary,),
+                          child: SvgPicture.asset(
+                            'assets/icons/user.svg',
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
                         SizedBox(width: 12),
                         Text(employee.fullName, style: Theme.of(context).textTheme.labelLarge),
                       ],
                     ),
                   ),
-                  PopupMenuButton(
-                    icon: SvgPicture.asset('assets/icons/more-hor.svg'),
-                    onSelected: (value) {
-                      if (value == 'call') {
-                       makeCall(employee.mobile ?? '');
-                      }
-                    },
-                    itemBuilder: (ctx) {
-                      return [PopupMenuItem(value: 'call', child: Text('call'.tr))];
-                    },
+                  AppPopupMenu(
+                    items: [
+                      AppPopupMenuItem(
+                        title: 'call'.tr,
+                        icon: SvgPicture.asset('assets/icons/call.svg', color: Colors.white),
+                        onTap: () {
+                          makeCall(employee.mobile ?? '');
+                        },
+                      ),
+                    ],
+                    child: SvgPicture.asset('assets/icons/more-hor.svg'),
                   ),
                 ],
               ),

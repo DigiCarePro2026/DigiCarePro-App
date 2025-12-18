@@ -157,9 +157,9 @@ const Map<String, String> deDE = {
   "sign2": "Unterschreiben",
   "reason_required": "Begründung erforderlich",
   "save": "Speichern",
-  'mission_status_todo': 'Entwurf',
-  'mission_status_in_progress': 'In Bearbeitung',
-  'mission_status_done': 'Abgeschlossen',
+  'mission_status_todo': 'Offen',
+  'mission_status_in_progress': 'In Arbeit',
+  'mission_status_done': 'bestätigt',
   'comment': 'Kommentar',
   'manual_start_caption': "Sie beabsichtigen, die Mission manuell abzuschließen, da Sie zum Zeitpunkt und am Ort der Mission nicht verfügbar sind.",
 

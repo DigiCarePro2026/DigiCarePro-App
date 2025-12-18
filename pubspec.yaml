@@ -29,6 +29,7 @@ dependencies:
   geolocator: 14.0.2
   device_info_plus: 12.2.0
   hardware_button_listener: 0.0.1
+  popup_menu_plus: 0.0.6
 
 
 dev_dependencies:

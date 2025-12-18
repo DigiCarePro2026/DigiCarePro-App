@@ -2,6 +2,7 @@ import 'package:digi_care_pro/app/data/models/create_mission.dart';
 import 'package:digi_care_pro/app/data/repositories/mission_repository.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:digi_care_pro/app/utils/dialog_handler.dart';
+import 'package:digi_care_pro/app/utils/mission_event_bus.dart';
 import 'package:get/get.dart';
 
 class CreateMissionLogic extends GetxController {
@@ -29,7 +30,10 @@ class CreateMissionLogic extends GetxController {
         snackError(message: error.message);
       },
       (response) {
-        Future.delayed(Duration(milliseconds: 200), (){
+        MissionEventBus eventBus = Get.find();
+        eventBus.sendUpdate(true);
+
+        Future.delayed(Duration(milliseconds: 300), (){
           Get.back(result: true);
 
           snackSuccess(message: response.message);

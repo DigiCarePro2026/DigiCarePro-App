@@ -1,7 +1,5 @@
 import 'package:digi_care_pro/app/data/api/api_models/get_missions.dart';
 import 'package:digi_care_pro/app/data/enum/mission_status.dart';
-import 'package:digi_care_pro/app/data/enum/mission_type.dart';
-import 'package:digi_care_pro/app/data/enum/page_status.dart';
 import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:digi_care_pro/app/data/models/mission.dart';
 import 'package:digi_care_pro/app/data/repositories/mission_repository.dart';
@@ -18,7 +16,7 @@ class MissionsLogic extends GetxController {
 
   int? _selectedDay;
   List<Mission> allMissions = [], filteredMissions = [];
-  MissionType selectedMissionType = MissionType.all;
+  MissionStatus selectedMissionType = MissionStatus.all;
 
   int missionCountInDateFilter = 0;
 
@@ -110,7 +108,7 @@ class MissionsLogic extends GetxController {
     getMissions();
   }
 
-  innerFilterMissions({int? day, MissionType? missionType}) {
+  innerFilterMissions({int? day, MissionStatus? missionType}) {
     if (day != null) {
       _selectedDay = day;
     }
@@ -135,11 +133,11 @@ class MissionsLogic extends GetxController {
 
     for (Mission mission in filteredMissions) {
       switch (selectedMissionType) {
-        case MissionType.all:
+        case MissionStatus.all:
           tempList.add(mission);
           break;
 
-        case MissionType.todo:
+        case MissionStatus.draft:
           /* if (mission.realStartTime == null && mission.realEndTime == null) {
             tempList.add(mission);
           }*/
@@ -149,7 +147,7 @@ class MissionsLogic extends GetxController {
           }
           break;
 
-        case MissionType.inProgress:
+        case MissionStatus.inProgress:
           /*if (mission.realStartTime != null && mission.realEndTime == null) {
             tempList.add(mission);
           }*/
@@ -158,7 +156,7 @@ class MissionsLogic extends GetxController {
           }
           break;
 
-        case MissionType.done:
+        case MissionStatus.completed:
           /*if (mission.realStartTime != null && mission.realEndTime != null) {
             tempList.add(mission);
           }*/

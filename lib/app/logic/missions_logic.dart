@@ -109,9 +109,9 @@ class MissionsLogic extends GetxController {
   }
 
   innerFilterMissions({int? day, MissionStatus? missionType}) {
-    if (day != null) {
+     // if (day != null) {
       _selectedDay = day;
-    }
+    //}
 
     if (_selectedDay != null) {
       _changeDay(_selectedDay!);

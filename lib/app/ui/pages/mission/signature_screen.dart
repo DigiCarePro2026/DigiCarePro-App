@@ -53,17 +53,24 @@ class _SignatureScreenState extends State<SignatureScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Theme
-                          .of(context)
-                          .disabledColor),
-                    ),
-                    child: SfSignaturePad(
-                      key: signatureGlobalKey,
-                      strokeColor: Colors.black,
-                    ),
+                  child: Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: Theme
+                              .of(context)
+                              .disabledColor),
+                        ),
+                        child: SfSignaturePad(
+                          key: signatureGlobalKey,
+                          strokeColor: Colors.black,
+                        ),
+                      ),Positioned(
+                          left: 50,
+                          bottom: 50,
+                          child: Text('x.........'))
+                    ],
                   ),
                 ),
                 Padding(

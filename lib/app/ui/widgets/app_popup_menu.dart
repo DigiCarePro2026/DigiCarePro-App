@@ -34,8 +34,9 @@ class AppPopupMenu extends StatelessWidget {
                   .textTheme
                   .bodySmall!
                   .copyWith(
+                fontSize: 10,
                 color: Theme.of(context).colorScheme.onPrimary,
-                fontWeight: FontWeight.w700
+                fontWeight: FontWeight.w400
               ),
             ),
           )

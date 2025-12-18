@@ -344,7 +344,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                   crossAxisCount: 2, // 👈 سه ستون
                                   mainAxisSpacing: 16, // فاصله عمودی بین آیتم‌ها
                                   crossAxisSpacing: 16, // فاصله افقی بین آیتم‌ها
-                                  childAspectRatio: 1.3, // نسبت عرض به ارتفاع آیتم‌ها
+                                  childAspectRatio: 1.2, // نسبت عرض به ارتفاع آیتم‌ها
                                 ),
                                 itemBuilder: (ctx, index) => _buildItem(logic.menuItems[index]),
                               ),

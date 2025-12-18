@@ -64,7 +64,7 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
                   ),
                 ),
                 SizedBox(height: bodyPadding),
-                // if (logic.signatures != null)
+                if (logic.signatures != null)
                   Container(
                     decoration: BoxDecoration(border: BoxBorder.all(color: Theme.of(context).dividerColor, width: 1)),
                     child: Row(
@@ -79,18 +79,18 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
                                 Text('employee'.tr, style: Theme.of(context).textTheme.labelMedium),
                                 SizedBox(height: 4),
                                 Text(
-                                  /*logic.signatures!.employeeSignDate ?? ''*/'2025/12/06',
+                                  logic.signatures != null ? logic.signatures!.employeeSignDate ?? '' : '',
                                   style: Theme.of(context).textTheme.titleSmall,
                                 ),
                                 SizedBox(height: fieldSpace),
                                 Center(
                                   child: Image.network(
-                                    /*logic.signatures!.employeeSignaturePath ?? ''*/ '',
+                                    logic.signatures != null ? logic.signatures!.employeeSignaturePath ?? '' : '',
                                     width: 200,
                                     height: 200,
                                     fit: BoxFit.cover,
                                     errorBuilder: (ctx, _, __) {
-                                      return Container(
+                                      return SizedBox(
                                         width: 200,
                                         height: 200,
                                         /*color: Theme
@@ -113,33 +113,6 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
                             ),
                           ),
                         ),
-                        /*Expanded(
-                          flex: 1,
-                          child: Container(
-                            padding: EdgeInsets.all(12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('manager'.tr, style: Theme.of(context).textTheme.labelMedium),
-                                SizedBox(height: 4),
-                                Text(
-                                  *//*logic.signatures!.managerSignDate ?? ''*//*'2025/12/28',
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                                SizedBox(height: fieldSpace),
-                                Image.network(
-                                  *//*logic.signatures!.managerSignaturePath ?? ''*//* '',
-                                  width: 150,
-                                  height: 150,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (ctx, _, __) {
-                                    return Container(width: 150, height: 150, color: Theme.of(context).dividerColor);
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),*/
                       ],
                     ),
                   ),

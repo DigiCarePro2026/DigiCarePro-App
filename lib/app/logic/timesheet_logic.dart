@@ -66,7 +66,7 @@ class TimeSheetLogic extends GetxController {
 
   getSignatures() async {
     var result = await EmployeeRepository.get().getTimesheetSignatures(
-      GetTimesheetRequest(month: selectedMonth!.substring(0, 10)),
+      GetTimesheetRequest(month: selectedMonth!),
     );
 
     result.fold(
@@ -92,7 +92,7 @@ class TimeSheetLogic extends GetxController {
         snackError(message: error.message);
       },
       (response) async {
-        // snackSuccess(message: response.message);
+        snackSuccess(message: response.message);
 
         await getTimesheet();
         getSignatures();

@@ -1,8 +1,10 @@
 import 'package:digi_care_pro/app/data/enum/page_status.dart';
 import 'package:digi_care_pro/app/data/models/message.dart';
 import 'package:digi_care_pro/app/logic/notifications_logic.dart';
+import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class NotificationsScreen extends StatefulWidget {
@@ -27,7 +29,20 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return GetBuilder<NotificationsLogic>(
       builder: (logic) {
         return Scaffold(
-          appBar: AppBar(title: Text('notifications'.tr)),
+          appBar: AppBar(
+            title: Text('notifications'.tr),
+            actions: [
+              InkWell(
+                customBorder: CircleBorder(),
+                onTap: () => Get.toNamed(Routes.SUPPORT),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SvgPicture.asset('assets/icons/message-edit.svg'),
+                ),
+              ),
+              SizedBox(width: 12),
+            ],
+          ),
           body: Stack(
             children: [
               if (logic.pageStatus == PageStatus.loading) Center(child: CircularProgressIndicator()),

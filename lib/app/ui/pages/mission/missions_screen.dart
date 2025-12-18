@@ -42,7 +42,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: CalendarWidget(
                         selectionMode: CalendarSelectionMode.single,
-                        initialDate: DateTime.now(),
+                        // initialDate: DateTime.now(),
                         activeMinMaxMonth: 2,
                         onDateSelected: (date, isChangedMonth) {
                           if (isChangedMonth) {
@@ -316,10 +316,10 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => Get.width < 400 ? 78 : 79; // Adjust based on chip height + padding
+  double get maxExtent => /*Get.width < 400 ? 79 : */79; // Adjust based on chip height + padding
 
   @override
-  double get minExtent => Get.width < 400 ? 78 : 79; // Same as maxExtent to prevent shrinking
+  double get minExtent => /*Get.width < 400 ? 79 :*/ 79; // Same as maxExtent to prevent shrinking
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {

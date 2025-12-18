@@ -25,20 +25,19 @@ class CreateMissionLogic extends GetxController {
 
     DialogHandler.hideLoading();
 
-    result.fold(
-      (error) {
-        snackError(message: error.message);
-      },
-      (response) {
-        MissionEventBus eventBus = Get.find();
-        eventBus.sendUpdate(true);
+    Future.delayed(Duration(milliseconds: 200), () {
+      result.fold(
+        (error) {
+          snackError(message: error.message);
+        },
+        (response) {
+          MissionEventBus eventBus = Get.find();
+          eventBus.sendUpdate(true);
 
-        Future.delayed(Duration(milliseconds: 300), (){
-          Get.back(result: true);
-
+          Get.back();
           snackSuccess(message: response.message);
-        });
-      },
-    );
+        },
+      );
+    });
   }
 }

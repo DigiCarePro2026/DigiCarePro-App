@@ -47,9 +47,10 @@ class AppColors {
   static const green = Color(0xFF45B19D);
   static const yellow = Color(0xFFFDC34F);
 
-  static const missionNew = Color(0xFF4C7BE6);
-  static const missionInProgress = Color(0xFFDA72F9);
-  static const missionDone = Color(0xFF45B19D);
+  static const allMissions = Color(0xFF00A0A3);
+  static const missionNew = Color(0xFFFEA516);
+  static const missionInProgress = Color(0xFF016DCD);
+  static const missionDone = Color(0xFF4BA01B);
 
   static const routingColor = Color(0xFFFBB52F);
   static const callColor = Color(0xFFF06404);

@@ -126,7 +126,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                     ),
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(30),
-                                      onTap: (){
+                                      onTap: () {
                                         makeCall(logic.mission.customerPhone ?? '');
                                       },
                                       child: Padding(
@@ -148,8 +148,11 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                     ),
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(30),
-                                      onTap: (){
-                                        openNavigation(logic.mission.customerLatitude ?? 0, logic.mission.customerLongitude ?? 0);
+                                      onTap: () {
+                                        openNavigation(
+                                          logic.mission.customerLatitude ?? 0,
+                                          logic.mission.customerLongitude ?? 0,
+                                        );
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
@@ -180,54 +183,67 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                 ],
                               ),
                               SizedBox(height: 8),
-                              InkWell(
-                                borderRadius: BorderRadius.circular(8),
-                                onTap: (){
-                                  logic.showChangeDateAndTimeBottomSheet();
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(8.0),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).dividerColor.withAlpha(100),
-                                    borderRadius: BorderRadius.circular(8)
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      SvgPicture.asset(
-                                        'assets/icons/calendar2.svg',
-                                        color: Theme.of(context).disabledColor,
-                                        width: 16,
-                                      ),
-                                      SizedBox(width: 8),
-                                      Text(
-                                        logic.mission.plannedStartDateTime!.substring(0, 10),
-                                        style: Theme.of(context).textTheme.titleMedium,
-                                      ),
-                                      SizedBox(width: 32),
-                                      SvgPicture.asset(
-                                        'assets/icons/clock.svg',
-                                        color: Theme.of(context).disabledColor,
-                                        width: 16,
-                                      ),
-                                      SizedBox(width: 8),
-                                      Text(
-                                        logic.mission.plannedStartDateTime!.substring(11, 16),
-                                        style: Theme.of(context).textTheme.titleMedium,
-                                      ),
-                                      SizedBox(width: 4),
-                                      SvgPicture.asset(
-                                        'assets/icons/arrow-long-right.svg',
-                                        color: Theme.of(context).disabledColor,
-                                      ),
-                                      SizedBox(width: 4),
-                                      Text(
+                              Container(
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).dividerColor.withAlpha(100),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/icons/calendar2.svg',
+                                      color: Theme.of(context).disabledColor,
+                                      width: 16,
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      logic.mission.plannedStartDateTime!.substring(0, 10),
+                                      style: Theme.of(context).textTheme.titleMedium,
+                                    ),
+                                    SizedBox(width: 32),
+                                    SvgPicture.asset(
+                                      'assets/icons/clock.svg',
+                                      color: Theme.of(context).disabledColor,
+                                      width: 16,
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      logic.mission.plannedStartDateTime!.substring(11, 16),
+                                      style: Theme.of(context).textTheme.titleMedium,
+                                    ),
+                                    SizedBox(width: 4),
+                                    SvgPicture.asset(
+                                      'assets/icons/arrow-long-right.svg',
+                                      color: Theme.of(context).disabledColor,
+                                    ),
+                                    SizedBox(width: 4),
+                                    Expanded(
+                                      child: Text(
                                         logic.mission.plannedEndDateTime!.substring(11, 16),
                                         style: Theme.of(context).textTheme.titleMedium,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    InkWell(
+                                      borderRadius: BorderRadius.circular(8),
+                                      onTap: () {
+                                        logic.showChangeDateAndTimeBottomSheet();
+                                      },
+                                      child: Container(
+                                        width: 28,
+                                        height: 28,
+                                        padding: EdgeInsets.all(6),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).cardTheme.color,
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
+                                        child: SvgPicture.asset('assets/icons/pen.svg', color: Theme.of(context).colorScheme.primary,),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
+
                               /* SizedBox(height: 12),
                               Row(
                                 children: [
@@ -303,7 +319,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          SvgPicture.asset('assets/icons/cancel.svg',color: AppColors.red, width: 22),
+                                          SvgPicture.asset('assets/icons/cancel.svg', color: AppColors.red, width: 22),
                                           SizedBox(width: 8),
                                           Text(logic.actionType!.title, style: Theme.of(context).textTheme.labelLarge),
                                         ],

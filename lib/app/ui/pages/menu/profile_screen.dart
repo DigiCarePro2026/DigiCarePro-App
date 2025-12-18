@@ -214,6 +214,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         ),
+                        Divider(
+                          height: 1,
+                          color: Theme.of(context).dividerColor,
+                          indent: profileItemPadding,
+                          endIndent: profileItemPadding,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            DialogHandler.showConfirm(
+                              title: 'delete_account'.tr,
+                              message: 'delete_account_message'.tr,
+                              buttons: [
+                                DialogButtonModel(
+                                  label: 'delete_account'.tr,
+                                  labelColor: AppColors.red,
+                                  onTap: () {
+                                    logic.requestDeleteAccount();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                          borderRadius: BorderRadius.circular(12),
+                          child: Padding(
+                            padding: const EdgeInsets.all(profileItemPadding),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset('assets/icons/user-remove.svg', color: AppColors.red),
+                                SizedBox(width: 12),
+                                Expanded(child: Text('delete_account'.tr, style: Theme.of(context).textTheme.labelMedium)),
+                                SvgPicture.asset(
+                                  'assets/icons/arrow-right.svg',
+                                  color: Theme.of(context).disabledColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

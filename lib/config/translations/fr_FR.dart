@@ -162,4 +162,11 @@ const Map<String, String> frFR = {
   "mission_status_done": "Terminé",
   'comment': 'commentaire',
   'manual_start_caption': "Vous avez l'intention d'accomplir la mission manuellement car vous serez indisponible au moment et à l'endroit prévus pour la mission.",
+  'report_item1': 'Accompagnement / soutien social',
+  'report_item2': 'Tâches ménagères',
+  'report_item3': 'Soins corporels / aide aux soins',
+  'report_item4': 'Administration / documentation',
+  'report_item5': 'Mobilité / transport',
+  'report_item6': 'Activités de stimulation',
+  'report_item7': 'Autres',
 };

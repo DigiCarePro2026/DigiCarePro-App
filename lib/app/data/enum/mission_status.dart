@@ -57,7 +57,7 @@ extension MissionStatusExtension on MissionStatus {
   Color get color {
     switch (this) {
       case MissionStatus.all:
-        return AppColors.red;
+        return AppColors.allMissions;
 
       case MissionStatus.draft:
         return AppColors.missionNew;

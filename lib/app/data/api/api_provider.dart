@@ -40,7 +40,7 @@ class ApiProvider {
   List<Function()> _retryQueue = [];
 
   ApiProvider._() {
-    // dio.options.headers['locale'] = 'fa';
+    dio.options.headers['accept-language'] = getX.Get.locale!.languageCode;
 
     final token = Pref.getString(PrefKey.accessToken);
     if (token != null) {

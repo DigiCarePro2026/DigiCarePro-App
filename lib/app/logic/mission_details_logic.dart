@@ -107,7 +107,8 @@ class MissionDetailsLogic extends GetxController {
   _prepareMenuItems() {
     menuItems = [];
 
-    if (actionType == MissionActionType.done && (mission.signaturePath == null || mission.signaturePath == '')) { // fixme: add flag when back from signature
+    if (actionType == MissionActionType.done && (mission.signaturePath == null || mission.signaturePath == '')) {
+      // fixme: add flag when back from signature
       menuItems.add(
         MenuModel(
           title: 'customer_signature'.tr,
@@ -452,12 +453,33 @@ class MissionDetailsLogic extends GetxController {
                 children: [
                   Text('mission_report'.tr, style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 16),
-                  AppTextAreaField(
-                    title: 'description'.tr,
-                    onChanged: (value) {
-                      setState(() => report = value);
+                  AppDropdownField<String>(
+                    title: 'comment'.tr,
+                    items: [
+                      'report_item1'.tr,
+                      'report_item2'.tr,
+                      'report_item3'.tr,
+                      'report_item4'.tr,
+                      'report_item5'.tr,
+                      'report_item6'.tr,
+                      'report_item7'.tr,
+                    ].map((item) => DropdownMenuItem<String>(value: item, child: Text(item))).toList(),
+                    hint: 'comment'.tr,
+                    onChanged: (item) {
+                      report = item;
+
+                      setState(() {});
                     },
                   ),
+                  if (report == 'report_item7'.tr)
+                  const SizedBox(height: fieldSpace),
+                  if (report == 'report_item7'.tr)
+                    AppTextAreaField(
+                      title: 'description'.tr,
+                      onChanged: (value) {
+                        report = value;
+                      },
+                    ),
                   const SizedBox(height: 24),
                   Row(
                     children: [

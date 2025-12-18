@@ -161,6 +161,13 @@ const Map<String, String> deDE = {
   'mission_status_in_progress': 'In Arbeit',
   'mission_status_done': 'bestätigt',
   'comment': 'Kommentar',
-  'manual_start_caption': "Sie beabsichtigen, die Mission manuell abzuschließen, da Sie zum Zeitpunkt und am Ort der Mission nicht verfügbar sind.",
-
+  'manual_start_caption':
+      "Sie beabsichtigen, die Mission manuell abzuschließen, da Sie zum Zeitpunkt und am Ort der Mission nicht verfügbar sind.",
+  'report_item1': 'Begleitung / soziale Betreuung',
+  'report_item2': 'Haushaltsnahe Tätigkeiten',
+  'report_item3': 'Körperpflege / pflegerische Unterstützung',
+  'report_item4': 'Verwaltung / Dokumentation',
+  'report_item5': 'Mobilität / Transport',
+  'report_item6': 'Aktivierende Beschäftigung',
+  'report_item7': 'Sonstiges',
 };

@@ -150,5 +150,16 @@ const Map<String, String> enUS = {
   'october': 'October',
   'november':'November',
   'december': 'December',
-
+  'employee': 'Employee',
+  'manager': 'Manager',
+  'submit_sign': 'Submit sign',
+  'clear': 'Clear',
+  'sign2':'Sign',
+  'reason_required': 'Reason required',
+  'save': 'Save',
+  'mission_status_todo': 'Draft',
+  'mission_status_in_progress': 'In progress',
+  'mission_status_done': 'Completed',
+  'comment': 'Comment',
+  'manual_start_caption': 'You intend to complete the mission manually due to being unavailable at the time and place of the mission.',
 };

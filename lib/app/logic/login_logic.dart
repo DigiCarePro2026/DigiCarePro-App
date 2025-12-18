@@ -6,32 +6,44 @@ import 'package:digi_care_pro/app/data/api/api_provider.dart';
 import 'package:digi_care_pro/app/data/repositories/account_repository.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
-import 'package:digi_care_pro/app/utils/globals.dart';
 import 'package:digi_care_pro/app/utils/dialog_handler.dart';
 import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class LoginLogic extends GetxController {
   login({required String email, required String password}) async {
     LoginRequest request = LoginRequest(email: email, password: password);
 
-    var result = await AccountRepository.get().login(request, loadingMessage: 'loading_message_login'.tr);
+    DialogHandler.showLoading('loading_message_login'.tr);
+
+    var result = await AccountRepository.get().login(request,);
 
     result.fold(
       (error) {
+        DialogHandler.hideLoading();
+
         snackError(message: error.message);
       },
       (response) async {
+        DialogHandler.hideLoading();
+
         AccountRepository.get().saveLoginInfo(response.data!);
 
         ApiProvider().setToken(response.data?.accessToken);
 
-        await _registerDevice();
+        TextInput.finishAutofillContext();
+
+        if(!kIsWeb) {
+          await _registerDevice();
+        }
+
         await _getProfile();
 
-        snackSuccess(message: response.message);
+        // snackSuccess(message: response.message);
       },
     );
   }
@@ -53,7 +65,11 @@ class LoginLogic extends GetxController {
   }
 
   _getProfile() async {
-    var result = await AccountRepository.get().getProfile(loadingMessage: 'loading_message_get_profile'.tr);
+    DialogHandler.showLoading('loading_message_get_profile'.tr);
+
+    var result = await AccountRepository.get().getProfile();
+
+    DialogHandler.hideLoading();
 
     result.fold(
       (error) {

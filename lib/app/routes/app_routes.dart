@@ -18,5 +18,6 @@ abstract class Routes {
   static const LEAVE_REQUEST = '/requests/leave-request';
   static const SUPPORT = '/support';
   static const TIMESHEET = '/timesheet';
+  static const SET_SERVER_URL = '/set-server-url';
 
 }

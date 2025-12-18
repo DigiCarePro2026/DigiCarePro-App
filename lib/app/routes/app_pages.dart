@@ -3,6 +3,7 @@ import 'package:digi_care_pro/app/ui/pages/account/change_password_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/account/forget_password_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/account/login_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/account/reset_password_screen.dart';
+import 'package:digi_care_pro/app/ui/pages/debug/set_base_url_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/main/main_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/main/notifications_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/change_language_screen.dart';
@@ -56,6 +57,6 @@ class AppPages {
     GetPage(name: Routes.LEAVE_REQUEST, page: () => const LeaveRequestScreen()),
     GetPage(name: Routes.SUPPORT, page: () => const SupportScreen()),
     GetPage(name: Routes.TIMESHEET, page: () => const TimesheetScreen()),
-
+    GetPage(name: Routes.SET_SERVER_URL, page: () =>  SetBaseUrlScreen()),
   ];
 }

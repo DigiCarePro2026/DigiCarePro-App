@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:digi_care_pro/app/data/api/api_models/cancel_mission.dart';
 import 'package:digi_care_pro/app/data/api/api_models/change_mission_datetime.dart';
@@ -14,6 +15,7 @@ import 'package:digi_care_pro/app/data/repositories/mission_repository.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/mission_details_screen.dart';
 import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
+import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:digi_care_pro/app/ui/widgets/app_dropdown_field.dart';
 import 'package:digi_care_pro/app/ui/widgets/app_text_area_field.dart';
 import 'package:digi_care_pro/app/ui/widgets/calendar_widget.dart';
@@ -24,6 +26,7 @@ import 'package:digi_care_pro/app/ui/widgets/delay_time_picker.dart';
 import 'package:digi_care_pro/app/ui/widgets/time_picker.dart';
 import 'package:digi_care_pro/app/utils/dialog_handler.dart';
 import 'package:digi_care_pro/app/utils/location_service.dart';
+import 'package:digi_care_pro/app/utils/mission_event_bus.dart';
 import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -42,27 +45,132 @@ class MissionDetailsLogic extends GetxController {
 
   @override
   void onReady() {
-    _prepareMenuItems();
-
     checkMissionStatus(true);
 
     super.onReady();
   }
 
+  Future<bool> findUserLocation(bool hasLoading) async {
+    var completer = Completer<bool>();
+
+    isLocationServiceOk = await LocationService.instance.ensurePermissionAndService(context: Get.context!);
+
+    update();
+    if (isLocationServiceOk) {
+      if (hasLoading) {
+        DialogHandler.showLoading('finding_location'.tr);
+      }
+
+      userLocation = await LocationService.instance.getCurrentLocation(context: Get.context!);
+
+      DialogHandler.hideLoading();
+
+      if (!completer.isCompleted) completer.complete(true);
+    } else {
+      if (!completer.isCompleted) completer.complete(false);
+    }
+
+    return completer.future;
+  }
+
+  checkMissionStatus(bool hasLoadingForLocation) async {
+    DialogHandler.showLoading('loading_check_mission_status'.tr);
+
+    if (hasLoadingForLocation) {
+      await findUserLocation(hasLoadingForLocation);
+    }
+
+    if (isLocationServiceOk) {
+      var result = await MissionRepository.get().checkMissionStatus(
+        CheckMissionStatusRequest(
+          missionId: mission.id,
+          latitude: userLocation!.latitude,
+          longitude: userLocation!.longitude,
+        ),
+      );
+
+      DialogHandler.hideLoading();
+
+      result.fold(
+        (error) {
+          snackError(message: error.message);
+        },
+        (response) {
+          actionType = response.data;
+
+          _prepareMenuItems();
+        },
+      );
+    }
+  }
+
   _prepareMenuItems() {
-    menuItems = [
+    menuItems = [];
+
+    if (actionType == MissionActionType.done && (mission.signaturePath == null || mission.signaturePath == '')) { // fixme: add flag when back from signature
+      menuItems.add(
+        MenuModel(
+          title: 'customer_signature'.tr,
+          icon: 'assets/icons/signature.svg',
+          color: AppColors.signatureColor,
+          callback: () async {
+            bool needRefresh = await Get.toNamed(Routes.MISSION_SIGNATURE, arguments: mission.id);
+
+            if (needRefresh) {
+              checkMissionStatus(false);
+
+              MissionEventBus eventBus = Get.find();
+              eventBus.sendUpdate(true);
+            }
+          },
+        ),
+      );
+    }
+
+    menuItems.add(
       MenuModel(
-        title: 'routing'.tr,
-        icon: 'assets/icons/routing.svg',
-        color: AppColors.routingColor,
-        callback: () => openNavigation(mission.customerLatitude ?? 0, mission.customerLongitude ?? 0),
+        title: 'add_mission'.tr,
+        icon: 'assets/icons/add-mission.svg',
+        color: AppColors.addMissionColor,
+        callback: () {
+          Get.toNamed(Routes.CREATE_MISSION, arguments: mission.customerId);
+        },
       ),
-      MenuModel(
-        title: 'call'.tr,
-        icon: 'assets/icons/call.svg',
-        color: AppColors.callColor,
-        callback: () => makeCall(mission.customerPhone ?? ''),
-      ),
+    );
+
+    if (actionType != MissionActionType.done) {
+      menuItems.add(
+        MenuModel(
+          title: 'delay_report'.tr,
+          icon: 'assets/icons/delay-report.svg',
+          color: AppColors.delayReportColor,
+          callback: () async {
+            Duration? duration = await showDelayTimeBottomSheet();
+
+            if (duration != null) {
+              _delayReportApi(duration.inMinutes);
+            }
+          },
+        ),
+      );
+
+      menuItems.add(
+        MenuModel(
+          title: 'cancel_mission'.tr,
+          icon: 'assets/icons/cancel.svg',
+          color: AppColors.cancelMissionColor,
+          callback: () async {
+            CancelMissionRequest? request = await showCancelMissionBottomSheet();
+
+            if (request != null) {
+              _cancelMissionApi(request);
+            }
+          },
+        ),
+      );
+    }
+
+    menuItems.addAll([
       MenuModel(
         title: 'upload_document'.tr,
         icon: 'assets/icons/upload.svg',
@@ -75,22 +183,6 @@ class MissionDetailsLogic extends GetxController {
         },
       ),
       MenuModel(
-        title: 'add_mission'.tr,
-        icon: 'assets/icons/add-mission.svg',
-        color: AppColors.addMissionColor,
-        callback: () {
-          Get.toNamed(Routes.CREATE_MISSION, arguments: mission.customerId);
-        },
-      ),
- /*     MenuModel(
-        title: 'customer_signature'.tr,
-        icon: 'assets/icons/signature.svg',
-        color: AppColors.signatureColor,
-        callback: () {
-          Get.toNamed(Routes.MISSION_SIGNATURE, arguments: mission.id);
-        },
-      ),*/
-      MenuModel(
         title: 'submit_report'.tr,
         icon: 'assets/icons/report.svg',
         color: AppColors.reportColor,
@@ -102,90 +194,9 @@ class MissionDetailsLogic extends GetxController {
           }
         },
       ),
-      MenuModel(
-        title: 'delay_report'.tr,
-        icon: 'assets/icons/delay-report.svg',
-        color: AppColors.delayReportColor,
-        callback: () async {
-          Duration? duration = await showDelayTimeBottomSheet();
-
-          if (duration != null) {
-            _delayReportApi(duration.inMinutes);
-          }
-        },
-      ),
-      MenuModel(
-        title: 'change_date_time'.tr,
-        icon: 'assets/icons/calendar-setting.svg',
-        color: AppColors.changeDateAndTimeColor,
-        callback: () async {
-          String? result = await showChangeDateAndTimeBottomSheet();
-        },
-      ),
-      MenuModel(
-        title: 'cancel_mission'.tr,
-        icon: 'assets/icons/cancel.svg',
-        color: AppColors.cancelMissionColor,
-        callback: () async {
-          CancelMissionType? reason = await showCancelMissionBottomSheet();
-
-          if (reason != null) {
-            _cancelMissionApi(reason.title);
-          }
-        },
-      ),
-    ];
-  }
-
-  Future<bool> findUserLocation(bool hasLoading) async {
-    var completer = Completer<bool>();
-
-    isLocationServiceOk = await LocationService.instance.ensurePermissionAndService(context: Get.context!);
+    ]);
 
     update();
-    if (isLocationServiceOk) {
-      if(hasLoading) {
-        DialogHandler.showLoading('finding_location'.tr);
-      }
-
-      userLocation = await LocationService.instance.getCurrentLocation(context: Get.context!);
-
-      if(hasLoading) {
-        Get.back();
-      }
-
-      if (!completer.isCompleted) completer.complete(true);
-    } else {
-      if (!completer.isCompleted) completer.complete(false);
-    }
-
-    return completer.future;
-  }
-
-  checkMissionStatus(bool hasLoadingForLocation) async {
-    await findUserLocation(hasLoadingForLocation);
-
-    if (isLocationServiceOk) {
-      var result = await MissionRepository.get().checkMissionStatus(
-        CheckMissionStatusRequest(
-          missionId: mission.id,
-          latitude: userLocation!.latitude,
-          longitude: userLocation!.longitude,
-        ),
-        loadingMessage: 'loading_check_mission_status'.tr,
-      );
-
-      result.fold(
-        (error) {
-          snackError(message: error.message);
-        },
-        (response) {
-          actionType = response.data;
-
-          update();
-        },
-      );
-    }
   }
 
   handleActionTap() async {
@@ -196,33 +207,48 @@ class MissionDetailsLogic extends GetxController {
 
       case MissionActionType.manualStart:
         String? reason = await showManualEndMissionBottomSheet();
-        manualEnd(reason ?? '');
+        if (reason != null) {
+          manualEnd(reason);
+        }
         break;
 
       case MissionActionType.sign:
-        Get.toNamed(Routes.MISSION_SIGNATURE, arguments: mission.id);
+        bool needRefresh = await Get.toNamed(Routes.MISSION_SIGNATURE, arguments: mission.id);
+        if (needRefresh) {
+          checkMissionStatus(false);
+
+          MissionEventBus eventBus = Get.find();
+          eventBus.sendUpdate(true);
+        }
         break;
 
       case MissionActionType.done:
+        break;
+
+      case MissionActionType.canceled:
         break;
     }
   }
 
   startMission() async {
+    DialogHandler.showLoading('start_mission'.tr);
+
     var result = await MissionRepository.get().startMission(
-      StartMissionRequest(
-        missionId: mission.id,
-        latitude: userLocation!.latitude,
-        longitude: userLocation!.longitude,
-      ),
-      loadingMessage: 'start_mission'.tr
+      StartMissionRequest(missionId: mission.id, latitude: userLocation!.latitude, longitude: userLocation!.longitude),
     );
 
-    result.fold((error) {
-      snackError(message: error.message);
-    }, (response) {
-      snackSuccess(message: response.message);
-    });
+    DialogHandler.hideLoading();
+
+    result.fold(
+      (error) {
+        snackError(message: error.message);
+      },
+      (response) {
+        snackSuccess(message: response.message);
+
+        checkMissionStatus(false);
+      },
+    );
   }
 
   Future<String?> showManualEndMissionBottomSheet() async {
@@ -247,10 +273,17 @@ class MissionDetailsLogic extends GetxController {
             builder: (context, setState) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('manual_start'.tr, style: Theme.of(context).textTheme.headlineMedium),
+                  const SizedBox(height: 8),
+                  Text('manual_start_caption'.tr, style: Theme.of(context).textTheme.bodyMedium),
                   const SizedBox(height: 16),
-                  AppTextAreaField(title: 'reason'.tr, onChanged: (text) => setState(() => value), controller: controller,),
+                  AppTextAreaField(
+                    title: 'reason'.tr,
+                    onChanged: (text) => setState(() => value),
+                    controller: controller,
+                  ),
                   const SizedBox(height: 24),
                   Row(
                     children: [
@@ -261,7 +294,14 @@ class MissionDetailsLogic extends GetxController {
                       Expanded(
                         child: PrimaryButton(
                           label: 'confirm'.tr,
-                          onPressed: () => Navigator.pop(context, controller.text),
+                          onPressed: () {
+                            if (controller.text.isEmpty) {
+                              snackError(message: 'reason_required'.tr);
+                              return;
+                            }
+
+                            Navigator.pop(context, controller.text);
+                          },
                         ),
                       ),
                     ],
@@ -277,21 +317,28 @@ class MissionDetailsLogic extends GetxController {
   }
 
   manualEnd(String reason) async {
+    DialogHandler.showLoading('manual_start'.tr);
+
     var result = await MissionRepository.get().manualEnd(
-        ManualEndRequest(
-          missionId: mission.id,
-          reason: reason,
-        ),
-        loadingMessage: 'Manual start'.tr
+      ManualEndRequest(missionId: mission.id, reason: reason),
+      loadingMessage: 'Manual start'.tr,
     );
 
-    result.fold((error) {
-      snackError(message: error.message);
-    }, (response) {
-      snackSuccess(message: response.message);
+    DialogHandler.hideLoading();
 
-      checkMissionStatus(false);
-    });
+    result.fold(
+      (error) {
+        snackError(message: error.message);
+      },
+      (response) {
+        snackSuccess(message: response.message);
+
+        MissionEventBus eventBus = Get.find();
+        eventBus.sendUpdate(true);
+
+        checkMissionStatus(false);
+      },
+    );
   }
 
   //<editor-fold desc="Delay">
@@ -352,10 +399,13 @@ class MissionDetailsLogic extends GetxController {
   }
 
   _delayReportApi(int minutes) async {
+    DialogHandler.showLoading('loading_delay_mission'.tr);
+
     var result = await MissionRepository.get().delayReport(
       DelayMissionRequest(missionId: mission.id, delayMinutes: minutes),
-      loadingMessage: 'loading_delay_mission'.tr,
     );
+
+    DialogHandler.hideLoading();
 
     result.fold(
       (error) {
@@ -364,7 +414,14 @@ class MissionDetailsLogic extends GetxController {
       (response) {
         snackSuccess(message: response.message);
 
-        //todo: what todo?
+        if (response.data != null) {
+          mission.plannedStartDateTime = response.data!.plannedStartDateTime;
+
+          MissionEventBus eventBus = Get.find();
+          eventBus.sendUpdate(false);
+
+          update();
+        }
       },
     );
   }
@@ -441,11 +498,15 @@ class MissionDetailsLogic extends GetxController {
 
   //</editor-fold>
 
-  //<editor-fold desc="change datetime">
+  //<editor-fold desc="Change datetime">
   Future<String?> showChangeDateAndTimeBottomSheet() async {
-    DateTime? selectedDate;
-    TimeOfDay startTime = TimeOfDay.now();
-    TimeOfDay endTime = TimeOfDay.now();
+    DateTime? selectedDate = DateTime.tryParse(mission.plannedStartDateTime!);
+    TimeOfDay startTime =
+        parseTime(mission.plannedStartDateTime) ??
+        TimeOfDay.now().replacing(hour: TimeOfDay.now().hour, minute: (TimeOfDay.now().minute / 15).floor() * 15);
+    TimeOfDay endTime =
+        parseTime(mission.plannedEndDateTime) ??
+        TimeOfDay.now().replacing(hour: min(TimeOfDay.now().hour + 2, 23), minute: TimeOfDay.now().hour == 23 ? 55 : 0);
     TextEditingController reasonController = TextEditingController();
 
     return await showModalBottomSheet<String>(
@@ -478,6 +539,8 @@ class MissionDetailsLogic extends GetxController {
                           children: [
                             CalendarWidget(
                               selectionMode: CalendarSelectionMode.single,
+                              initialDate: selectedDate,
+                              minDate: DateTime.now().subtract(const Duration(days: 1)),
                               onDateSelected: (date, isChangedMonth) {
                                 if (!isChangedMonth) {
                                   selectedDate = date;
@@ -492,7 +555,7 @@ class MissionDetailsLogic extends GetxController {
                                   child: Center(
                                     child: TimePickerField(
                                       title: 'start'.tr,
-                                      initialValue: TimeOfDay.now(),
+                                      initialValue: startTime,
                                       onChanged: (time) {
                                         setState(() {
                                           startTime = time;
@@ -506,6 +569,7 @@ class MissionDetailsLogic extends GetxController {
                                   child: Center(
                                     child: TimePickerField(
                                       title: 'end'.tr,
+                                      initialValue: endTime,
                                       onChanged: (time) {
                                         setState(() {
                                           endTime = time;
@@ -576,6 +640,8 @@ class MissionDetailsLogic extends GetxController {
   }
 
   _changeMissionDatetimeApi({required String plannedStart, required String plannedEnd, required String reason}) async {
+    DialogHandler.showLoading('loading_change_mission_datetime'.tr);
+
     var result = await MissionRepository.get().changeMissionDatetime(
       ChangeMissionDatetimeRequest(
         missionId: mission.id,
@@ -583,8 +649,9 @@ class MissionDetailsLogic extends GetxController {
         plannedEnd: plannedEnd,
         reason: reason,
       ),
-      loadingMessage: 'loading_change_mission_datetime'.tr,
     );
+
+    DialogHandler.hideLoading();
 
     result.fold(
       (error) {
@@ -601,10 +668,11 @@ class MissionDetailsLogic extends GetxController {
   //</editor-fold>
 
   //<editor-fold desc="Cancel">
-  Future<CancelMissionType?> showCancelMissionBottomSheet() async {
+  Future<CancelMissionRequest?> showCancelMissionBottomSheet() async {
     CancelMissionType? selectedValue;
+    TextEditingController commentController = TextEditingController();
 
-    return await showModalBottomSheet<CancelMissionType>(
+    return await showModalBottomSheet<CancelMissionRequest>(
       context: Get.context!,
       isScrollControlled: true,
       useSafeArea: true,
@@ -638,6 +706,8 @@ class MissionDetailsLogic extends GetxController {
                       );
                     }).toList(),
                   ),
+                  SizedBox(height: fieldSpace),
+                  AppTextAreaField(title: 'comment'.tr, controller: commentController),
                   const SizedBox(height: 24),
                   Row(
                     children: [
@@ -648,7 +718,14 @@ class MissionDetailsLogic extends GetxController {
                       Expanded(
                         child: PrimaryButton(
                           label: 'confirm'.tr,
-                          onPressed: () => Navigator.pop(context, selectedValue),
+                          onPressed: () => Navigator.pop(
+                            context,
+                            CancelMissionRequest(
+                              missionId: mission.id,
+                              reason: selectedValue!.title,
+                              comment: commentController.text,
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -663,20 +740,26 @@ class MissionDetailsLogic extends GetxController {
     );
   }
 
-  _cancelMissionApi(String reason) async {
-    var result = await MissionRepository.get().cancelMission(
-      CancelMissionRequest(missionId: mission.id, reason: reason),
-      loadingMessage: 'loading_cancel_mission'.tr,
-    );
+  _cancelMissionApi(CancelMissionRequest request) async {
+    DialogHandler.showLoading('loading_cancel_mission'.tr);
+
+    var result = await MissionRepository.get().cancelMission(request);
+
+    DialogHandler.hideLoading();
 
     result.fold(
       (error) {
         snackError(message: error.message);
       },
       (response) {
-        snackSuccess(message: response.message);
+        /*        MissionEventBus eventBus = Get.find();
+        eventBus.sendUpdate(true);*/
 
-        //todo: what todo?
+        Future.delayed(Duration(milliseconds: 200), () {
+          Get.back(result: true);
+
+          snackSuccess(message: response.message);
+        });
       },
     );
   }

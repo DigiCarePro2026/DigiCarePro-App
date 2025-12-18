@@ -1,6 +1,8 @@
 import 'package:digi_care_pro/app/data/models/create_mission.dart';
 import 'package:digi_care_pro/app/data/repositories/mission_repository.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
+import 'package:digi_care_pro/app/utils/dialog_handler.dart';
+import 'package:digi_care_pro/app/utils/mission_event_bus.dart';
 import 'package:get/get.dart';
 
 class CreateMissionLogic extends GetxController {
@@ -9,6 +11,8 @@ class CreateMissionLogic extends GetxController {
   CreateMissionLogic(this.customerId);
 
   createMission({required String date, required String startTime, required String endTime, String? comment}) async {
+    DialogHandler.showLoading('loading_default_message'.tr);
+
     var result = await MissionRepository.get().createMission(
       CreateMissionRequest(
         customerId: customerId,
@@ -19,14 +23,21 @@ class CreateMissionLogic extends GetxController {
       ),
     );
 
+    DialogHandler.hideLoading();
+
     result.fold(
       (error) {
         snackError(message: error.message);
       },
       (response) {
-        Get.back();
+        MissionEventBus eventBus = Get.find();
+        eventBus.sendUpdate(true);
 
-        snackSuccess(message: response.message);
+        Future.delayed(Duration(milliseconds: 300), (){
+          Get.back(result: true);
+
+          snackSuccess(message: response.message);
+        });
       },
     );
   }

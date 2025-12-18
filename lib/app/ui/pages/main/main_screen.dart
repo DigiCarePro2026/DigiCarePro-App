@@ -1,7 +1,6 @@
 import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:digi_care_pro/app/logic/main_logic.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
-import 'package:digi_care_pro/app/ui/pages/main/home_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/customer_list_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/menu/profile_screen.dart';
 import 'package:digi_care_pro/app/ui/pages/mission/missions_screen.dart';
@@ -13,7 +12,6 @@ import 'package:get/get.dart';
 
 class MainScreen extends StatefulWidget {
   int currentPage = 1;
-  Function(Customer c)? callback;
 
   List<Widget> _pages = [];
 
@@ -27,13 +25,15 @@ class _MainScreenState extends State<MainScreen> {
 
   MainLogic logic = MainLogic();
 
+  Function(Customer?)? onCustomerSelected;
+
   @override
   void initState() {
     Get.put(logic);
 
     widget._pages = [
       CustomerListScreen(),
-      MissionsScreen(callback: widget.callback,),
+      MissionsScreen(),
       ProfileScreen()
     ];
 
@@ -75,18 +75,21 @@ class _MainScreenState extends State<MainScreen> {
                             .colorScheme
                             .onSurface,
                       ),
-                      SizedBox(width: 8),
-                      Container(
-                        decoration: BoxDecoration(
-                            color: AppColors.red, shape: BoxShape.circle),
-                        constraints: BoxConstraints(
-                            minWidth: 16, minHeight: 16),
-                        child: Center(
-                          child: Text(
-                            logic.unSeenMessageCount.toString(),
-                            style: TextStyle(color: Colors.white,
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold),
+                      SizedBox(width: logic.unSeenMessageCount > 0 ? 8 : 0),
+                      Visibility(
+                        visible: logic.unSeenMessageCount > 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: AppColors.red, shape: BoxShape.circle),
+                          constraints: BoxConstraints(
+                              minWidth: 16, minHeight: 16),
+                          child: Center(
+                            child: Text(
+                              logic.unSeenMessageCount.toString(),
+                              style: TextStyle(color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                       ),
@@ -163,7 +166,7 @@ class _MainScreenState extends State<MainScreen> {
         return Text('customer_list'.tr);
 
       case 1:
-        return AnimatedSearchField(employeeCustomers: logic.employeeCustomers,callback: widget.callback,);
+        return AnimatedSearchField(employeeCustomers: logic.employeeCustomers);
 
       case 2:
         return Text('profile'.tr);

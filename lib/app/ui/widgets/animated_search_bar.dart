@@ -1,14 +1,14 @@
 import 'package:digi_care_pro/app/data/models/customer.dart';
+import 'package:digi_care_pro/app/logic/missions_logic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:get/get.dart';
 
 class AnimatedSearchField extends StatefulWidget {
-
   List<Customer> employeeCustomers = [];
-  Function(Customer c)? callback;
 
-  AnimatedSearchField({super.key, required this.employeeCustomers, this.callback});
+  AnimatedSearchField({super.key, required this.employeeCustomers});
 
   @override
   State<AnimatedSearchField> createState() => _AnimatedSearchFieldState();
@@ -31,6 +31,10 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField> {
 
           if (isExpanded) {
             animationEnd = false;
+          }else{
+            selectedItem = null;
+
+            Get.find<MissionsLogic>().onCustomerSelected(selectedItem);
           }
         });
       },
@@ -53,7 +57,7 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField> {
             Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 5),
               child: SvgPicture.asset(
-                isExpanded ? 'assets/icons/mul.svg':'assets/icons/search-customer.svg',
+                isExpanded ? 'assets/icons/mul.svg' : 'assets/icons/search-customer.svg',
                 color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
@@ -70,11 +74,9 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField> {
                       onChanged: (value) {
                         setState(() {
                           selectedItem = value;
-
-                          if(widget.callback != null) {
-                            widget.callback!(value!);
-                          }
                         });
+
+                        Get.find<MissionsLogic>().onCustomerSelected(value);
                       },
                       popupProps: PopupProps.menu(
                         showSearchBox: true,
@@ -97,7 +99,7 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField> {
                         ),
                       ),
                       dropdownBuilder: (context, selectedItem) => Text(
-                        selectedItem == null ? '' :  selectedItem.getFullName(),
+                        selectedItem == null ? '' : selectedItem.getFullName(),
                         style: Theme.of(context).textTheme.labelSmall,
                         overflow: TextOverflow.ellipsis,
                       ),

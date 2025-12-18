@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DialogHandler {
+
   static showLoading(String message) {
     if (Get.isDialogOpen == true) return;
 
@@ -12,6 +13,19 @@ class DialogHandler {
       barrierDismissible: false,
     );
   }
+
+  static hideLoading() {
+    Future.microtask(() {
+      Get.rawRoute?.navigator?.popUntil((route) {
+        if (route is PopupRoute && route.settings.name == null) {
+          return false;
+        }
+        return true;
+      });
+    });
+  }
+
+
 
   static showConfirm({required String title, required String message, required List<DialogButtonModel> buttons}) {
     showDialog(

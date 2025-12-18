@@ -16,6 +16,8 @@ class UploadDocumentLogic extends GetxController {
         snackError(message: error.message);
       },
       (response) {
+        Get.back();
+
         snackSuccess(message: response.message);
       },
     );

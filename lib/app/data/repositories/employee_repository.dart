@@ -3,6 +3,7 @@ import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
 import 'package:digi_care_pro/app/data/api/api_models/cancel_day_off.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get-timesheet.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get_day_off.dart';
+import 'package:digi_care_pro/app/data/api/api_models/sign_timesheet.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/models/change_settings.dart';
 import 'package:digi_care_pro/app/data/models/customer.dart';
@@ -11,6 +12,7 @@ import 'package:digi_care_pro/app/data/models/employee.dart';
 import 'package:digi_care_pro/app/data/api/api_models/request_day_off.dart';
 import 'package:digi_care_pro/app/data/models/support_employee.dart';
 import 'package:digi_care_pro/app/data/models/timesheet_record.dart';
+import 'package:digi_care_pro/app/data/models/timesheet_signature.dart';
 import 'package:digi_care_pro/app/data/remote_data_sources/employee_remote_data_source.dart';
 
 class EmployeeRepository {
@@ -30,6 +32,9 @@ class EmployeeRepository {
   Future<Either<ApiError, AppResponse<List<SupportEmployee>>>> getSupportEmployees({String? loadingMessage}) =>
       EmployeeRemoteDataSource.get().getSupportEmployees(loadingMessage: loadingMessage);
 
+  Future<Either<ApiError, AppResponse<List<String>>>> getDayOffMonths({String? loadingMessage}) =>
+      EmployeeRemoteDataSource.get().getDayOffMonths(loadingMessage: loadingMessage);
+
   Future<Either<ApiError, AppResponse<List<DayOff>>>> getDayOffs(GetDayOffRequest request, {String? loadingMessage}) =>
       EmployeeRemoteDataSource.get().getListOfDayOff(request, loadingMessage: loadingMessage);
 
@@ -47,4 +52,10 @@ class EmployeeRepository {
 
   Future<Either<ApiError, AppResponse<List<TimesheetRecord>>>> getTimesheet(GetTimesheetRequest request, {String? loadingMessage}) =>
       EmployeeRemoteDataSource.get().getTimeSheet(request, loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse<TimesheetSignature>>> getTimesheetSignatures(GetTimesheetRequest request, {String? loadingMessage}) =>
+      EmployeeRemoteDataSource.get().getTimesheetSignatures(request, loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse>> uploadSignature(SignTimesheetRequest request, {String? loadingMessage}) =>
+      EmployeeRemoteDataSource.get().uploadSignature(request, loadingMessage: loadingMessage);
 }

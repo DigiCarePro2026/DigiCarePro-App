@@ -1,3 +1,4 @@
+import 'package:digi_care_pro/app/data/enum/page_status.dart';
 import 'package:digi_care_pro/app/data/models/message.dart';
 import 'package:digi_care_pro/app/logic/notifications_logic.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
@@ -29,20 +30,27 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           appBar: AppBar(title: Text('notifications'.tr)),
           body: Stack(
             children: [
-              if (logic.messages.isEmpty) Center(child: CircularProgressIndicator()),
-              if (logic.messages.isNotEmpty)
-              ListView.builder(
-                itemCount: logic.messages.length,
-                itemBuilder: (ctx, index) {
-                  if(index == logic.messages.length - 1){
-                    logic.paging.page ++;
+              if (logic.pageStatus == PageStatus.loading) Center(child: CircularProgressIndicator()),
+              if (logic.pageStatus == PageStatus.empty)
+                Center(child: Text('empty_message'.tr, style: Theme.of(context).textTheme.titleMedium)),
+              if (logic.pageStatus == PageStatus.loaded)
+                ListView.builder(
+                  itemCount: logic.messages.length,
+                  itemBuilder: (ctx, index) {
+                    if (index == logic.messages.length - 1) {
+                      logic.paging.page++;
 
-                    logic.getMessages();
-                  }
+                      logic.getMessages();
+                    }
 
-                  return MessageItem(message: logic.messages[index]);
-                },
-              ),
+                    return MessageItem(
+                      message: logic.messages[index],
+                      readCallback: (String messageId) {
+                        logic.markAsRead(messageId: messageId);
+                      },
+                    );
+                  },
+                ),
             ],
           ),
         );
@@ -53,8 +61,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
 class MessageItem extends StatefulWidget {
   final Message message;
+  final Function(String messageId) readCallback;
 
-  const MessageItem({super.key, required this.message});
+  const MessageItem({super.key, required this.message, required this.readCallback});
 
   @override
   State<MessageItem> createState() => _MessageItemState();
@@ -75,6 +84,12 @@ class _MessageItemState extends State<MessageItem> {
           child: InkWell(
             borderRadius: BorderRadius.circular(cardRadius),
             onTap: () {
+              if (!widget.message.isRead) {
+                widget.readCallback.call(widget.message.id);
+
+                widget.message.isRead = true;
+              }
+
               setState(() {
                 isExpanded = !isExpanded;
               });

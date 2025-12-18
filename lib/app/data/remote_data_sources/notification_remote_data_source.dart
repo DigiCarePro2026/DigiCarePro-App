@@ -16,11 +16,20 @@ class NotificationRemoteDataSource extends BaseRemoteDataSource {
     return _instance!;
   }
 
-  Future<Either<ApiError, AppResponse<GetMessagesResponse>>> getMessages({required PagingModel pagingModel, String? loadingMessage}) => api.get(
+  Future<Either<ApiError, AppResponse<int>>> getUnreadMessagesCount() =>
+      api.get(path: '/message/unread-count', fromJson: (json) => json);
+
+  Future<Either<ApiError, AppResponse<GetMessagesResponse>>> getMessages({
+    required PagingModel pagingModel,
+    String? loadingMessage,
+  }) => api.get(
     path: '/message/inbox?page=${pagingModel.page}&pageSize=${pagingModel.pageSize}',
     fromJson: (json) => GetMessagesResponse.fromJson(json),
     loadingMessage: loadingMessage,
   );
+
+  Future<Either<ApiError, AppResponse<dynamic>>> markAsRead({required String messageId}) =>
+      api.post(path: '/message/mark-as-read/$messageId', body: null);
 
   Future<Either<ApiError, AppResponse>> sendMessage(SendMessageRequest request, {String? loadingMessage}) =>
       api.post(path: '/message/send-to-company', body: request.toJson(), loadingMessage: loadingMessage);

@@ -1,6 +1,7 @@
 import 'package:digi_care_pro/app/data/models/employee.dart';
 import 'package:digi_care_pro/app/data/repositories/employee_repository.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
+import 'package:digi_care_pro/app/utils/dialog_handler.dart';
 import 'package:get/get.dart';
 
 class EmployeeProfileLogic extends GetxController {
@@ -16,7 +17,11 @@ class EmployeeProfileLogic extends GetxController {
   }
 
   _getEmployeeProfile() async {
-    var result = await EmployeeRepository.get().getEmployeeProfile(loadingMessage: 'loading_profile'.tr);
+    DialogHandler.showLoading('loading_profile'.tr);
+
+    var result = await EmployeeRepository.get().getEmployeeProfile();
+
+    DialogHandler.hideLoading();
 
     result.fold((error) {
       snackError(message: error.message);

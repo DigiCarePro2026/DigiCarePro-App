@@ -3,6 +3,7 @@ import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
 import 'package:digi_care_pro/app/data/api/api_models/cancel_day_off.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get-timesheet.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get_day_off.dart';
+import 'package:digi_care_pro/app/data/api/api_models/sign_timesheet.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/models/change_settings.dart';
 import 'package:digi_care_pro/app/data/models/customer.dart';
@@ -11,7 +12,9 @@ import 'package:digi_care_pro/app/data/models/employee.dart';
 import 'package:digi_care_pro/app/data/api/api_models/request_day_off.dart';
 import 'package:digi_care_pro/app/data/models/support_employee.dart';
 import 'package:digi_care_pro/app/data/models/timesheet_record.dart';
+import 'package:digi_care_pro/app/data/models/timesheet_signature.dart';
 import 'package:digi_care_pro/app/data/remote_data_sources/base_remote_data_source.dart';
+import 'package:dio/dio.dart';
 
 class EmployeeRemoteDataSource extends BaseRemoteDataSource {
   static EmployeeRemoteDataSource? _instance;
@@ -40,6 +43,11 @@ class EmployeeRemoteDataSource extends BaseRemoteDataSource {
     fromJson: (json) => (json as List).map((json) => SupportEmployee.fromJson(json)).toList(),
   );
 
+  Future<Either<ApiError, AppResponse<List<String>>>> getDayOffMonths( {String? loadingMessage}) => api.get(
+    path: '/employee/get-available-months',
+    fromJson: (json) => (json as List).map((json) => (json as String).substring(0,7)).toList(),
+  );
+
   Future<Either<ApiError, AppResponse<List<DayOff>>>> getListOfDayOff(
     GetDayOffRequest request, {
     String? loadingMessage,
@@ -61,7 +69,7 @@ class EmployeeRemoteDataSource extends BaseRemoteDataSource {
 
   Future<Either<ApiError, AppResponse<List<String>>>> getTimesheetMonths({String? loadingMessage}) => api.get(
     path: '/employeeTimeSheet/months',
-    fromJson: (json) => (json as List).map((json) => json as String).toList(),
+    fromJson: (json) => (json as List).map((json) => (json as String).substring(0,7)).toList(),
   );
 
   Future<Either<ApiError, AppResponse<List<TimesheetRecord>>>> getTimeSheet(
@@ -72,4 +80,34 @@ class EmployeeRemoteDataSource extends BaseRemoteDataSource {
     queryParameters: request.toJson(),
     fromJson: (json) => (json as List).map((json) => TimesheetRecord.fromJson(json)).toList(),
   );
+
+  Future<Either<ApiError, AppResponse<TimesheetSignature>>> getTimesheetSignatures(
+    GetTimesheetRequest request, {
+    String? loadingMessage,
+  }) => api.get(
+    path: '/employeeTimeSheet/signatures?month=2025-10-01',
+    queryParameters: request.toJson(),
+    fromJson: (json) => TimesheetSignature.fromJson(json),
+  );
+
+  Future<Either<ApiError, AppResponse>> uploadSignature(
+      SignTimesheetRequest request, {
+        String? loadingMessage,
+      }) async {
+    FormData formData = FormData.fromMap({
+      'month': request.month,
+      "file": MultipartFile.fromBytes(
+        request.imageData,
+        filename: "signature.jpg",
+        contentType: DioMediaType("image", "jpeg"),
+      ),
+    });
+
+    return api.post(
+      path: '/employeeTimeSheet/sign',
+      body: formData,
+      headers: {"Content-Type": "multipart/form-data"},
+      loadingMessage: loadingMessage,
+    );
+  }
 }

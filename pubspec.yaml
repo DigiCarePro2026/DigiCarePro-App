@@ -1,6 +1,6 @@
 name: digi_care_pro
 description: "A new Flutter project."
-version: 1.0.2+2
+version: 1.0.4+4
 
 environment:
   sdk: ^3.9.2
@@ -28,6 +28,8 @@ dependencies:
   firebase_messaging: ^16.0.3
   geolocator: 14.0.2
   device_info_plus: 12.2.0
+  hardware_button_listener: 0.0.1
+  popup_menu_plus: 0.0.6
 
 
 dev_dependencies:

@@ -38,8 +38,13 @@ class MissionRemoteDataSource extends BaseRemoteDataSource {
   Future<Either<ApiError, AppResponse>> cancel(CancelMissionRequest request, {String? loadingMessage}) =>
       api.post(path: '/mission/${request.missionId}/cancel', body: request.toJson(), loadingMessage: loadingMessage);
 
-  Future<Either<ApiError, AppResponse>> delayReport(DelayMissionRequest request, {String? loadingMessage}) =>
-      api.post(path: '/mission/${request.missionId}/delay', body: request.toJson(), loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse<Mission>>> delayReport(DelayMissionRequest request, {String? loadingMessage}) =>
+      api.post(
+        path: '/mission/${request.missionId}/delay',
+        body: request.toJson(),
+        fromJson: (json) => Mission.fromJson(json),
+        loadingMessage: loadingMessage,
+      );
 
   Future<Either<ApiError, AppResponse>> reportMission(ReportMissionRequest request, {String? loadingMessage}) =>
       api.post(path: '/mission/${request.missionId}/report', body: request.toJson(), loadingMessage: loadingMessage);
@@ -105,7 +110,7 @@ class MissionRemoteDataSource extends BaseRemoteDataSource {
     path: '/mission/${request.missionId}/status-check',
     body: request.toJson(),
     loadingMessage: loadingMessage,
-    fromJson: (actionType) => MissionActionType.values[actionType - 1],
+    fromJson: (actionType) => MissionActionType.values[actionType],
   );
 
   Future<Either<ApiError, AppResponse>> startMission(StartMissionRequest request, {String? loadingMessage}) =>

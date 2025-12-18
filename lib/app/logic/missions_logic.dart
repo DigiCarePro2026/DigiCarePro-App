@@ -1,18 +1,22 @@
 import 'package:digi_care_pro/app/data/api/api_models/get_missions.dart';
-import 'package:digi_care_pro/app/data/enum/mission_type.dart';
-import 'package:digi_care_pro/app/data/enum/page_status.dart';
+import 'package:digi_care_pro/app/data/enum/mission_status.dart';
+import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:digi_care_pro/app/data/models/mission.dart';
 import 'package:digi_care_pro/app/data/repositories/mission_repository.dart';
 import 'package:digi_care_pro/app/ui/widgets/calendar_widget.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
+import 'package:digi_care_pro/app/utils/dialog_handler.dart';
+import 'package:digi_care_pro/app/utils/mission_event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MissionsLogic extends GetxController {
   DateTime _selectedDateTime = DateTime.now();
+  Customer? selectedCustomer;
+
   int? _selectedDay;
   List<Mission> allMissions = [], filteredMissions = [];
-  MissionType selectedMissionType = MissionType.all;
+  MissionStatus selectedMissionType = MissionStatus.all;
 
   int missionCountInDateFilter = 0;
 
@@ -20,17 +24,37 @@ class MissionsLogic extends GetxController {
   void onReady() {
     getMissions();
 
+    MissionEventBus eventBus = Get.find();
+
+    eventBus.delayUpdated.stream.listen((reloadMissions) {
+      if (reloadMissions) {
+        getMissions();
+      } else {
+        update();
+      }
+    });
+
     super.onReady();
   }
 
+  void onCustomerSelected(customer) {
+    selectedCustomer = customer;
+
+    getMissions();
+  }
+
   getMissions() async {
+    DialogHandler.showLoading('loading_missions'.tr);
+
     var result = await MissionRepository.get().getMissions(
-      GetMissionsRequest(year: _selectedDateTime.year, month: _selectedDateTime.month, ),
+      GetMissionsRequest(
+        year: _selectedDateTime.year,
+        month: _selectedDateTime.month,
+        customerId: selectedCustomer?.id,
+      ),
     );
 
-    if (Get.isDialogOpen!) {
-      Get.back();
-    }
+    DialogHandler.hideLoading();
 
     result.fold(
       (error) {
@@ -38,13 +62,16 @@ class MissionsLogic extends GetxController {
       },
       (response) {
         allMissions = response.data!;
-        filteredMissions.clear();
 
-        filteredMissions.addAll(allMissions);
-
-        missionCountInDateFilter = allMissions.length;
-
-        update();
+        DateTime now = DateTime.now();
+        if (now.month == _selectedDateTime.month) {
+          innerFilterMissions(day: _selectedDay, missionType: selectedMissionType);
+        } else {
+          filteredMissions.clear();
+          filteredMissions.addAll(allMissions);
+          missionCountInDateFilter = allMissions.length;
+          update();
+        }
       },
     );
   }
@@ -81,7 +108,7 @@ class MissionsLogic extends GetxController {
     getMissions();
   }
 
-  innerFilterMissions({int? day, MissionType? missionType}) {
+  innerFilterMissions({int? day, MissionStatus? missionType}) {
     if (day != null) {
       _selectedDay = day;
     }
@@ -89,14 +116,16 @@ class MissionsLogic extends GetxController {
     if (_selectedDay != null) {
       _changeDay(_selectedDay!);
     } else {
+      filteredMissions.clear();
       filteredMissions.addAll(allMissions);
+      missionCountInDateFilter = filteredMissions.length;
     }
 
     if (missionType != null) {
       selectedMissionType = missionType;
-    }
 
-    _filterMissionType();
+      _filterMissionType();
+    }
   }
 
   _filterMissionType() {
@@ -104,24 +133,34 @@ class MissionsLogic extends GetxController {
 
     for (Mission mission in filteredMissions) {
       switch (selectedMissionType) {
-        case MissionType.all:
+        case MissionStatus.all:
           tempList.add(mission);
           break;
 
-        case MissionType.todo:
-          if (mission.realStartTime == null && mission.realEndTime == null) {
+        case MissionStatus.draft:
+          /* if (mission.realStartTime == null && mission.realEndTime == null) {
+            tempList.add(mission);
+          }*/
+
+          if (mission.status == MissionStatus.draft.code) {
             tempList.add(mission);
           }
           break;
 
-        case MissionType.inProgress:
-          if (mission.realStartTime != null && mission.realEndTime == null) {
+        case MissionStatus.inProgress:
+          /*if (mission.realStartTime != null && mission.realEndTime == null) {
+            tempList.add(mission);
+          }*/
+          if (mission.status == MissionStatus.inProgress.code) {
             tempList.add(mission);
           }
           break;
 
-        case MissionType.done:
-          if (mission.realStartTime != null && mission.realEndTime != null) {
+        case MissionStatus.completed:
+          /*if (mission.realStartTime != null && mission.realEndTime != null) {
+            tempList.add(mission);
+          }*/
+          if (mission.status == MissionStatus.completed.code) {
             tempList.add(mission);
           }
           break;

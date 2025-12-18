@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:digi_care_pro/app/logic/mission_signature_logic.dart';
@@ -51,104 +50,60 @@ class _SignatureScreenState extends State<SignatureScreen> {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(bodyPadding),
-            child: Stack(
+            child: Row(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Theme
-                        .of(context)
-                        .disabledColor),
-                  ),
-                  child: SfSignaturePad(
-                    key: signatureGlobalKey,
-                    strokeColor: Colors.black,
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Theme
+                          .of(context)
+                          .disabledColor),
+                    ),
+                    child: SfSignaturePad(
+                      key: signatureGlobalKey,
+                      strokeColor: Colors.black,
+                    ),
                   ),
                 ),
-                PositionedDirectional(
-                  end: 0, bottom: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(bodyPadding),
-                    child: Column(
-                      children: [
-                        InkWell(
-                          onTap: () async {
-                            final signature = signatureGlobalKey.currentState!;
-                            final image = await signature.toImage(); // ui.Image
-                            final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-                            final Uint8List pngBytes = byteData!.buffer.asUint8List();
-
-                            logic.upload(widget.missionId, pngBytes.toList());
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.green,
-                              borderRadius: BorderRadius.circular(cardRadius),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: SvgPicture.asset(
-                                'assets/icons/tick.svg',
-                                width: 32,
-                                height: 32,
-                                color: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .onPrimary,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 12),
-                        InkWell(
-                          onTap: () {
-                            signatureGlobalKey.currentState!.clear();
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.yellow,
-                              borderRadius: BorderRadius.circular(cardRadius),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: SvgPicture.asset(
-                                'assets/icons/eraser.svg',
-                                width: 32,
-                                height: 32,
-                                color: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .onPrimary,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 12),
-                        InkWell(
-                          onTap: () {
-                            Get.back();
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.red,
-                              borderRadius: BorderRadius.circular(cardRadius),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: SvgPicture.asset(
-                                'assets/icons/mul.svg',
-                                width: 32,
-                                height: 32,
-                                color: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .onPrimary,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                Padding(
+                  padding: const EdgeInsets.all(bodyPadding),
+                  child: Column(
+                    children: [
+                      _button(
+                        context,
+                        color: AppColors.green,
+                        icon: 'assets/icons/tick.svg',
+                        label: 'submit'.tr,
+                        onTap: () async {
+                          final signature = signatureGlobalKey.currentState!;
+                          final image = await signature.toImage();
+                          final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+                          final Uint8List pngBytes = byteData!.buffer.asUint8List();
+                          logic.upload(widget.missionId, pngBytes.toList());
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      _button(
+                        context,
+                        color: AppColors.yellow,
+                        icon: 'assets/icons/eraser.svg',
+                        label: 'clear'.tr,
+                        onTap: () {
+                          signatureGlobalKey.currentState!.clear();
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      _button(
+                        context,
+                        color: AppColors.red,
+                        icon: 'assets/icons/mul.svg',
+                        label: 'cancel'.tr,
+                        onTap: () {
+                          Get.back();
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -158,4 +113,49 @@ class _SignatureScreenState extends State<SignatureScreen> {
       );
     });
   }
+
+  Widget _button(
+      BuildContext context, {
+        required Color color,
+        required String icon,
+        required String label,
+        required VoidCallback onTap,
+      }) {
+    return Flexible(
+      fit: FlexFit.tight,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(cardRadius),
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 12),
+          width: 100,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(cardRadius),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                icon,
+                width: 24,
+                height: 24,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                label,
+                style: Theme.of(context)
+                    .textTheme
+                    .labelSmall!
+                    .copyWith(color: Colors.white),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
 }

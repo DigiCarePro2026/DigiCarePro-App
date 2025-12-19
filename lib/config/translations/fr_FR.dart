@@ -169,4 +169,13 @@ const Map<String, String> frFR = {
   'report_item5': 'Mobilité / transport',
   'report_item6': 'Activités de stimulation',
   'report_item7': 'Autres',
+  'legal_notice': 'Mentions légales',
+  'terms_and_conditions': 'Conditions générales',
+  'privacy_policy': 'Politique de confidentialité',
+  'close': 'Fermer',
+  'delete_account': 'Supprimer le compte',
+  'delete_account_message':
+  'Êtes-vous sûr(e) de vouloir supprimer votre compte ?\nCette action est définitive et ne peut pas être annulée. Toutes vos données seront définitivement supprimées.',
+  'customer_comment_empty_message': 'Il n’y a pas de commentaires supplémentaires',
+  'data_protection': 'Protection des données',
 };

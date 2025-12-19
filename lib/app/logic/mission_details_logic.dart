@@ -200,6 +200,41 @@ class MissionDetailsLogic extends GetxController {
     update();
   }
 
+   showInfoBottomSheet()  {
+    return showModalBottomSheet<String>(
+      context: Get.context!,
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
+            left: 16,
+            right: 16,
+            top: 20,
+          ),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('comment'.tr, style: Theme.of(context).textTheme.headlineMedium),
+                  const SizedBox(height: 16),
+                  Text(mission.comment == null || mission.comment!.isEmpty ?  'customer_comment_empty_message'.tr : mission.comment!),
+                  const SizedBox(height: 24),
+                  SecondaryButton(label: 'close'.tr, onPressed: () => Navigator.pop(context, null)),
+                  const SizedBox(height: 20),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
   handleActionTap() async {
     switch (actionType!) {
       case MissionActionType.autoStart:

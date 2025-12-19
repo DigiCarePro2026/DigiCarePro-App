@@ -10,6 +10,7 @@ import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -316,6 +317,104 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                   ),
+                  SizedBox(height: 24),
+                  Text('data_protection'.tr, style: Theme.of(context).textTheme.titleMedium),
+                  SizedBox(height: 8),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: BoxBorder.all(color: Theme.of(context).dividerColor, width: 1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            launchUrl(Uri.parse('https://digicarepro.de/Impressum'),mode: LaunchMode.inAppWebView);
+                          },
+                          borderRadius: BorderRadius.circular(12),
+                          child: Padding(
+                            padding: const EdgeInsets.all(profileItemPadding),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset('assets/icons/legal.svg', color: AppColors.reportColor),
+                                SizedBox(width: 12),
+                                Expanded(
+                                  child: Text('legal_notice'.tr, style: Theme.of(context).textTheme.labelMedium),
+                                ),
+                                SvgPicture.asset(
+                                  'assets/icons/arrow-right.svg',
+                                  color: Theme.of(context).disabledColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Divider(
+                          height: 1,
+                          color: Theme.of(context).dividerColor,
+                          indent: profileItemPadding,
+                          endIndent: profileItemPadding,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            launchUrl(Uri.parse('https://digicarepro.de/AGB'),mode: LaunchMode.inAppWebView);
+                          },
+                          borderRadius: BorderRadius.circular(12),
+                          child: Padding(
+                            padding: const EdgeInsets.all(profileItemPadding),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset('assets/icons/contract.svg', color: Theme.of(context).colorScheme.primary),
+                                SizedBox(width: 12),
+                                Expanded(
+                                  child: Text('terms_and_conditions'.tr, style: Theme.of(context).textTheme.labelMedium),
+                                ),
+                                SvgPicture.asset(
+                                  'assets/icons/arrow-right.svg',
+                                  color: Theme.of(context).disabledColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Divider(
+                          height: 1,
+                          color: Theme.of(context).dividerColor,
+                          indent: profileItemPadding,
+                          endIndent: profileItemPadding,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            launchUrl(Uri.parse('https://digicarepro.de/Datenschutz'),mode: LaunchMode.inAppWebView);
+                          },
+                          borderRadius: BorderRadius.circular(12),
+                          child: Padding(
+                            padding: const EdgeInsets.all(profileItemPadding),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset('assets/icons/shield.svg', color: AppColors.signatureColor),
+                                SizedBox(width: 12),
+                                Expanded(
+                                  child: Text('privacy_policy'.tr, style: Theme.of(context).textTheme.labelMedium),
+                                ),
+                                SvgPicture.asset(
+                                  'assets/icons/arrow-right.svg',
+                                  color: Theme.of(context).disabledColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Divider(
+                          height: 1,
+                          color: Theme.of(context).dividerColor,
+                          indent: profileItemPadding,
+                          endIndent: profileItemPadding,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 8),
                   SizedBox(height: 24),
                   Text('more'.tr, style: Theme.of(context).textTheme.titleMedium),
                   SizedBox(height: 8),

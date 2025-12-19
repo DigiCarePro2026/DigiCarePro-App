@@ -170,8 +170,14 @@ const Map<String, String> enUS = {
   'report_item5': 'Mobility / transportation',
   'report_item6': 'Activating activities',
   'report_item7': 'Other',
+  'legal_notice': 'Legal Notice',
+  'terms_and_conditions': 'Terms and Conditions',
+  'privacy_policy': 'Privacy Policy',
 
+  'close': 'Close',
   'delete_account': 'Delete account',
   'delete_account_message':
       'Are you sure you want to delete your account?\nThis action is permanent and cannot be undone. All your data will be permanently removed.',
+  'customer_comment_empty_message': 'There are no additional comments',
+  'data_protection': 'Data protection',
 };

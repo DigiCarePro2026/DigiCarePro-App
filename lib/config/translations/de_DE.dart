@@ -170,4 +170,13 @@ const Map<String, String> deDE = {
   'report_item5': 'Mobilität / Transport',
   'report_item6': 'Aktivierende Beschäftigung',
   'report_item7': 'Sonstiges',
+  'legal_notice': 'Impressum',
+  'terms_and_conditions': 'AGB',
+  'privacy_policy': 'Datenschutz',
+  'close': 'Schließen',
+  'delete_account': 'Konto löschen',
+  'delete_account_message':
+  'Möchten Sie Ihr Konto wirklich löschen?\nDiese Aktion ist dauerhaft und kann nicht rückgängig gemacht werden. Alle Ihre Daten werden dauerhaft gelöscht.',
+  'customer_comment_empty_message': 'Es gibt keine zusätzlichen Kommentare',
+  'data_protection': 'Datenschutz',
 };

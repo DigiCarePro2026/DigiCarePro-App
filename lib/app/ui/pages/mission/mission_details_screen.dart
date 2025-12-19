@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:digi_care_pro/app/data/enum/mission_action_type.dart';
 import 'package:digi_care_pro/app/data/models/mission.dart';
 import 'package:digi_care_pro/app/logic/mission_details_logic.dart';
@@ -98,17 +100,21 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                     radius: 32,
                                     backgroundImage: NetworkImage(logic.mission.customerAvatar ?? ''),
                                   ),*/
-                                  Container(
-                                    width: 42,
-                                    height: 42,
-                                    padding: EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.outline,
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    child: SvgPicture.asset(
-                                      'assets/icons/user.svg',
-                                      color: Theme.of(context).colorScheme.primary,
+                                  InkWell(
+                                    customBorder: CircleBorder(),
+                                    onTap: () => logic.showInfoBottomSheet(),
+                                    child: Container(
+                                      width: 42,
+                                      height: 42,
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).colorScheme.outline,
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      child: SvgPicture.asset(
+                                        'assets/icons/user.svg',
+                                        color: Theme.of(context).colorScheme.primary,
+                                      ),
                                     ),
                                   ),
                                   SizedBox(width: 12),

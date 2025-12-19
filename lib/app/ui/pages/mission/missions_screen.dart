@@ -64,7 +64,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
                   count: logic.missionCountInDateFilter,
                   onMissionTypeSelected: (missionType) {
                     setState(() {
-                      logic.innerFilterMissions(missionType: missionType);
+                      logic.innerFilterMissions(day: logic.selectedDay, missionType: missionType);
                     });
                   },
                 ),

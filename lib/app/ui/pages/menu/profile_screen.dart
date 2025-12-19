@@ -512,6 +512,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 12),
+                  Center(child: Text('v1.0.5', style: Theme.of(context).textTheme.titleSmall,))
                 ],
               ),
             ),

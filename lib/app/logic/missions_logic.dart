@@ -22,7 +22,7 @@ class MissionsLogic extends GetxController {
   DateTime _selectedDateTime = DateTime.now();
   Customer? selectedCustomer;
 
-  int? _selectedDay;
+  int? selectedDay;
   List<Mission> allMissions = [], filteredMissions = [];
   MissionStatus selectedMissionType = MissionStatus.all;
 
@@ -73,7 +73,7 @@ class MissionsLogic extends GetxController {
 
         // DateTime now = DateTime.now();
         // if (now.month == _selectedDateTime.month) {
-          innerFilterMissions(day: _selectedDay, missionType: selectedMissionType);
+          innerFilterMissions(day: selectedDay, missionType: selectedMissionType);
         // } else {
         //   filteredMissions.clear();
         //   filteredMissions.addAll(allMissions);
@@ -118,11 +118,11 @@ class MissionsLogic extends GetxController {
 
   innerFilterMissions({int? day, MissionStatus? missionType}) {
     // if (day != null) {
-    _selectedDay = day;
+    selectedDay = day;
     //}
 
-    if (_selectedDay != null) {
-      _changeDay(_selectedDay!);
+    if (selectedDay != null) {
+      _changeDay(selectedDay!);
     } else {
       filteredMissions.clear();
       filteredMissions.addAll(allMissions);

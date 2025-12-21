@@ -4,6 +4,7 @@ import 'package:digi_care_pro/app/data/api/api_models/get_messages.dart';
 import 'package:digi_care_pro/app/data/api/api_models/send_message.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
 import 'package:digi_care_pro/app/data/models/customer.dart';
+import 'package:digi_care_pro/app/data/models/message_receiver.dart';
 import 'package:digi_care_pro/app/data/models/paging_model.dart';
 import 'package:digi_care_pro/app/data/remote_data_sources/employee_remote_data_source.dart';
 import 'package:digi_care_pro/app/data/remote_data_sources/notification_remote_data_source.dart';
@@ -24,6 +25,9 @@ class NotificationRepository {
     required PagingModel pagingModel,
     String? loadingMessage,
   }) => NotificationRemoteDataSource.get().getMessages(pagingModel: pagingModel, loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse<List<MessageReceiver>>>> getReceivers() =>
+      NotificationRemoteDataSource.get().getReceivers();
 
   Future<Either<ApiError, AppResponse>> markAsRead({required String messageId}) =>
       NotificationRemoteDataSource.get().markAsRead(messageId: messageId);

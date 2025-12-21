@@ -101,7 +101,7 @@ const Map<String, String> frFR = {
   "support_employees_loading": "Chargement du support",
   "loading_notifications": "Chargement des notifications ...",
   "try_again": "Réessayer",
-  "support_body_length_validation": "La longueur minimale du mot de passe est de 5 caractères",
+  "support_body_length_validation": "La longueur minimale du message est de 5 caractères",
   "change_datetime_error_date_null": "Veuillez sélectionner une date",
   "loading_get_requests": "Chargement des demandes ...",
   "unknown": "Inconnu",
@@ -178,4 +178,6 @@ const Map<String, String> frFR = {
   'Êtes-vous sûr(e) de vouloir supprimer votre compte ?\nCette action est définitive et ne peut pas être annulée. Toutes vos données seront définitivement supprimées.',
   'customer_comment_empty_message': 'Il n’y a pas de commentaires supplémentaires',
   'data_protection': 'Protection des données',
+  "receiver": "Destinataire",
+  "receiver_required": "Le destinataire est requis",
 };

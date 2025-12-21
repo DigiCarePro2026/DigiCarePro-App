@@ -159,10 +159,11 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
               ),
               SizedBox(height: 12),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SvgPicture.asset('assets/icons/location.svg', width: 16, color: Theme.of(context).disabledColor),
                   SizedBox(width: 8),
-                  Text(customer.address ?? '', style: Theme.of(context).textTheme.titleMedium),
+                  Expanded(child: Text(customer.address ?? '', style: Theme.of(context).textTheme.titleMedium)),
                 ],
               ),
             ],

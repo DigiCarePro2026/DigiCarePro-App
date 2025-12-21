@@ -112,7 +112,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                         borderRadius: BorderRadius.circular(50),
                                       ),
                                       child: SvgPicture.asset(
-                                        'assets/icons/user.svg',
+                                        'assets/icons/info.svg',
                                         color: Theme.of(context).colorScheme.primary,
                                       ),
                                     ),
@@ -175,6 +175,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                               ),
                               SizedBox(height: 12),
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SvgPicture.asset(
                                     'assets/icons/location.svg',
@@ -182,9 +183,11 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                     width: 16,
                                   ),
                                   SizedBox(width: 8),
-                                  Text(
-                                    logic.mission.customerAddress ?? '',
-                                    style: Theme.of(context).textTheme.titleMedium,
+                                  Expanded(
+                                    child: Text(
+                                      logic.mission.customerAddress ?? '',
+                                      style: Theme.of(context).textTheme.titleMedium,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -202,28 +205,26 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                       color: Theme.of(context).disabledColor,
                                       width: 16,
                                     ),
-                                    SizedBox(width: 8),
+                                    SizedBox(width: 2),
                                     Text(
                                       logic.mission.plannedStartDateTime!.substring(0, 10),
                                       style: Theme.of(context).textTheme.titleMedium,
                                     ),
-                                    SizedBox(width: 32),
+                                    SizedBox(width: 16),
                                     SvgPicture.asset(
                                       'assets/icons/clock.svg',
                                       color: Theme.of(context).disabledColor,
                                       width: 16,
                                     ),
-                                    SizedBox(width: 8),
+                                    SizedBox(width: 2),
                                     Text(
                                       logic.mission.plannedStartDateTime!.substring(11, 16),
                                       style: Theme.of(context).textTheme.titleMedium,
                                     ),
-                                    SizedBox(width: 4),
                                     SvgPicture.asset(
                                       'assets/icons/arrow-long-right.svg',
                                       color: Theme.of(context).disabledColor,
                                     ),
-                                    SizedBox(width: 4),
                                     Expanded(
                                       child: Text(
                                         logic.mission.plannedEndDateTime!.substring(11, 16),
@@ -243,7 +244,10 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                           color: Theme.of(context).cardTheme.color,
                                           borderRadius: BorderRadius.circular(4),
                                         ),
-                                        child: SvgPicture.asset('assets/icons/pen.svg', color: Theme.of(context).colorScheme.primary,),
+                                        child: SvgPicture.asset(
+                                          'assets/icons/pen.svg',
+                                          color: Theme.of(context).colorScheme.primary,
+                                        ),
                                       ),
                                     ),
                                   ],

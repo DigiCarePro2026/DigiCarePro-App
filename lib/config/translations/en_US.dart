@@ -101,7 +101,6 @@ const Map<String, String> enUS = {
   'support_employees_loading': 'Loading support employees',
   'loading_notifications': 'Loading notifications',
   'try_again': 'Try again',
-  'support_body_length_validation': 'Minimum password length is 5 characters',
   'change_datetime_error_date_null': 'Please selected a date',
   'loading_get_requests': 'Getting requests',
   'unknown': 'Unknown',
@@ -173,11 +172,13 @@ const Map<String, String> enUS = {
   'legal_notice': 'Legal Notice',
   'terms_and_conditions': 'Terms and Conditions',
   'privacy_policy': 'Privacy Policy',
-
   'close': 'Close',
   'delete_account': 'Delete account',
   'delete_account_message':
       'Are you sure you want to delete your account?\nThis action is permanent and cannot be undone. All your data will be permanently removed.',
   'customer_comment_empty_message': 'There are no additional comments',
   'data_protection': 'Data protection',
+  'receiver': 'Receiver',
+  'receiver_required': 'Receiver required',
+  'support_body_length_validation': 'Minimum body length is 5 characters',
 };

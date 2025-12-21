@@ -368,7 +368,7 @@ class MissionsLogic extends GetxController {
         Navigator.pop(Get.context!, result);
 
         getMissions();
-        snackSuccess(message: response.message);
+        // snackSuccess(message: response.message);
       },
     );
   }

@@ -101,7 +101,7 @@ const Map<String, String> deDE = {
   "support_employees_loading": "Support-Mitarbeiter werden geladen",
   "loading_notifications": "Benachrichtigungen werden geladen",
   "try_again": "Erneut versuchen",
-  "support_body_length_validation": "Die Mindestlänge des Passworts beträgt 5 Zeichen",
+  "support_body_length_validation": "Die Mindestlänge des Textes beträgt 5 Zeichen",
   "change_datetime_error_date_null": "Bitte ein Datum auswählen",
   "loading_get_requests": "Anfragen werden geladen",
   "unknown": "Unbekannt",
@@ -179,4 +179,6 @@ const Map<String, String> deDE = {
   'Möchten Sie Ihr Konto wirklich löschen?\nDiese Aktion ist dauerhaft und kann nicht rückgängig gemacht werden. Alle Ihre Daten werden dauerhaft gelöscht.',
   'customer_comment_empty_message': 'Es gibt keine zusätzlichen Kommentare',
   'data_protection': 'Datenschutz',
+  "receiver": "Empfänger",
+  "receiver_required": "Empfänger erforderlich",
 };

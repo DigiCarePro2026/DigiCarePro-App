@@ -174,6 +174,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
                     ),
                     SizedBox(height: 8),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SvgPicture.asset(
                           'assets/icons/location.svg',
@@ -181,7 +182,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
                           width: 16,
                         ),
                         SizedBox(width: 8),
-                        Text(mission.customerAddress!, style: Theme.of(context).textTheme.titleMedium),
+                        Expanded(child: Text(mission.customerAddress ?? '' , style: Theme.of(context).textTheme.titleMedium)),
                       ],
                     ),
                     SizedBox(height: 8),
@@ -192,28 +193,26 @@ class _MissionsScreenState extends State<MissionsScreen> {
                           color: Theme.of(context).disabledColor,
                           width: 16,
                         ),
-                        SizedBox(width: 8),
+                        SizedBox(width: 2),
                         Text(
                           mission.plannedStartDateTime!.substring(0, 10),
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
-                        SizedBox(width: 32),
+                        SizedBox(width: 16),
                         SvgPicture.asset(
                           'assets/icons/clock.svg',
                           color: Theme.of(context).disabledColor,
                           width: 16,
                         ),
-                        SizedBox(width: 8),
+                        SizedBox(width: 2),
                         Text(
                           mission.plannedStartDateTime!.substring(11, 16),
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
-                        SizedBox(width: 4),
                         SvgPicture.asset(
                           'assets/icons/arrow-long-right.svg',
                           color: Theme.of(context).disabledColor,
                         ),
-                        SizedBox(width: 4),
                         Expanded(
                           child: Text(
                             mission.plannedEndDateTime!.substring(11, 16),
@@ -286,7 +285,7 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
             _buildChipsItem(context, missionType: MissionStatus.all, count: count),
             _buildChipsItem(context, missionType: MissionStatus.draft),
             _buildChipsItem(context, missionType: MissionStatus.inProgress),
-            _buildChipsItem(context, missionType: MissionStatus.completed),
+            // _buildChipsItem(context, missionType: MissionStatus.completed),
           ],
         ),
       ),

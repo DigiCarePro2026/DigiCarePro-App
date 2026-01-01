@@ -35,47 +35,53 @@ class _LeaveRequestScreenState extends State<LeaveRequestScreen> {
       builder: (logic) {
         return Scaffold(
           appBar: AppBar(title: Text('leave_request'.tr), centerTitle: true),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(bodyPadding / 2),
-              child: Column(
-                children: [
-                  CalendarWidget(
-                    selectionMode: CalendarSelectionMode.range,
-                    onRangeSelected: (start, end) {
-                      startDate = start.toIso8601String();
-                      endDate = end!.toIso8601String();
+          body: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(bodyPadding / 2),
+                child: Column(
+                  children: [
+                    CalendarWidget(
+                      selectionMode: CalendarSelectionMode.range,
+                      onRangeSelected: (start, end) {
+                        startDate = start.toIso8601String();
+                        endDate = end!.toIso8601String();
 
-                      setState(() {});
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(bodyPadding),
-                    child: AppDropdownField<LeaveType>(
-                      title: 'reason'.tr,
-                      value: LeaveType.personal,
-                      onChanged: (value) {
-                        setState(() {
-                          leaveType = value!;
-                        });
-                      },
-                      items: LeaveType.values
-                          .map((lt) => DropdownMenuItem<LeaveType>(value: lt, child: Text(lt.title)))
-                          .toList(),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(bodyPadding),
-                    child: AppTextAreaField(
-                      title: 'description'.tr,
-                      hint: 'leave_request_description_hint'.tr,
-                      controller: descriptionController,
-                      onChanged: (value) {
-                        print(value);
+                        setState(() {});
                       },
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.all(bodyPadding),
+                      child: AppDropdownField<LeaveType>(
+                        title: 'reason'.tr,
+                        value: LeaveType.personal,
+                        onChanged: (value) {
+                          setState(() {
+                            leaveType = value!;
+                          });
+                        },
+                        items: LeaveType.values
+                            .map((lt) => DropdownMenuItem<LeaveType>(value: lt, child: Text(lt.title)))
+                            .toList(),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(bodyPadding),
+                      child: AppTextAreaField(
+                        title: 'description'.tr,
+                        hint: 'leave_request_description_hint'.tr,
+                        controller: descriptionController,
+                        onChanged: (value) {
+                          print(value);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

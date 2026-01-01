@@ -15,6 +15,7 @@ import 'package:digi_care_pro/app/data/models/timesheet_record.dart';
 import 'package:digi_care_pro/app/data/models/timesheet_signature.dart';
 import 'package:digi_care_pro/app/data/remote_data_sources/base_remote_data_source.dart';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart' as getX;
 
 class EmployeeRemoteDataSource extends BaseRemoteDataSource {
   static EmployeeRemoteDataSource? _instance;
@@ -108,6 +109,14 @@ class EmployeeRemoteDataSource extends BaseRemoteDataSource {
       body: formData,
       headers: {"Content-Type": "multipart/form-data"},
       loadingMessage: loadingMessage,
+    );
+  }
+
+  Future<Either<ApiError, AppResponse>> deactivateAccount(){
+    return api.post(
+      path: '/employee/deactivate',
+      body: {},
+      loadingMessage: 'loading_default_message'.tr,
     );
   }
 }

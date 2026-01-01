@@ -83,6 +83,7 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField> {
                         searchFieldProps: TextFieldProps(
                           decoration: InputDecoration(
                             hintText: 'Search...',
+                            icon: SvgPicture.asset('assets/icons/search.svg',width:16,color: Theme.of(context).disabledColor,),
                             border: InputBorder.none,
                             hintStyle: Theme.of(context).textTheme.titleMedium,
                           ),

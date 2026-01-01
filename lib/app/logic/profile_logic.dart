@@ -26,9 +26,7 @@ class ProfileLogic extends GetxController {
   changeEmployeeSettings(bool value) async {
     // DialogHandler.showLoading('change_employee_settings_message'.tr);
 
-    var result = await EmployeeRepository.get().changeSettings(
-      ChangeSettingsRequest(receiveNotifications: value),
-    );
+    var result = await EmployeeRepository.get().changeSettings(ChangeSettingsRequest(receiveNotifications: value));
 
     // DialogHandler.hideLoading();
 
@@ -47,5 +45,13 @@ class ProfileLogic extends GetxController {
     AccountRepository.get().logout();
 
     Get.offAllNamed(Routes.LOGIN);
+  }
+
+  requestDeleteAccount() async {
+    var result = await EmployeeRepository.get().deactivateAccount();
+
+    result.fold((error) {}, (response) {
+      logout();
+    });
   }
 }

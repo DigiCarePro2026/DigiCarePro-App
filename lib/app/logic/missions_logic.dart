@@ -1,12 +1,20 @@
+import 'dart:math';
+
+import 'package:digi_care_pro/app/data/api/api_models/change_mission_datetime.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get_missions.dart';
 import 'package:digi_care_pro/app/data/enum/mission_status.dart';
 import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:digi_care_pro/app/data/models/mission.dart';
 import 'package:digi_care_pro/app/data/repositories/mission_repository.dart';
+import 'package:digi_care_pro/app/ui/widgets/app_text_area_field.dart';
 import 'package:digi_care_pro/app/ui/widgets/calendar_widget.dart';
+import 'package:digi_care_pro/app/ui/widgets/primary_button.dart';
+import 'package:digi_care_pro/app/ui/widgets/secondary_button.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
+import 'package:digi_care_pro/app/ui/widgets/time_picker.dart';
 import 'package:digi_care_pro/app/utils/dialog_handler.dart';
 import 'package:digi_care_pro/app/utils/mission_event_bus.dart';
+import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,7 +22,7 @@ class MissionsLogic extends GetxController {
   DateTime _selectedDateTime = DateTime.now();
   Customer? selectedCustomer;
 
-  int? _selectedDay;
+  int? selectedDay;
   List<Mission> allMissions = [], filteredMissions = [];
   MissionStatus selectedMissionType = MissionStatus.all;
 
@@ -63,15 +71,15 @@ class MissionsLogic extends GetxController {
       (response) {
         allMissions = response.data!;
 
-        DateTime now = DateTime.now();
-        if (now.month == _selectedDateTime.month) {
-          innerFilterMissions(day: _selectedDay, missionType: selectedMissionType);
-        } else {
-          filteredMissions.clear();
-          filteredMissions.addAll(allMissions);
-          missionCountInDateFilter = allMissions.length;
-          update();
-        }
+        // DateTime now = DateTime.now();
+        // if (now.month == _selectedDateTime.month) {
+          innerFilterMissions(day: selectedDay, missionType: selectedMissionType);
+        // } else {
+        //   filteredMissions.clear();
+        //   filteredMissions.addAll(allMissions);
+        //   missionCountInDateFilter = allMissions.length;
+        //   update();
+        // }
       },
     );
   }
@@ -109,12 +117,12 @@ class MissionsLogic extends GetxController {
   }
 
   innerFilterMissions({int? day, MissionStatus? missionType}) {
-     // if (day != null) {
-      _selectedDay = day;
+    // if (day != null) {
+    selectedDay = day;
     //}
 
-    if (_selectedDay != null) {
-      _changeDay(_selectedDay!);
+    if (selectedDay != null) {
+      _changeDay(selectedDay!);
     } else {
       filteredMissions.clear();
       filteredMissions.addAll(allMissions);
@@ -190,4 +198,180 @@ class MissionsLogic extends GetxController {
 
     update();
   }
+
+  //<editor-fold desc="Change datetime">
+  Future<String?> showChangeDateAndTimeBottomSheet(Mission mission) async {
+    DateTime? selectedDate = DateTime.tryParse(mission.plannedStartDateTime!);
+    TimeOfDay startTime =
+        parseTime(mission.plannedStartDateTime) ??
+        TimeOfDay.now().replacing(hour: TimeOfDay.now().hour, minute: (TimeOfDay.now().minute / 15).floor() * 15);
+    TimeOfDay endTime =
+        parseTime(mission.plannedEndDateTime) ??
+        TimeOfDay.now().replacing(hour: min(TimeOfDay.now().hour + 2, 23), minute: TimeOfDay.now().hour == 23 ? 55 : 0);
+    TextEditingController reasonController = TextEditingController();
+
+    return await showModalBottomSheet<String>(
+      context: Get.context!,
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      builder: (context) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.85,
+          maxChildSize: 0.95,
+          minChildSize: 0.50,
+          expand: false,
+          builder: (BuildContext context, ScrollController scrollController) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
+                left: 16,
+                right: 16,
+                top: 20,
+              ),
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Text('change_date_time'.tr, style: Theme.of(context).textTheme.headlineMedium),
+                        const SizedBox(height: 16),
+                        Column(
+                          children: [
+                            CalendarWidget(
+                              selectionMode: CalendarSelectionMode.single,
+                              initialDate: selectedDate,
+                              minDate: DateTime.now().subtract(const Duration(days: 1)),
+                              onDateSelected: (date, isChangedMonth) {
+                                if (!isChangedMonth) {
+                                  selectedDate = date;
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Center(
+                                    child: TimePickerField(
+                                      title: 'start'.tr,
+                                      initialValue: startTime,
+                                      onChanged: (time) {
+                                        setState(() {
+                                          startTime = time;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Center(
+                                    child: TimePickerField(
+                                      title: 'end'.tr,
+                                      initialValue: endTime,
+                                      onChanged: (time) {
+                                        setState(() {
+                                          endTime = time;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            AppTextAreaField(title: 'reason'.tr, controller: reasonController),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: SecondaryButton(label: 'cancel'.tr, onPressed: () => Navigator.pop(context, null)),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: PrimaryButton(
+                                label: 'confirm'.tr,
+                                onPressed: () {
+                                  if (selectedDate == null) {
+                                    snackError(message: 'change_datetime_error_date_null'.tr);
+                                    return;
+                                  }
+
+                                  DateTime plannedStart = DateTime(
+                                    selectedDate!.year,
+                                    selectedDate!.month,
+                                    selectedDate!.day,
+                                    startTime.hour,
+                                    startTime.minute,
+                                  );
+
+                                  DateTime plannedEnd = DateTime(
+                                    selectedDate!.year,
+                                    selectedDate!.month,
+                                    selectedDate!.day,
+                                    endTime.hour,
+                                    endTime.minute,
+                                  );
+
+                                  _changeMissionDatetimeApi(
+                                    mission: mission,
+                                    plannedStart: plannedStart.toIso8601String(),
+                                    plannedEnd: plannedEnd.toIso8601String(),
+                                    reason: reasonController.text,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  _changeMissionDatetimeApi({
+    required Mission mission,
+    required String plannedStart,
+    required String plannedEnd,
+    required String reason,
+  }) async {
+    DialogHandler.showLoading('loading_change_mission_datetime'.tr);
+
+    var result = await MissionRepository.get().changeMissionDatetime(
+      ChangeMissionDatetimeRequest(
+        missionId: mission.id,
+        plannedStart: plannedStart,
+        plannedEnd: plannedEnd,
+        reason: reason,
+      ),
+    );
+
+    DialogHandler.hideLoading();
+
+    result.fold(
+      (error) {
+        snackError(message: error.message);
+      },
+      (response) {
+        Navigator.pop(Get.context!, result);
+
+        getMissions();
+        // snackSuccess(message: response.message);
+      },
+    );
+  }
+
+  //</editor-fold>
 }

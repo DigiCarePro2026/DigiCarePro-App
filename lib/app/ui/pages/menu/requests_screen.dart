@@ -6,6 +6,7 @@ import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:digi_care_pro/app/ui/widgets/app_dropdown_field.dart';
+import 'package:digi_care_pro/app/ui/widgets/app_popup_menu.dart';
 import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -122,16 +123,17 @@ class _RequestsScreenState extends State<RequestsScreen> {
                     ),
                   ),
                   if (request.status != LeaveStatus.canceled)
-                    PopupMenuButton(
-                      icon: SvgPicture.asset('assets/icons/more-hor.svg'),
-                      onSelected: (value) {
-                        if (value == 'cancel') {
-                          logic.cancelRequest(request.id);
-                        }
-                      },
-                      itemBuilder: (ctx) {
-                        return [PopupMenuItem(value: 'cancel', child: Text('cancel'.tr))];
-                      },
+                    AppPopupMenu(
+                      items: [
+                        AppPopupMenuItem(
+                          title: 'cancel'.tr,
+                          icon: SvgPicture.asset('assets/icons/cancel.svg', color: Colors.white),
+                          onTap: () {
+                            logic.cancelRequest(request.id);
+                          },
+                        ),
+                      ],
+                      child: SvgPicture.asset('assets/icons/more-hor.svg'),
                     ),
                 ],
               ),

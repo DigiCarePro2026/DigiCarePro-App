@@ -64,7 +64,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
                   count: logic.missionCountInDateFilter,
                   onMissionTypeSelected: (missionType) {
                     setState(() {
-                      logic.innerFilterMissions(missionType: missionType);
+                      logic.innerFilterMissions(day: logic.selectedDay, missionType: missionType);
                     });
                   },
                 ),
@@ -85,147 +85,181 @@ class _MissionsScreenState extends State<MissionsScreen> {
   Widget _buildMissionItem(Mission mission) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
-      child: Card.filled(
-        child: InkWell(
-          borderRadius: BorderRadius.circular(cardRadius),
-          onTap: () async {
-            bool needRefresh = await Get.toNamed(Routes.MISSION_DETAILS, arguments: mission);
-
-            if (needRefresh) {
-              logic.getMissions();
-            }
-          },
-          child: IntrinsicHeight(
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Container(width: 2, color: MissionStatus.fromCode(mission.status!).color),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                width: 50,
+                decoration: BoxDecoration(
+                  color: MissionStatus.fromCode(mission.status!).color,
+                  borderRadius: BorderRadius.circular(cardRadius),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(cardPadding),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  CircleAvatar(radius: 16, backgroundImage: NetworkImage(mission.customerAvatar ?? '')),
-                                  SizedBox(width: 12),
-                                  Text(mission.customerName ?? '', style: Theme.of(context).textTheme.labelLarge),
-                                ],
-                              ),
-                            ),
-                            AppPopupMenu(
-                              items: [
-                                AppPopupMenuItem(
-                                  title: 'call'.tr,
-                                  icon: SvgPicture.asset('assets/icons/call.svg', color: Colors.white),
-                                  onTap: () {
-                                    makeCall(mission.customerPhone ?? '');
-                                  },
-                                ),
-                                AppPopupMenuItem(
-                                  title: 'routing'.tr,
-                                  icon: SvgPicture.asset('assets/icons/navigation.svg', color: Colors.white),
-                                  onTap: () {
-                                    openNavigation(mission.customerLatitude ?? 0, mission.customerLongitude ?? 0);
-                                  },
-                                ),
-                                AppPopupMenuItem(
-                                  title: 'add_mission'.tr,
-                                  icon: SvgPicture.asset('assets/icons/calendar-add.svg', color: Colors.white),
-                                  onTap: () async {
-                                    bool result = await Get.toNamed(
-                                      Routes.CREATE_MISSION,
-                                      arguments: mission.customerId!,
-                                    );
+              ),
+            ),
+          ),
+          Card.filled(
+            margin: EdgeInsets.only(left: 4),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(cardRadius),
+              onTap: () async {
+                bool needRefresh = await Get.toNamed(Routes.MISSION_DETAILS, arguments: mission);
 
-                                    if (result) {
-                                      logic.getMissions();
-                                    }
-                                  },
+                if (needRefresh) {
+                  logic.getMissions();
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(cardPadding),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 32,
+                                height: 32,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: MissionStatus.fromCode(mission.status!).color,
                                 ),
-                              ],
-                              child: SvgPicture.asset('assets/icons/more-hor.svg'),
-                            ),
-                          ],
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SvgPicture.asset(MissionStatus.fromCode(mission.status!).icon, color: Colors.white,),
+                                ),
+                              ),
+                              SizedBox(width: 12),
+                              Text(mission.customerName ?? '', style: Theme.of(context).textTheme.labelLarge),
+                            ],
+                          ),
                         ),
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/location.svg',
-                              color: Theme.of(context).disabledColor,
-                              width: 16,
+                        AppPopupMenu(
+                          items: [
+                            AppPopupMenuItem(
+                              title: 'call'.tr,
+                              icon: SvgPicture.asset('assets/icons/call.svg', color: Colors.white),
+                              onTap: () {
+                                makeCall(mission.customerPhone ?? '');
+                              },
                             ),
-                            SizedBox(width: 8),
-                            Text(mission.customerAddress!, style: Theme.of(context).textTheme.titleMedium),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/calendar2.svg',
-                              color: Theme.of(context).disabledColor,
-                              width: 16,
+                            AppPopupMenuItem(
+                              title: 'routing'.tr,
+                              icon: SvgPicture.asset('assets/icons/navigation.svg', color: Colors.white),
+                              onTap: () {
+                                openNavigation(mission.customerLatitude ?? 0, mission.customerLongitude ?? 0);
+                              },
                             ),
-                            SizedBox(width: 8),
-                            Text(
-                              mission.plannedStartDateTime!.substring(0, 10),
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            SizedBox(width: 32),
-                            SvgPicture.asset(
-                              'assets/icons/clock.svg',
-                              color: Theme.of(context).disabledColor,
-                              width: 16,
-                            ),
-                            SizedBox(width: 8),
-                            Text(
-                              mission.plannedStartDateTime!.substring(11, 16),
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            SizedBox(width: 4),
-                            SvgPicture.asset(
-                              'assets/icons/arrow-long-right.svg',
-                              color: Theme.of(context).disabledColor,
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              mission.plannedEndDateTime!.substring(11, 16),
-                              style: Theme.of(context).textTheme.titleMedium,
+                            AppPopupMenuItem(
+                              title: 'add_mission'.tr,
+                              icon: SvgPicture.asset('assets/icons/calendar-add.svg', color: Colors.white),
+                              onTap: () async {
+                                bool result = await Get.toNamed(
+                                  Routes.CREATE_MISSION,
+                                  arguments: mission.customerId!,
+                                );
+
+                                if (result) {
+                                  logic.getMissions();
+                                }
+                              },
                             ),
                           ],
-                        ),
-                        Divider(height: 12, thickness: 0.5, color: Theme.of(context).dividerColor),
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              MissionStatus.fromCode(mission.status!).icon,
-                              width: 14,
-                              color: MissionStatus.fromCode(mission.status!).color,
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              MissionStatus.fromCode(mission.status!).title,
-                              style: Theme.of(
-                                context,
-                              ).textTheme.titleSmall!.copyWith(color: MissionStatus.fromCode(mission.status!).color),
-                            ),
-                          ],
+                          child: SvgPicture.asset('assets/icons/more-hor.svg'),
                         ),
                       ],
                     ),
-                  ),
+                    SizedBox(height: 8),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/location.svg',
+                          color: Theme.of(context).disabledColor,
+                          width: 16,
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(child: Text(mission.customerAddress ?? '' , style: Theme.of(context).textTheme.titleMedium)),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/calendar2.svg',
+                          color: Theme.of(context).disabledColor,
+                          width: 16,
+                        ),
+                        SizedBox(width: 2),
+                        Text(
+                          mission.plannedStartDateTime!.substring(0, 10),
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        SizedBox(width: 16),
+                        SvgPicture.asset(
+                          'assets/icons/clock.svg',
+                          color: Theme.of(context).disabledColor,
+                          width: 16,
+                        ),
+                        SizedBox(width: 2),
+                        Text(
+                          mission.plannedStartDateTime!.substring(11, 16),
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        SvgPicture.asset(
+                          'assets/icons/arrow-long-right.svg',
+                          color: Theme.of(context).disabledColor,
+                        ),
+                        Expanded(
+                          child: Text(
+                            mission.plannedEndDateTime!.substring(11, 16),
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ),
+                        InkWell(
+                          borderRadius: BorderRadius.circular(8),
+                          onTap: () {
+                            logic.showChangeDateAndTimeBottomSheet(mission);
+                          },
+                          child: Container(
+                            width: 28,
+                            height: 28,
+                            padding: EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardTheme.color,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: SvgPicture.asset('assets/icons/pen.svg', color: Theme.of(context).colorScheme.primary,),
+                          ),
+                        ),
+                      ],
+                    ),
+                    /*Divider(height: 12, thickness: 0.5, color: Theme.of(context).dividerColor),
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          MissionStatus.fromCode(mission.status!).icon,
+                          width: 14,
+                          color: MissionStatus.fromCode(mission.status!).color,
+                        ),
+                        SizedBox(width: 4),
+                        Text(
+                          MissionStatus.fromCode(mission.status!).title,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleSmall!.copyWith(color: MissionStatus.fromCode(mission.status!).color),
+                        ),
+                      ],
+                    ),*/
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -251,7 +285,7 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
             _buildChipsItem(context, missionType: MissionStatus.all, count: count),
             _buildChipsItem(context, missionType: MissionStatus.draft),
             _buildChipsItem(context, missionType: MissionStatus.inProgress),
-            _buildChipsItem(context, missionType: MissionStatus.completed),
+            // _buildChipsItem(context, missionType: MissionStatus.completed),
           ],
         ),
       ),

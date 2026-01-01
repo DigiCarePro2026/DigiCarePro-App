@@ -50,12 +50,18 @@ class EmployeeRepository {
   Future<Either<ApiError, AppResponse<List<String>>>> getTimesheetMonths({String? loadingMessage}) =>
       EmployeeRemoteDataSource.get().getTimesheetMonths(loadingMessage: loadingMessage);
 
-  Future<Either<ApiError, AppResponse<List<TimesheetRecord>>>> getTimesheet(GetTimesheetRequest request, {String? loadingMessage}) =>
-      EmployeeRemoteDataSource.get().getTimeSheet(request, loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse<List<TimesheetRecord>>>> getTimesheet(
+    GetTimesheetRequest request, {
+    String? loadingMessage,
+  }) => EmployeeRemoteDataSource.get().getTimeSheet(request, loadingMessage: loadingMessage);
 
-  Future<Either<ApiError, AppResponse<TimesheetSignature>>> getTimesheetSignatures(GetTimesheetRequest request, {String? loadingMessage}) =>
-      EmployeeRemoteDataSource.get().getTimesheetSignatures(request, loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse<TimesheetSignature>>> getTimesheetSignatures(
+    GetTimesheetRequest request, {
+    String? loadingMessage,
+  }) => EmployeeRemoteDataSource.get().getTimesheetSignatures(request, loadingMessage: loadingMessage);
 
   Future<Either<ApiError, AppResponse>> uploadSignature(SignTimesheetRequest request, {String? loadingMessage}) =>
       EmployeeRemoteDataSource.get().uploadSignature(request, loadingMessage: loadingMessage);
+
+  Future<Either<ApiError, AppResponse>> deactivateAccount() => EmployeeRemoteDataSource.get().deactivateAccount();
 }

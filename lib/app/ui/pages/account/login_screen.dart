@@ -70,12 +70,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                         if (!_isKeyboardVisible)
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/images/logo2.png',
-                                height: 50,
-                              ),
-                            ],
+                            children: [Image.asset('assets/images/logo2.png', height: 50)],
                           ),
                         SizedBox(height: 50),
                         Text(
@@ -86,10 +81,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
-                        Text(
-                          'login_caption'.tr,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
+                        Text('login_caption'.tr, style: Theme.of(context).textTheme.bodyMedium),
                         SizedBox(height: 32),
                         AutofillGroup(
                           child: Column(
@@ -123,13 +115,10 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   'forget_pass'.tr,
-                                  style: Theme.of(context).textTheme.bodyMedium!
-                                      .copyWith(
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.primary,
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ),
@@ -139,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                         PrimaryButton(
                           label: 'login'.tr,
                           onPressed: () {
-                            logic.login(
+                            logic.getCompaniesAndLogin(
                               email: _emailController.text,
                               password: _passwordController.text,
                             );
@@ -154,7 +143,10 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                       children: [
                         InkWell(
                           borderRadius: BorderRadius.circular(8),
-                          onTap: () => launchUrl(Uri.parse('https://www.instagram.com/digicarepro?igsh=MWpueGV5Z3FrOXlibQ=='), mode: LaunchMode.externalApplication),
+                          onTap: () => launchUrl(
+                            Uri.parse('https://www.instagram.com/digicarepro?igsh=MWpueGV5Z3FrOXlibQ=='),
+                            mode: LaunchMode.externalApplication,
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.all(4.0),
                             child: SvgPicture.asset(
@@ -166,7 +158,10 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                         SizedBox(width: 16),
                         InkWell(
                           borderRadius: BorderRadius.circular(8),
-                          onTap: () => launchUrl(Uri.parse('https://www.facebook.com/share/16gba7n8fi/?mibextid=wwXIfr'), mode: LaunchMode.externalApplication),
+                          onTap: () => launchUrl(
+                            Uri.parse('https://www.facebook.com/share/16gba7n8fi/?mibextid=wwXIfr'),
+                            mode: LaunchMode.externalApplication,
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.all(4.0),
                             child: SvgPicture.asset(

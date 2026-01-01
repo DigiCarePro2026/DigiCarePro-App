@@ -7,7 +7,10 @@ import 'package:digi_care_pro/app/data/api/api_models/login.dart';
 import 'package:digi_care_pro/app/data/api/api_models/register_device.dart';
 import 'package:digi_care_pro/app/data/api/api_models/reset_password.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
+import 'package:digi_care_pro/app/data/models/company.dart';
 import 'package:digi_care_pro/app/data/remote_data_sources/base_remote_data_source.dart';
+
+import '../api/api_models/pre_login.dart';
 
 class AccountRemoteDataSource extends BaseRemoteDataSource {
   static AccountRemoteDataSource? _instance;
@@ -18,6 +21,16 @@ class AccountRemoteDataSource extends BaseRemoteDataSource {
     return _instance!;
   }
 
+  Future<Either<ApiError, AppResponse<PreLoginResponse>>> preLogin(
+    PreLoginRequest request, {
+    String? loadingMessage,
+  }) async => api.post<PreLoginResponse>(
+    path: '/auth/pre-login?email=${request.email}',
+    body: null,
+    loadingMessage: loadingMessage,
+    fromJson: (json) => PreLoginResponse.fromJson(json),
+  );
+
   Future<Either<ApiError, AppResponse<LoginResponse>>> login(LoginRequest request, {String? loadingMessage}) async =>
       api.post<LoginResponse>(
         path: '/auth/login',
@@ -27,11 +40,7 @@ class AccountRemoteDataSource extends BaseRemoteDataSource {
       );
 
   Future<Either<ApiError, AppResponse>> registerDevice(RegisterDeviceRequest request, {String? loadingMessage}) async =>
-      api.post(
-        path: '/user/register-device',
-        body: request.toJson(),
-        loadingMessage: loadingMessage,
-      );
+      api.post(path: '/user/register-device', body: request.toJson(), loadingMessage: loadingMessage);
 
   Future<Either<ApiError, AppResponse<GetProfileResponse>>> getProfile({String? loadingMessage}) async =>
       api.get<GetProfileResponse>(

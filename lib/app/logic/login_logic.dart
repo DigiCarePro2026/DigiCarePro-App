@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:digi_care_pro/app/data/api/api_models/login.dart';
+import 'package:digi_care_pro/app/data/api/api_models/pre_login.dart';
 import 'package:digi_care_pro/app/data/api/api_models/register_device.dart';
 import 'package:digi_care_pro/app/data/api/api_provider.dart';
 import 'package:digi_care_pro/app/data/repositories/account_repository.dart';
@@ -15,12 +16,35 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class LoginLogic extends GetxController {
+  getCompaniesAndLogin({required String email, required String password}) async {
+    PreLoginRequest request = PreLoginRequest(email: email);
+
+    DialogHandler.showLoading('loading_message_login'.tr);
+
+    var result = await AccountRepository.get().preLogin(request);
+
+    DialogHandler.hideLoading();
+
+    result.fold(
+      (error) {
+        snackError(message: error.message);
+      },
+      (response) {
+        if (response.data!.companies.length > 1) {
+          snackSuccess(message: 'multi company');
+        } else {
+          login(email: email, password: password);
+        }
+      },
+    );
+  }
+
   login({required String email, required String password}) async {
     LoginRequest request = LoginRequest(email: email, password: password);
 
     DialogHandler.showLoading('loading_message_login'.tr);
 
-    var result = await AccountRepository.get().login(request,);
+    var result = await AccountRepository.get().login(request);
 
     result.fold(
       (error) {
@@ -37,7 +61,7 @@ class LoginLogic extends GetxController {
 
         TextInput.finishAutofillContext();
 
-        if(!kIsWeb) {
+        if (!kIsWeb) {
           await _registerDevice();
         }
 
@@ -51,7 +75,7 @@ class LoginLogic extends GetxController {
   _registerDevice() async {
     String? deviceId = await getDeviceUniqueId();
 
-    if(Platform.isAndroid) {
+    if (Platform.isAndroid) {
       final String? fbToken = await FirebaseMessaging.instance.getToken();
 
       debugPrint('firebase token : $fbToken');

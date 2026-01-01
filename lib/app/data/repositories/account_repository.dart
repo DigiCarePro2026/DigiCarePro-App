@@ -6,10 +6,12 @@ import 'package:digi_care_pro/app/data/api/api_models/change_password.dart';
 import 'package:digi_care_pro/app/data/api/api_models/forget_password.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get_profile.dart';
 import 'package:digi_care_pro/app/data/api/api_models/login.dart';
+import 'package:digi_care_pro/app/data/api/api_models/pre_login.dart';
 import 'package:digi_care_pro/app/data/api/api_models/register_device.dart';
 import 'package:digi_care_pro/app/data/api/api_models/reset_password.dart';
 import 'package:digi_care_pro/app/data/constants/pref_key.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
+import 'package:digi_care_pro/app/data/models/company.dart';
 import 'package:digi_care_pro/app/data/models/profile.dart';
 import 'package:digi_care_pro/app/data/pref.dart';
 import 'package:digi_care_pro/app/data/remote_data_sources/account_remote_data_source.dart';
@@ -22,6 +24,9 @@ class AccountRepository {
 
     return _instance!;
   }
+
+  Future<Either<ApiError, AppResponse<PreLoginResponse>>> preLogin(PreLoginRequest request, {String? loadingMessage}) async =>
+      AccountRemoteDataSource.get().preLogin(request, loadingMessage: loadingMessage);
 
   Future<Either<ApiError, AppResponse<LoginResponse>>> login(LoginRequest request, {String? loadingMessage}) async =>
       AccountRemoteDataSource.get().login(request, loadingMessage: loadingMessage);

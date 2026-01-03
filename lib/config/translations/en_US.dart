@@ -184,4 +184,7 @@ const Map<String, String> enUS = {
 
   'chose_company': 'Choose Company',
   'chose_company_caption': 'Which company account are you planning to log in with?',
+  'taking_a_photo': 'Taking a photo',
+  'pictures_taken': 'Pictures taken',
+  'uploading_document': 'Uploading document...',
 };

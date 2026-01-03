@@ -23,13 +23,17 @@ dependencies:
   dropdown_search: ^6.0.2
   url_launcher: ^6.3.2
   syncfusion_flutter_signaturepad: ^31.2.2
-  camera: ^0.10.5+2
+#  camera: ^0.11.3
   firebase_core: ^4.2.0
   firebase_messaging: ^16.0.3
   geolocator: 14.0.2
   device_info_plus: 12.2.0
   hardware_button_listener: 0.0.1
   popup_menu_plus: 0.0.6
+  pdf: ^3.11.3
+  path_provider: ^2.1.5
+  image_picker: 1.0.7
+  flutter_image_compress: 2.4.0
 
 
 dev_dependencies:

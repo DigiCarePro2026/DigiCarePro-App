@@ -181,4 +181,9 @@ const Map<String, String> deDE = {
   'data_protection': 'Datenschutz',
   "receiver": "Empfänger",
   "receiver_required": "Empfänger erforderlich",
+  "chose_company": "Unternehmen auswählen",
+  "chose_company_caption": "Mit welchem Unternehmenskonto möchten Sie sich anmelden?",
+  "taking_a_photo": "Foto wird aufgenommen",
+  "pictures_taken": "Aufgenommene Bilder",
+  "uploading_document": "Dokument wird hochgeladen...",
 };

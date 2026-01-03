@@ -180,4 +180,9 @@ const Map<String, String> frFR = {
   'data_protection': 'Protection des données',
   "receiver": "Destinataire",
   "receiver_required": "Le destinataire est requis",
+  "chose_company": "Choisir une entreprise",
+  "chose_company_caption": "Avec quel compte d’entreprise souhaitez-vous vous connecter ?",
+  "taking_a_photo": "Prise de photo",
+  "pictures_taken": "Photos prises",
+  "uploading_document": "Téléversement du document...",
 };

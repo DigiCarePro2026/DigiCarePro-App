@@ -181,4 +181,7 @@ const Map<String, String> enUS = {
   'receiver': 'Receiver',
   'receiver_required': 'Receiver required',
   'support_body_length_validation': 'Minimum body length is 5 characters',
+
+  'chose_company': 'Choose Company',
+  'chose_company_caption': 'Which company account are you planning to log in with?',
 };

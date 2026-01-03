@@ -12,6 +12,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app/data/pref.dart';
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
+import 'app/service/notification_service.dart';
 import 'app/utils/hardware_button_combo_listener.dart';
 import 'app/utils/mission_event_bus.dart';
 import 'firebase_options.dart';
@@ -22,6 +23,12 @@ Future<void> main() async {
   await Pref.init();
   HardwareButtonComboListener().startListening();
   _initFirebaseServices();
+
+  await NotificationService.init();
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    NotificationService.show(message);
+  });
 
   Get.put(MissionEventBus());
 

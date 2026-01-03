@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
   LoginLogic logic = LoginLogic();
   bool _isKeyboardVisible = false;
 
-  final _emailController = TextEditingController(text: kDebugMode ? 'mostafababaee@gmail.com' : '');
+  final _emailController = TextEditingController(text: kDebugMode ? 'ahmad.ab1993@gmail.com' : '');
   final _passwordController = TextEditingController(text: kDebugMode ? '123456' : '');
 
   @override

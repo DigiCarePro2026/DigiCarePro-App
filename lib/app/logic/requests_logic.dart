@@ -1,5 +1,6 @@
 import 'package:digi_care_pro/app/data/api/api_models/cancel_day_off.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get_day_off.dart';
+import 'package:digi_care_pro/app/data/enum/page_status.dart';
 import 'package:digi_care_pro/app/data/models/day_off.dart';
 import 'package:digi_care_pro/app/data/repositories/employee_repository.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
@@ -7,6 +8,7 @@ import 'package:digi_care_pro/app/utils/dialog_handler.dart';
 import 'package:get/get.dart';
 
 class RequestsLogic extends GetxController {
+  PageStatus pageStatus = PageStatus.loading;
   List<DayOff> requests = [];
 
   List<String> months = [];
@@ -35,6 +37,8 @@ class RequestsLogic extends GetxController {
           getRequests();
         }
 
+        pageStatus = months.isEmpty ? PageStatus.empty : PageStatus.loaded;
+
         update();
       },
     );
@@ -43,17 +47,15 @@ class RequestsLogic extends GetxController {
   getRequests() async {
     DialogHandler.showLoading('loading_get_requests'.tr);
 
-    var result = await EmployeeRepository.get().getDayOffs(
-      GetDayOffRequest(month: selectedMonth!),
-    );
+    var result = await EmployeeRepository.get().getDayOffs(GetDayOffRequest(month: selectedMonth!));
 
     DialogHandler.hideLoading();
 
     result.fold(
-      (error) {
+          (error) {
         snackError(message: error.message);
       },
-      (response) {
+          (response) {
         requests = response.data!;
 
         update();
@@ -64,17 +66,15 @@ class RequestsLogic extends GetxController {
   cancelRequest(String id) async {
     DialogHandler.showLoading('loading_cancel_request'.tr);
 
-    var result = await EmployeeRepository.get().cancelDayOff(
-      CancelDayOffRequest(id: id),
-    );
+    var result = await EmployeeRepository.get().cancelDayOff(CancelDayOffRequest(id: id));
 
     DialogHandler.hideLoading();
 
     result.fold(
-      (error) {
+          (error) {
         snackError(message: error.message);
       },
-      (response) {
+          (response) {
         snackSuccess(message: response.message);
 
         getRequests();

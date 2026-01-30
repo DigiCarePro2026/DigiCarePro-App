@@ -1,3 +1,4 @@
+import 'package:digi_care_pro/app/data/enum/page_status.dart';
 import 'package:digi_care_pro/app/data/models/support_employee.dart';
 import 'package:digi_care_pro/app/logic/employee_list_logic.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
@@ -33,7 +34,9 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
           appBar: AppBar(title: Text('employee_list'.tr)),
           body: Stack(
             children: [
-              if (logic.employees.isEmpty) Center(child: CircularProgressIndicator()),
+              if (logic.pageStatus == PageStatus.loading) Center(child: CircularProgressIndicator()),
+              if (logic.pageStatus == PageStatus.empty)
+                Center(child: Text('empty_message'.tr, style: Theme.of(context).textTheme.titleMedium)),
               if (logic.employees.isNotEmpty)
                 ListView.builder(
                   itemCount: logic.employees.length,

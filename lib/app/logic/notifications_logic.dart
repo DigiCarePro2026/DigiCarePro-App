@@ -19,6 +19,8 @@ class NotificationsLogic extends GetxController {
 
   getMessages() async {
     pageStatus = PageStatus.loading;
+    update();
+
     var result = await NotificationRepository.get().getMessages(
       pagingModel: paging,
     );

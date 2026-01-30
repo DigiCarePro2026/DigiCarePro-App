@@ -181,10 +181,14 @@ const Map<String, String> enUS = {
   'receiver': 'Receiver',
   'receiver_required': 'Receiver required',
   'support_body_length_validation': 'Minimum body length is 5 characters',
-
   'chose_company': 'Choose Company',
   'chose_company_caption': 'Which company account are you planning to log in with?',
   'taking_a_photo': 'Taking a photo',
   'pictures_taken': 'Pictures taken',
   'uploading_document': 'Uploading document...',
+  'password_validation_message': 'New password must contain at least one uppercase letter. Password must be at least 6 characters long',
+  'support_mission': 'Mission',
+  'support_customer': 'Customer',
+  'support_payment': 'Payment',
+  'support_application': 'Application',
 };

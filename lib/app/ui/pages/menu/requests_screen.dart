@@ -1,5 +1,6 @@
 import 'package:digi_care_pro/app/data/enum/leave_status.dart';
 import 'package:digi_care_pro/app/data/enum/leave_type.dart';
+import 'package:digi_care_pro/app/data/enum/page_status.dart';
 import 'package:digi_care_pro/app/data/models/day_off.dart';
 import 'package:digi_care_pro/app/logic/requests_logic.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
@@ -35,9 +36,12 @@ class _RequestsScreenState extends State<RequestsScreen> {
       builder: (logic) {
         return Scaffold(
           appBar: AppBar(title: Text('requests'.tr), centerTitle: true),
-          body: logic.requests.isEmpty
-              ? Center(child: Text('empty_message'.tr, style: Theme.of(context).textTheme.titleMedium))
-              : Padding(
+          body: Stack(
+            children: [
+              if (logic.pageStatus == PageStatus.loading) Center(child: CircularProgressIndicator()),
+              if (logic.pageStatus == PageStatus.empty)
+                Center(child: Text('empty_message'.tr, style: Theme.of(context).textTheme.titleMedium)),
+              Padding(
                 padding: const EdgeInsets.all(bodyPadding),
                 child: Column(
                   children: [
@@ -54,13 +58,15 @@ class _RequestsScreenState extends State<RequestsScreen> {
                     SizedBox(height: 12),
                     Expanded(
                       child: ListView.builder(
-                          itemCount: logic.requests.length,
-                          itemBuilder: (ctx, index) => _buildItem(logic.requests[index]),
-                        ),
+                        itemCount: logic.requests.length,
+                        itemBuilder: (ctx, index) => _buildItem(logic.requests[index]),
+                      ),
                     ),
                   ],
                 ),
               ),
+            ],
+          ),
           floatingActionButton: Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,

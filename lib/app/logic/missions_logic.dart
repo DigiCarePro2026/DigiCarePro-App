@@ -73,7 +73,7 @@ class MissionsLogic extends GetxController {
 
         // DateTime now = DateTime.now();
         // if (now.month == _selectedDateTime.month) {
-          innerFilterMissions(day: selectedDay, missionType: selectedMissionType);
+        innerFilterMissions(day: selectedDay, missionType: selectedMissionType);
         // } else {
         //   filteredMissions.clear();
         //   filteredMissions.addAll(allMissions);
@@ -360,17 +360,19 @@ class MissionsLogic extends GetxController {
 
     DialogHandler.hideLoading();
 
-    result.fold(
-      (error) {
-        snackError(message: error.message);
-      },
-      (response) {
-        Navigator.pop(Get.context!, result);
+    Future.delayed(Duration(milliseconds: 500), () {
+      result.fold(
+        (error) {
+          snackError(message: error.message);
+        },
+        (response) {
+          Navigator.pop(Get.context!, /*result*/);
 
-        getMissions();
-        // snackSuccess(message: response.message);
-      },
-    );
+          getMissions();
+          // snackSuccess(message: response.message);
+        },
+      );
+    });
   }
 
   //</editor-fold>

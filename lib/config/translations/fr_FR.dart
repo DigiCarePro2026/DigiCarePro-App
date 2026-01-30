@@ -185,4 +185,10 @@ const Map<String, String> frFR = {
   "taking_a_photo": "Prise de photo",
   "pictures_taken": "Photos prises",
   "uploading_document": "Téléversement du document...",
+  'password_validation_message': 'Le nouveau mot de passe doit contenir au moins une lettre majuscule. Le mot de passe doit comporter au moins 6 caractères.',
+  "support_mission": "Mission",
+  "support_customer": "Client",
+  "support_payment": "Paiement",
+  "support_application": "Application"
+
 };

@@ -50,37 +50,38 @@ class MissionDetailsLogic extends GetxController {
     super.onReady();
   }
 
-  Future<bool> findUserLocation(bool hasLoading) async {
-    var completer = Completer<bool>();
-
-    isLocationServiceOk = await LocationService.instance.ensurePermissionAndService(context: Get.context!);
+  Future<bool> findUserLocation() async {
+    isLocationServiceOk =
+    await LocationService.instance.ensurePermissionAndService(
+      context: Get.context!,
+    );
 
     update();
-    if (isLocationServiceOk) {
-      if (hasLoading) {
-        DialogHandler.showLoading('finding_location'.tr);
-      }
 
-      userLocation = await LocationService.instance.getCurrentLocation(context: Get.context!);
+    if (!isLocationServiceOk) return false;
 
-      DialogHandler.hideLoading();
+    userLocation =
+    await LocationService.instance.getCurrentLocation(
+      context: Get.context!,
+    );
 
-      if (!completer.isCompleted) completer.complete(true);
-    } else {
-      if (!completer.isCompleted) completer.complete(false);
-    }
-
-    return completer.future;
+    return true;
   }
 
-  checkMissionStatus(bool hasLoadingForLocation) async {
+
+  Future<void> checkMissionStatus(bool hasLoadingForLocation) async {
     DialogHandler.showLoading('loading_check_mission_status'.tr);
 
-    if (hasLoadingForLocation) {
-      await findUserLocation(hasLoadingForLocation);
-    }
+    try {
+      if (hasLoadingForLocation) {
+        await findUserLocation();
+      }
 
-    if (isLocationServiceOk) {
+      if (!isLocationServiceOk) {
+        DialogHandler.hideLoading();
+        return;
+      }
+
       var result = await MissionRepository.get().checkMissionStatus(
         CheckMissionStatusRequest(
           missionId: mission.id,
@@ -92,15 +93,17 @@ class MissionDetailsLogic extends GetxController {
       DialogHandler.hideLoading();
 
       result.fold(
-        (error) {
+            (error) {
           snackError(message: error.message);
         },
-        (response) {
+            (response) {
           actionType = response.data;
-
           _prepareMenuItems();
         },
       );
+    } catch (e) {
+      DialogHandler.hideLoading();
+      snackError(message: e.toString());
     }
   }
 
@@ -200,7 +203,7 @@ class MissionDetailsLogic extends GetxController {
     update();
   }
 
-   showInfoBottomSheet()  {
+  showInfoBottomSheet() {
     return showModalBottomSheet<String>(
       context: Get.context!,
       isScrollControlled: true,
@@ -222,7 +225,11 @@ class MissionDetailsLogic extends GetxController {
                 children: [
                   Text('comment'.tr, style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 16),
-                  Text(mission.comment == null || mission.comment!.isEmpty ?  'customer_comment_empty_message'.tr : mission.comment!),
+                  Text(
+                    mission.comment == null || mission.comment!.isEmpty
+                        ? 'customer_comment_empty_message'.tr
+                        : mission.comment!,
+                  ),
                   const SizedBox(height: 24),
                   SecondaryButton(label: 'close'.tr, onPressed: () => Navigator.pop(context, null)),
                   const SizedBox(height: 20),
@@ -506,8 +513,7 @@ class MissionDetailsLogic extends GetxController {
                       setState(() {});
                     },
                   ),
-                  if (report == 'report_item7'.tr)
-                  const SizedBox(height: fieldSpace),
+                  if (report == 'report_item7'.tr) const SizedBox(height: fieldSpace),
                   if (report == 'report_item7'.tr)
                     AppTextAreaField(
                       title: 'description'.tr,

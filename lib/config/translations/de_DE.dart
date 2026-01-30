@@ -186,4 +186,9 @@ const Map<String, String> deDE = {
   "taking_a_photo": "Foto wird aufgenommen",
   "pictures_taken": "Aufgenommene Bilder",
   "uploading_document": "Dokument wird hochgeladen...",
+  'password_validation_message': 'Das neue Passwort muss mindestens einen Großbuchstaben enthalten. Das Passwort muss mindestens 6 Zeichen lang sein.',
+  "support_mission": "Mission",
+  "support_customer": "Kunde",
+  "support_payment": "Zahlung",
+  "support_application": "Anwendung"
 };

@@ -11,13 +11,13 @@ extension SupportTypeExtension on SupportType {
   String get title {
     switch (this) {
       case SupportType.mission:
-        return 'Mission'.tr;
+        return 'support_mission'.tr;
       case SupportType.customer:
-        return 'Customer'.tr;
+        return 'support_customer'.tr;
       case SupportType.payment:
-        return 'Payment'.tr;
+        return 'support_payment'.tr;
       case SupportType.application:
-        return 'Application'.tr;
+        return 'support_application'.tr;
     }
   }
 }

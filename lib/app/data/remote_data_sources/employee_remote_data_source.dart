@@ -86,7 +86,7 @@ class EmployeeRemoteDataSource extends BaseRemoteDataSource {
     GetTimesheetRequest request, {
     String? loadingMessage,
   }) => api.get(
-    path: '/employeeTimeSheet/signatures?month=2025-10-01',
+    path: '/employeeTimeSheet/signatures?month=${request.month}',
     queryParameters: request.toJson(),
     fromJson: (json) => TimesheetSignature.fromJson(json),
   );

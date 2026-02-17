@@ -19,6 +19,7 @@ class TimesheetScreen extends StatefulWidget {
 
 class _TimesheetScreenState extends State<TimesheetScreen> {
   TimeSheetLogic logic = TimeSheetLogic();
+  final ScrollController _tableScrollController = ScrollController();
 
   @override
   void initState() {
@@ -28,95 +29,116 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
   }
 
   @override
+  void dispose() {
+    _tableScrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GetBuilder<TimeSheetLogic>(
       builder: (logic) {
         return Scaffold(
           appBar: AppBar(title: Text('timesheet'.tr)),
-          body: Padding(
-            padding: const EdgeInsets.all(bodyPadding),
-            child: Column(
-              children: [
-                AppDropdownField<String>(
-                  value: logic.selectedMonth ?? (logic.months.isEmpty ? '' : logic.months[0]),
-                  title: 'timesheet_month_title'.tr,
-                  items: logic.months.map((m) => DropdownMenuItem<String>(value: m, child: Text(m))).toList(),
-                  onChanged: (item) {
-                    logic.selectedMonth = item;
+          body: SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.all(bodyPadding),
+              child: Column(
+                children: [
+                  AppDropdownField<String>(
+                    value: logic.selectedMonth ?? (logic.months.isEmpty ? '' : logic.months[0]),
+                    title: 'timesheet_month_title'.tr,
+                    items: logic.months.map((m) => DropdownMenuItem<String>(value: m, child: Text(m))).toList(),
+                    onChanged: (item) {
+                      logic.selectedMonth = item;
 
-                    logic.getTimesheet();
-                  },
-                ),
-                SizedBox(height: 12),
-                SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Table(
-                    border: TableBorder.all(color: Colors.grey.shade300),
-                    columnWidths: const {
-                      0: FlexColumnWidth(2), // Date
-                      1: FlexColumnWidth(1.3), // Start
-                      2: FlexColumnWidth(1.3), // End
-                      3: FlexColumnWidth(1.3), // Total
-                      4: FlexColumnWidth(1.3), // Work
-                      5: FlexColumnWidth(1.3), // Pause
+                      logic.getTimesheet();
                     },
-                    children: [_buildHeaderRow(), ...logic.records.map((r) => _buildDataRow(r))],
                   ),
-                ),
-                SizedBox(height: bodyPadding),
-                if (logic.signatures != null)
-                  Container(
-                    decoration: BoxDecoration(border: BoxBorder.all(color: Theme.of(context).dividerColor, width: 1)),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            padding: EdgeInsets.all(12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('employee'.tr, style: Theme.of(context).textTheme.labelMedium),
-                                SizedBox(height: 4),
-                                Text(
-                                  logic.signatures != null ? logic.signatures!.employeeSignDate ?? '' : '',
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                                SizedBox(height: fieldSpace),
-                                Center(
-                                  child: Image.network(
-                                    logic.signatures != null ? logic.signatures!.employeeSignaturePath ?? '' : '',
-                                    width: 200,
-                                    height: 200,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (ctx, _, __) {
-                                      return SizedBox(
-                                        width: 200,
-                                        height: 200,
-                                        /*color: Theme
-                                          .of(context)
-                                          .dividerColor,*/
-                                        child: SecondaryButton(
-                                          label: 'submit_sign'.tr,
-                                          onPressed: () async {
-                                            final signatureBytes = await showSignatureSheet(context);
-                                            if (signatureBytes != null) {
-                                              logic.uploadSign(signatureBytes);
-                                            }
-                                          },
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
+                  SizedBox(height: 12),
+                  Table(
+                    border: TableBorder.all(color: Colors.grey.shade300),
+                    columnWidths: _columnWidths,
+                    children: [_buildHeaderRow()],
+                  ),
+                  Expanded(
+                    child: Scrollbar(
+                      controller: _tableScrollController,
+                      thumbVisibility: true,
+                      trackVisibility: true,
+                      child: SingleChildScrollView(
+                        controller: _tableScrollController,
+                        scrollDirection: Axis.vertical,
+                        child: Table(
+                          border: TableBorder(
+                            left: BorderSide(color: Colors.grey.shade300),
+                            right: BorderSide(color: Colors.grey.shade300),
+                            bottom: BorderSide(color: Colors.grey.shade300),
+                            verticalInside: BorderSide(color: Colors.grey.shade300),
+                            horizontalInside: BorderSide(color: Colors.grey.shade300),
                           ),
+                          columnWidths: _columnWidths,
+                          children: logic.records.map((r) => _buildDataRow(r)).toList(),
                         ),
-                      ],
+                      ),
                     ),
                   ),
-              ],
+                  SizedBox(height: bodyPadding),
+                  if (logic.signatures != null)
+                    Container(
+                      decoration: BoxDecoration(border: BoxBorder.all(color: Theme.of(context).dividerColor, width: 1)),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              padding: EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('employee'.tr, style: Theme.of(context).textTheme.labelMedium),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    logic.signatures != null ? logic.signatures!.employeeSignDate ?? '' : '',
+                                    style: Theme.of(context).textTheme.titleSmall,
+                                  ),
+                                  SizedBox(height: fieldSpace),
+                                  Center(
+                                    child: Image.network(
+                                      logic.signatures != null ? logic.signatures!.employeeSignaturePath ?? '' : '',
+                                      width: 150,
+                                      height: 150,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (ctx, _, __) {
+                                        return SizedBox(
+                                          width: 150,
+                                          height: 150,
+                                          /*color: Theme
+                                          .of(context)
+                                          .dividerColor,*/
+                                          child: SecondaryButton(
+                                            label: 'submit_sign'.tr,
+                                            onPressed: () async {
+                                              final signatureBytes = await showSignatureSheet(context);
+                                              if (signatureBytes != null) {
+                                                logic.uploadSign(signatureBytes);
+                                              }
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         );
@@ -124,17 +146,26 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
     );
   }
 
+  Map<int, TableColumnWidth> get _columnWidths => const {
+    0: FlexColumnWidth(2), // Date
+    1: FlexColumnWidth(1.3), // Start
+    2: FlexColumnWidth(1.3), // Pause
+    3: FlexColumnWidth(1.3), // End
+    4: FlexColumnWidth(1.3), // Work
+    5: FlexColumnWidth(1.3), // Vacation
+  };
+
   /// Header
   TableRow _buildHeaderRow() {
     return TableRow(
       decoration: const BoxDecoration(color: Color(0xFFECECEC)),
-      children: const [
-        _HeaderCell("Date"),
-        _HeaderCell("Start"),
-        _HeaderCell("End"),
-        // _HeaderCell("Total"),
-        _HeaderCell("Work"),
-        _HeaderCell("Pause"),
+      children: [
+        _HeaderCell('date'.tr),
+        _HeaderCell('start'.tr),
+        _HeaderCell('pause'.tr),
+        _HeaderCell('end'.tr),
+        _HeaderCell('work'.tr),
+        _HeaderCell('vacation'.tr),
       ],
     );
   }
@@ -144,11 +175,11 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
     return TableRow(
       children: [
         _Cell(r.date.substring(0, 10)),
-        _Cell(r.startTime.substring(r.startTime.indexOf('T') + 1, r.startTime.indexOf('T') + 6)),
-        _Cell(r.endTime.substring(r.endTime.indexOf('T') + 1, r.endTime.indexOf('T') + 6)),
-        // _Cell(r.totalTimeDisplay),
-        _Cell(r.workTimeDisplay),
+        _Cell(r.startTime == null ? '-' : r.startTime!.substring(r.startTime!.indexOf('T') + 1, r.startTime!.indexOf('T') + 6)),
         _Cell(r.pauseTimeDisplay),
+        _Cell(r.endTime == null ? '-' : r.endTime!.substring(r.endTime!.indexOf('T') + 1, r.endTime!.indexOf('T') + 6)),
+        _Cell(r.workTimeDisplay),
+        _Cell(r.vacation ? '*' : ''),
       ],
     );
   }
@@ -228,7 +259,7 @@ class _HeaderCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
       child: Text(
         title,
         style: const TextStyle(fontWeight: FontWeight.bold),
@@ -246,7 +277,7 @@ class _Cell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
       child: Text(text, textAlign: TextAlign.center),
     );
   }

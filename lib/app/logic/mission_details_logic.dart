@@ -45,29 +45,28 @@ class MissionDetailsLogic extends GetxController {
 
   @override
   void onReady() {
+/*    MissionEventBus eventBus = Get.find();
+
+    eventBus.delayUpdated.stream.listen((reloadMissions) {
+      checkMissionStatus(false);
+    });*/
+
     checkMissionStatus(true);
 
     super.onReady();
   }
 
   Future<bool> findUserLocation() async {
-    isLocationServiceOk =
-    await LocationService.instance.ensurePermissionAndService(
-      context: Get.context!,
-    );
+    isLocationServiceOk = await LocationService.instance.ensurePermissionAndService(context: Get.context!);
 
     update();
 
     if (!isLocationServiceOk) return false;
 
-    userLocation =
-    await LocationService.instance.getCurrentLocation(
-      context: Get.context!,
-    );
+    userLocation = await LocationService.instance.getCurrentLocation(context: Get.context!);
 
     return true;
   }
-
 
   Future<void> checkMissionStatus(bool hasLoadingForLocation) async {
     DialogHandler.showLoading('loading_check_mission_status'.tr);
@@ -93,10 +92,10 @@ class MissionDetailsLogic extends GetxController {
       DialogHandler.hideLoading();
 
       result.fold(
-            (error) {
+        (error) {
           snackError(message: error.message);
         },
-            (response) {
+        (response) {
           actionType = response.data;
           _prepareMenuItems();
         },
@@ -680,6 +679,7 @@ class MissionDetailsLogic extends GetxController {
                                   );
 
                                   _changeMissionDatetimeApi(
+                                    bottomSheetContext: context,
                                     plannedStart: plannedStart.toIso8601String(),
                                     plannedEnd: plannedEnd.toIso8601String(),
                                     reason: reasonController.text,
@@ -702,8 +702,13 @@ class MissionDetailsLogic extends GetxController {
     );
   }
 
-  _changeMissionDatetimeApi({required String plannedStart, required String plannedEnd, required String reason}) async {
-    DialogHandler.showLoading('loading_change_mission_datetime'.tr);
+  _changeMissionDatetimeApi({
+    required BuildContext bottomSheetContext,
+    required String plannedStart,
+    required String plannedEnd,
+    required String reason,
+  }) async {
+    // DialogHandler.showLoading('loading_change_mission_datetime'.tr);
 
     var result = await MissionRepository.get().changeMissionDatetime(
       ChangeMissionDatetimeRequest(
@@ -714,14 +719,24 @@ class MissionDetailsLogic extends GetxController {
       ),
     );
 
-    DialogHandler.hideLoading();
+    // DialogHandler.hideLoading();
 
     result.fold(
       (error) {
         snackError(message: error.message);
       },
       (response) {
-        Navigator.pop(Get.context!, result);
+        if (Navigator.of(bottomSheetContext).canPop()) {
+          Navigator.of(bottomSheetContext).pop();
+        }
+
+        mission.plannedStartDateTime = plannedStart;
+        mission.plannedEndDateTime = plannedEnd;
+
+        MissionEventBus eventBus = Get.find();
+        eventBus.sendUpdate(true);
+
+        update();
 
         snackSuccess(message: response.message);
       },

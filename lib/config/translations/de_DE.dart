@@ -43,7 +43,7 @@ const Map<String, String> deDE = {
   "english": "Englisch",
   "french": "Französisch",
   "german": "Deutsch",
-  "notifications": "Benachrichtigungen",
+  "notifications": "Nachrichten",
   "change_date_time": "Datum & Uhrzeit ändern",
   "cancel_mission": "Einsatz abbrechen",
   "remove": "Entfernen",
@@ -190,5 +190,10 @@ const Map<String, String> deDE = {
   "support_mission": "Mission",
   "support_customer": "Kunde",
   "support_payment": "Zahlung",
-  "support_application": "Anwendung"
+  "support_application": "Anwendung",
+  'date': 'Datum',
+  'pause': 'Pause',
+  'work': 'Arbeit',
+  'vacation': 'Urlaub',
+
 };

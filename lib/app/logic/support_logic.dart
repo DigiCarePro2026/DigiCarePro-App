@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:digi_care_pro/app/data/api/api_models/send_message.dart';
 import 'package:digi_care_pro/app/data/models/message_receiver.dart';
 import 'package:digi_care_pro/app/data/repositories/notification_repository.dart';
@@ -19,13 +21,16 @@ class SupportLogic extends GetxController {
     var result = await NotificationRepository.get().getReceivers();
 
     result.fold((error) {}, (response) {
-      receivers = response.data!;
+      receivers.clear();
+
+      receivers.add(MessageReceiver(id: null, fullName: 'company'.tr));
+      receivers.addAll(response.data!);
 
       update();
     });
   }
 
-  sendMessage({required String subject, required String receiverId, required String body}) async {
+  sendMessage({required String subject, String? receiverId, required String body}) async {
     DialogHandler.showLoading('loading_send_message'.tr);
 
     var result = await NotificationRepository.get().sendMessage(

@@ -43,7 +43,7 @@ class CustomersLogic extends GetxController {
         snackError(message: error.message);
       },
       (response) {
-        paging = response.data!.pagingModel;
+        // paging = response.data!.pagingModel;
         customers.addAll(response.data!.customers);
 
         pageStatus = customers.isEmpty ? PageStatus.empty : PageStatus.loaded;

@@ -43,7 +43,7 @@ const Map<String, String> frFR = {
   "english": "Anglais",
   "french": "Français",
   "german": "Allemand",
-  "notifications": "Notifications",
+  "notifications": "Messages",
   "change_date_time": "Changer la date et l'heure",
   "cancel_mission": "Annuler la mission",
   "remove": "Supprimer",
@@ -189,6 +189,10 @@ const Map<String, String> frFR = {
   "support_mission": "Mission",
   "support_customer": "Client",
   "support_payment": "Paiement",
-  "support_application": "Application"
+  "support_application": "Application",
+  'date': 'Date',
+  'pause': 'Pause',
+  'work': 'Travail',
+  'vacation': 'Vacances',
 
 };

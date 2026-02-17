@@ -37,7 +37,6 @@ class TimeSheetLogic extends GetxController {
           selectedMonth = months[0];
 
           await getTimesheet();
-          getSignatures();
         }
 
         update();
@@ -58,6 +57,8 @@ class TimeSheetLogic extends GetxController {
       },
       (response) {
         records = response.data!;
+
+        getSignatures();
 
         update();
       },
@@ -95,7 +96,6 @@ class TimeSheetLogic extends GetxController {
         snackSuccess(message: response.message);
 
         await getTimesheet();
-        getSignatures();
       },
     );
   }

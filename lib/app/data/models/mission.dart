@@ -5,7 +5,7 @@ class Mission {
   final String companyId;
   final String employeeId;
   String? plannedStartDateTime;
-  final String? plannedEndDateTime;
+  String? plannedEndDateTime;
   final String? realStartTime;
   final String? realEndTime;
   final String? cancelDateTime;

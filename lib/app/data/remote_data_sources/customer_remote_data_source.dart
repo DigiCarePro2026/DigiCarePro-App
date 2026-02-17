@@ -20,9 +20,9 @@ class CustomerRemoteDataSource extends BaseRemoteDataSource {
     required PagingModel pagingModel,
     String? loadingMessage,
   }) async => api.get<GetCustomersResponse>(
-    path: '/customer',
-    queryParameters: {'page': pagingModel.page, 'pageSize': pagingModel.pageSize, 'keyword': keyword},
+    path: '/employee/customers',
+    // queryParameters: {'page': pagingModel.page, 'pageSize': pagingModel.pageSize, 'keyword': keyword},
     loadingMessage: loadingMessage,
-    fromJson: (json) => GetCustomersResponse.fromJson(json),
+    fromJson: (json) => GetCustomersResponse.fromJson({'items' : json}),
   );
 }

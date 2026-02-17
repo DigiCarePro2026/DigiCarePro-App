@@ -91,11 +91,11 @@ class _SupportScreenState extends State<SupportScreen> {
                   return;
                 }
 
-                if (selectedReceiver == null) {
+              /*  if (selectedReceiver == null) {
                   snackError(message: 'receiver_required'.tr);
 
                   return;
-                }
+                }*/
 
                 if (bodyController.text.length < 5) {
                   snackError(message: 'support_body_length_validation'.tr);
@@ -103,7 +103,7 @@ class _SupportScreenState extends State<SupportScreen> {
                   return;
                 }
 
-                logic.sendMessage(subject: selectedSubject!, receiverId: selectedReceiver!, body: bodyController.text);
+                logic.sendMessage(subject: selectedSubject!, receiverId: selectedReceiver, body: bodyController.text);
               },
             ),
           ),

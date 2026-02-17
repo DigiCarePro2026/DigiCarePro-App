@@ -46,14 +46,14 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                     ListView.builder(
                       itemCount: logic.customers.length,
                       itemBuilder: (ctx, index) {
-                        if (index == logic.customers.length - 1 && logic.paging.totalCount! > logic.customers.length) {
+                        /* if (index == logic.customers.length - 1 && logic.paging.totalCount! > logic.customers.length) {
                           //detect end
 
                           logic.paging.page++;
                           logic.pageStatus = PageStatus.loadMore;
 
                           logic.getCustomers();
-                        }
+                        }*/
 
                         return _buildCustomerItem(logic.customers[index]);
                       },
@@ -85,7 +85,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
           title: 'call'.tr,
           image: Padding(
             padding: const EdgeInsets.all(4.0),
-            child: SvgPicture.asset('assets/icons/call.svg', color: Theme.of(context).colorScheme.onPrimary,),
+            child: SvgPicture.asset('assets/icons/call.svg', color: Theme.of(context).colorScheme.onPrimary),
           ),
           textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.onPrimary),
         ),
@@ -132,22 +132,17 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                   ),
                   AppPopupMenu(
                     items: [
+                      if(customer.mobile != null || customer.phone != null)
                       AppPopupMenuItem(
                         title: 'call'.tr,
-                        icon: SvgPicture.asset(
-                          'assets/icons/call.svg',
-                          color: Colors.white,
-                        ),
+                        icon: SvgPicture.asset('assets/icons/call.svg', color: Colors.white),
                         onTap: () {
                           makeCall(customer.mobile ?? customer.phone!);
                         },
                       ),
                       AppPopupMenuItem(
                         title: 'add_mission'.tr,
-                        icon: SvgPicture.asset(
-                          'assets/icons/calendar-add.svg',
-                          color: Colors.white,
-                        ),
+                        icon: SvgPicture.asset('assets/icons/calendar-add.svg', color: Colors.white),
                         onTap: () {
                           Get.toNamed(Routes.CREATE_MISSION, arguments: customer.id);
                         },

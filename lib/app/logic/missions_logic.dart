@@ -93,15 +93,29 @@ class MissionsLogic extends GetxController {
       final startDateTime = DateTime.tryParse(mission.plannedStartDateTime!);
       if (startDateTime == null) continue;
 
-      final dateKey = DateTime(startDateTime.year, startDateTime.month, startDateTime.day);
+      final dateKey = DateTime(
+        startDateTime.year,
+        startDateTime.month,
+        startDateTime.day,
+      );
 
-      final startTime = TimeOfDay(hour: startDateTime.hour, minute: startDateTime.minute);
+      final startTime = TimeOfDay(
+        hour: startDateTime.hour,
+        minute: startDateTime.minute,
+      );
       final endDateTime = mission.plannedEndDateTime != null
           ? DateTime.tryParse(mission.plannedEndDateTime!)
           : startDateTime.add(const Duration(hours: 1));
-      final endTime = TimeOfDay(hour: endDateTime!.hour, minute: endDateTime.minute);
+      final endTime = TimeOfDay(
+        hour: endDateTime!.hour,
+        minute: endDateTime.minute,
+      );
 
-      final event = Event(title: mission.customerName ?? '', startTime: startTime, endTime: endTime);
+      final event = Event(
+        title: mission.customerName ?? '',
+        startTime: startTime,
+        endTime: endTime,
+      );
 
       groupedEvents.putIfAbsent(dateKey, () => []);
       groupedEvents[dateKey]!.add(event);
@@ -112,6 +126,7 @@ class MissionsLogic extends GetxController {
 
   changeMonth(DateTime dateTime) {
     _selectedDateTime = dateTime;
+    selectedDay = null;
 
     getMissions();
   }
@@ -204,17 +219,25 @@ class MissionsLogic extends GetxController {
     DateTime? selectedDate = DateTime.tryParse(mission.plannedStartDateTime!);
     TimeOfDay startTime =
         parseTime(mission.plannedStartDateTime) ??
-        TimeOfDay.now().replacing(hour: TimeOfDay.now().hour, minute: (TimeOfDay.now().minute / 15).floor() * 15);
+        TimeOfDay.now().replacing(
+          hour: TimeOfDay.now().hour,
+          minute: (TimeOfDay.now().minute / 15).floor() * 15,
+        );
     TimeOfDay endTime =
         parseTime(mission.plannedEndDateTime) ??
-        TimeOfDay.now().replacing(hour: min(TimeOfDay.now().hour + 2, 23), minute: TimeOfDay.now().hour == 23 ? 55 : 0);
+        TimeOfDay.now().replacing(
+          hour: min(TimeOfDay.now().hour + 2, 23),
+          minute: TimeOfDay.now().hour == 23 ? 55 : 0,
+        );
     TextEditingController reasonController = TextEditingController();
 
     return await showModalBottomSheet<String>(
       context: Get.context!,
       isScrollControlled: true,
       useSafeArea: true,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
       builder: (context) {
         return DraggableScrollableSheet(
           initialChildSize: 0.85,
@@ -224,7 +247,9 @@ class MissionsLogic extends GetxController {
           builder: (BuildContext context, ScrollController scrollController) {
             return Padding(
               padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
+                bottom:
+                    MediaQuery.of(context).viewInsets.bottom +
+                    MediaQuery.of(context).padding.bottom,
                 left: 16,
                 right: 16,
                 top: 20,
@@ -234,14 +259,19 @@ class MissionsLogic extends GetxController {
                   return SingleChildScrollView(
                     child: Column(
                       children: [
-                        Text('change_date_time'.tr, style: Theme.of(context).textTheme.headlineMedium),
+                        Text(
+                          'change_date_time'.tr,
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
                         const SizedBox(height: 16),
                         Column(
                           children: [
                             CalendarWidget(
                               selectionMode: CalendarSelectionMode.single,
                               initialDate: selectedDate,
-                              minDate: DateTime.now().subtract(const Duration(days: 1)),
+                              minDate: DateTime.now().subtract(
+                                const Duration(days: 1),
+                              ),
                               onDateSelected: (date, isChangedMonth) {
                                 if (!isChangedMonth) {
                                   selectedDate = date;
@@ -282,14 +312,20 @@ class MissionsLogic extends GetxController {
                               ],
                             ),
                             const SizedBox(height: 12),
-                            AppTextAreaField(title: 'reason'.tr, controller: reasonController),
+                            AppTextAreaField(
+                              title: 'reason'.tr,
+                              controller: reasonController,
+                            ),
                           ],
                         ),
                         const SizedBox(height: 24),
                         Row(
                           children: [
                             Expanded(
-                              child: SecondaryButton(label: 'cancel'.tr, onPressed: () => Navigator.pop(context, null)),
+                              child: SecondaryButton(
+                                label: 'cancel'.tr,
+                                onPressed: () => Navigator.pop(context, null),
+                              ),
                             ),
                             const SizedBox(width: 12),
                             Expanded(
@@ -297,7 +333,10 @@ class MissionsLogic extends GetxController {
                                 label: 'confirm'.tr,
                                 onPressed: () {
                                   if (selectedDate == null) {
-                                    snackError(message: 'change_datetime_error_date_null'.tr);
+                                    snackError(
+                                      message:
+                                          'change_datetime_error_date_null'.tr,
+                                    );
                                     return;
                                   }
 
@@ -319,7 +358,8 @@ class MissionsLogic extends GetxController {
 
                                   _changeMissionDatetimeApi(
                                     mission: mission,
-                                    plannedStart: plannedStart.toIso8601String(),
+                                    plannedStart: plannedStart
+                                        .toIso8601String(),
                                     plannedEnd: plannedEnd.toIso8601String(),
                                     reason: reasonController.text,
                                   );
@@ -366,7 +406,7 @@ class MissionsLogic extends GetxController {
           snackError(message: error.message);
         },
         (response) {
-          Navigator.pop(Get.context!, /*result*/);
+          Navigator.pop(Get.context! /*result*/);
 
           getMissions();
           // snackSuccess(message: response.message);

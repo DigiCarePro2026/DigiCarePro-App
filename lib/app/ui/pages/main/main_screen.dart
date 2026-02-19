@@ -22,7 +22,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
   MainLogic logic = MainLogic();
 
   Function(Customer?)? onCustomerSelected;
@@ -31,133 +30,134 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     Get.put(logic);
 
-    widget._pages = [
-      CustomerListScreen(),
-      MissionsScreen(),
-      ProfileScreen()
-    ];
+    widget._pages = [CustomerListScreen(), MissionsScreen(), ProfileScreen()];
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<MainLogic>(builder: (logic) {
-      return Scaffold(
-        appBar: AppBar(
-          title: _appBarTitle(),
-          centerTitle: false,
-          actionsPadding: EdgeInsets.only(right: 16),
+    return GetBuilder<MainLogic>(
+      builder: (logic) {
+        return Scaffold(
+          appBar: AppBar(
+            title: _appBarTitle(),
+            centerTitle: false,
+            actionsPadding: EdgeInsets.only(right: 16),
 
-          actions: [
-            InkWell(
-              borderRadius: BorderRadius.circular(16),
-              onTap: () => Get.toNamed(Routes.NOTIFICATIONS),
-              child: Container(
-                height: 32,
-                decoration: BoxDecoration(
-                  border: BoxBorder.all(color: Theme
-                      .of(context)
-                      .colorScheme
-                      .outline, width: 1),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Wrap(
-                    alignment: WrapAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/icons/notification.svg',
-                        width: 16,
-                        color: Theme
-                            .of(context)
-                            .colorScheme
-                            .onSurface,
-                      ),
-                      SizedBox(width: logic.unSeenMessageCount > 0 ? 8 : 0),
-                      Visibility(
-                        visible: logic.unSeenMessageCount > 0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: AppColors.red, shape: BoxShape.circle),
-                          constraints: BoxConstraints(
-                              minWidth: 16, minHeight: 16),
-                          child: Center(
-                            child: Text(
-                              logic.unSeenMessageCount.toString(),
-                              style: TextStyle(color: Colors.white,
+            actions: [
+              InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () => Get.toNamed(Routes.NOTIFICATIONS),
+                child: Container(
+                  height: 32,
+                  decoration: BoxDecoration(
+                    border: BoxBorder.all(
+                      color: Theme.of(context).colorScheme.outline,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/notification.svg',
+                          width: 16,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        SizedBox(width: logic.unSeenMessageCount > 0 ? 8 : 0),
+                        Visibility(
+                          visible: logic.unSeenMessageCount > 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            constraints: BoxConstraints(
+                              minWidth: 16,
+                              minHeight: 16,
+                            ),
+                            child: Center(
+                              child: Text(
+                                logic.unSeenMessageCount.toString(),
+                                style: TextStyle(
+                                  color: Colors.white,
                                   fontSize: 10,
-                                  fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            // SizedBox(width: 12),
-            // CircleAvatar(radius: 16, backgroundImage: AssetImage('assets/images/profile-sample.jpg')),
-          ],
-        ),
-        body: Column(
-          children: [
-            Expanded(child: widget._pages[widget.currentPage]),
-            Divider(height: 1, color: Theme
-                .of(context)
-                .dividerColor),
-          ],
-        ),
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: widget.currentPage,
-          onDestinationSelected: (index) {
-            setState(() {
-              widget.currentPage = index;
-            });
-          },
-          destinations: [
-            NavigationDestination(
-              icon: SvgPicture.asset('assets/icons/users.svg', color: Theme
-                  .of(context)
-                  .colorScheme
-                  .onSurface),
-              selectedIcon: SvgPicture.asset(
-                  'assets/icons/users.svg', color: Theme
-                  .of(context)
-                  .colorScheme
-                  .primary),
-              label: 'customer_list'.tr,
-            ),
-            NavigationDestination(
-              icon: SvgPicture.asset('assets/icons/missions.svg', color: Theme
-                  .of(context)
-                  .colorScheme
-                  .onSurface),
-              selectedIcon: SvgPicture.asset(
-                  'assets/icons/missions.svg', color: Theme
-                  .of(context)
-                  .colorScheme
-                  .primary),
-              label: 'missions'.tr,
-            ),
-            NavigationDestination(
-              icon: SvgPicture.asset('assets/icons/user.svg', color: Theme
-                  .of(context)
-                  .colorScheme
-                  .onSurface),
-              selectedIcon: SvgPicture.asset(
-                  'assets/icons/user.svg', color: Theme
-                  .of(context)
-                  .colorScheme
-                  .primary),
-              label: 'profile'.tr,
-            ),
-          ],
-        ),
-      );
-    });
+              // SizedBox(width: 12),
+              // CircleAvatar(radius: 16, backgroundImage: AssetImage('assets/images/profile-sample.jpg')),
+            ],
+          ),
+          body: Column(
+            children: [
+              Expanded(
+                child: IndexedStack(
+                  index: widget.currentPage,
+                  children: widget._pages,
+                ),
+              ),
+              Divider(height: 1, color: Theme.of(context).dividerColor),
+            ],
+          ),
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: widget.currentPage,
+            onDestinationSelected: (index) {
+              setState(() {
+                widget.currentPage = index;
+              });
+            },
+            destinations: [
+              NavigationDestination(
+                icon: SvgPicture.asset(
+                  'assets/icons/users.svg',
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                selectedIcon: SvgPicture.asset(
+                  'assets/icons/users.svg',
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                label: 'customer_list'.tr,
+              ),
+              NavigationDestination(
+                icon: SvgPicture.asset(
+                  'assets/icons/missions.svg',
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                selectedIcon: SvgPicture.asset(
+                  'assets/icons/missions.svg',
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                label: 'missions'.tr,
+              ),
+              NavigationDestination(
+                icon: SvgPicture.asset(
+                  'assets/icons/user.svg',
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                selectedIcon: SvgPicture.asset(
+                  'assets/icons/user.svg',
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                label: 'profile'.tr,
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   _appBarTitle() {

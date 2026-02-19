@@ -44,6 +44,8 @@ const Map<String, String> deDE = {
   "french": "Französisch",
   "german": "Deutsch",
   "notifications": "Nachrichten",
+  "inbox_messages": "Posteingang",
+  "sent_messages": "Gesendet",
   "change_date_time": "Datum & Uhrzeit ändern",
   "cancel_mission": "Einsatz abbrechen",
   "remove": "Entfernen",
@@ -76,7 +78,8 @@ const Map<String, String> deDE = {
   "forget_password": "Passwort vergessen",
   "submit": "Senden",
   "loading_cancel_mission": "Abbruchanfrage wird gesendet",
-  "loading_change_mission_datetime": "Änderung von Datum/Uhrzeit wird angefragt",
+  "loading_change_mission_datetime":
+      "Änderung von Datum/Uhrzeit wird angefragt",
   "loading_delay_mission": "Verspätung wird gemeldet",
   "loading_report_mission": "Bericht wird gesendet",
   "subject_required": "Betreff erforderlich",
@@ -92,7 +95,8 @@ const Map<String, String> deDE = {
   "start": "Start",
   "end": "Ende",
   "submit_mission": "Einsatz senden",
-  "check_repeat_pass_message": "Neues Passwort und Bestätigung müssen übereinstimmen",
+  "check_repeat_pass_message":
+      "Neues Passwort und Bestätigung müssen übereinstimmen",
   "all_fields_are_required": "Alle Felder sind erforderlich",
   "change_employee_settings_message": "Einstellungen werden geändert",
   "refresh_token_401_message": "Deine Sitzung ist abgelaufen",
@@ -101,7 +105,8 @@ const Map<String, String> deDE = {
   "support_employees_loading": "Support-Mitarbeiter werden geladen",
   "loading_notifications": "Benachrichtigungen werden geladen",
   "try_again": "Erneut versuchen",
-  "support_body_length_validation": "Die Mindestlänge des Textes beträgt 5 Zeichen",
+  "support_body_length_validation":
+      "Die Mindestlänge des Textes beträgt 5 Zeichen",
   "change_datetime_error_date_null": "Bitte ein Datum auswählen",
   "loading_get_requests": "Anfragen werden geladen",
   "unknown": "Unbekannt",
@@ -112,10 +117,12 @@ const Map<String, String> deDE = {
   "turn_on_gps": "Bitte GPS aktivieren, um den Standort zu verwenden.",
   "location_perm_denied": "Standortberechtigung verweigert",
   "finding_location": "Standort wird gesucht",
-  "location_perm_denied_desc": "Die App benötigt Standortzugriff, um fortzufahren.",
+  "location_perm_denied_desc":
+      "Die App benötigt Standortzugriff, um fortzufahren.",
   "ok": "OK",
   "permission_denied_forever": "Berechtigung dauerhaft verweigert",
-  "permission_denied_forever_desc": "Bitte Standortzugriff in den Einstellungen aktivieren.",
+  "permission_denied_forever_desc":
+      "Bitte Standortzugriff in den Einstellungen aktivieren.",
   "open_settings": "Einstellungen öffnen",
   "location_service_off": "Standortdienst ist deaktiviert",
   "police": "Polizei",
@@ -176,17 +183,19 @@ const Map<String, String> deDE = {
   'close': 'Schließen',
   'delete_account': 'Konto löschen',
   'delete_account_message':
-  'Möchten Sie Ihr Konto wirklich löschen?\nDiese Aktion ist dauerhaft und kann nicht rückgängig gemacht werden. Alle Ihre Daten werden dauerhaft gelöscht.',
+      'Möchten Sie Ihr Konto wirklich löschen?\nDiese Aktion ist dauerhaft und kann nicht rückgängig gemacht werden. Alle Ihre Daten werden dauerhaft gelöscht.',
   'customer_comment_empty_message': 'Es gibt keine zusätzlichen Kommentare',
   'data_protection': 'Datenschutz',
   "receiver": "Empfänger",
   "receiver_required": "Empfänger erforderlich",
   "chose_company": "Unternehmen auswählen",
-  "chose_company_caption": "Mit welchem Unternehmenskonto möchten Sie sich anmelden?",
+  "chose_company_caption":
+      "Mit welchem Unternehmenskonto möchten Sie sich anmelden?",
   "taking_a_photo": "Foto wird aufgenommen",
   "pictures_taken": "Aufgenommene Bilder",
   "uploading_document": "Dokument wird hochgeladen...",
-  'password_validation_message': 'Das neue Passwort muss mindestens einen Großbuchstaben enthalten. Das Passwort muss mindestens 6 Zeichen lang sein.',
+  'password_validation_message':
+      'Das neue Passwort muss mindestens einen Großbuchstaben enthalten. Das Passwort muss mindestens 6 Zeichen lang sein.',
   "support_mission": "Mission",
   "support_customer": "Kunde",
   "support_payment": "Zahlung",
@@ -195,5 +204,5 @@ const Map<String, String> deDE = {
   'pause': 'Pause',
   'work': 'Arbeit',
   'vacation': 'Urlaub',
-
+  'without_sign': 'Ohne Unterschrift',
 };

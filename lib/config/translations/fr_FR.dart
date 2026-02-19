@@ -44,6 +44,8 @@ const Map<String, String> frFR = {
   "french": "Français",
   "german": "Allemand",
   "notifications": "Messages",
+  "inbox_messages": "Reçus",
+  "sent_messages": "Envoyés",
   "change_date_time": "Changer la date et l'heure",
   "cancel_mission": "Annuler la mission",
   "remove": "Supprimer",
@@ -101,7 +103,8 @@ const Map<String, String> frFR = {
   "support_employees_loading": "Chargement du support",
   "loading_notifications": "Chargement des notifications ...",
   "try_again": "Réessayer",
-  "support_body_length_validation": "La longueur minimale du message est de 5 caractères",
+  "support_body_length_validation":
+      "La longueur minimale du message est de 5 caractères",
   "change_datetime_error_date_null": "Veuillez sélectionner une date",
   "loading_get_requests": "Chargement des demandes ...",
   "unknown": "Inconnu",
@@ -112,10 +115,12 @@ const Map<String, String> frFR = {
   "turn_on_gps": "Pour accéder à la localisation, activez le GPS.",
   "location_perm_denied": "Permission de localisation refusée",
   "finding_location": "Recherche de votre position",
-  "location_perm_denied_desc": "L'application a besoin de la localisation pour continuer.",
+  "location_perm_denied_desc":
+      "L'application a besoin de la localisation pour continuer.",
   "ok": "Ok",
   "permission_denied_forever": "Permission refusée définitivement",
-  "permission_denied_forever_desc": "Activez la localisation dans les paramètres.",
+  "permission_denied_forever_desc":
+      "Activez la localisation dans les paramètres.",
   "open_settings": "Ouvrir les paramètres",
   "location_service_off": "Service de localisation désactivé",
   "police": "Police",
@@ -161,7 +166,8 @@ const Map<String, String> frFR = {
   "mission_status_in_progress": "En cours",
   "mission_status_done": "Terminé",
   'comment': 'commentaire',
-  'manual_start_caption': "Vous avez l'intention d'accomplir la mission manuellement car vous serez indisponible au moment et à l'endroit prévus pour la mission.",
+  'manual_start_caption':
+      "Vous avez l'intention d'accomplir la mission manuellement car vous serez indisponible au moment et à l'endroit prévus pour la mission.",
   'report_item1': 'Accompagnement / soutien social',
   'report_item2': 'Tâches ménagères',
   'report_item3': 'Soins corporels / aide aux soins',
@@ -175,17 +181,20 @@ const Map<String, String> frFR = {
   'close': 'Fermer',
   'delete_account': 'Supprimer le compte',
   'delete_account_message':
-  'Êtes-vous sûr(e) de vouloir supprimer votre compte ?\nCette action est définitive et ne peut pas être annulée. Toutes vos données seront définitivement supprimées.',
-  'customer_comment_empty_message': 'Il n’y a pas de commentaires supplémentaires',
+      'Êtes-vous sûr(e) de vouloir supprimer votre compte ?\nCette action est définitive et ne peut pas être annulée. Toutes vos données seront définitivement supprimées.',
+  'customer_comment_empty_message':
+      'Il n’y a pas de commentaires supplémentaires',
   'data_protection': 'Protection des données',
   "receiver": "Destinataire",
   "receiver_required": "Le destinataire est requis",
   "chose_company": "Choisir une entreprise",
-  "chose_company_caption": "Avec quel compte d’entreprise souhaitez-vous vous connecter ?",
+  "chose_company_caption":
+      "Avec quel compte d’entreprise souhaitez-vous vous connecter ?",
   "taking_a_photo": "Prise de photo",
   "pictures_taken": "Photos prises",
   "uploading_document": "Téléversement du document...",
-  'password_validation_message': 'Le nouveau mot de passe doit contenir au moins une lettre majuscule. Le mot de passe doit comporter au moins 6 caractères.',
+  'password_validation_message':
+      'Le nouveau mot de passe doit contenir au moins une lettre majuscule. Le mot de passe doit comporter au moins 6 caractères.',
   "support_mission": "Mission",
   "support_customer": "Client",
   "support_payment": "Paiement",
@@ -194,5 +203,5 @@ const Map<String, String> frFR = {
   'pause': 'Pause',
   'work': 'Travail',
   'vacation': 'Vacances',
-
+  'without_sign': 'Sans signature',
 };

@@ -3,10 +3,8 @@ import 'package:digi_care_pro/app/data/api/api_models/app_response.dart';
 import 'package:digi_care_pro/app/data/api/api_models/get_messages.dart';
 import 'package:digi_care_pro/app/data/api/api_models/send_message.dart';
 import 'package:digi_care_pro/app/data/models/api_error.dart';
-import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:digi_care_pro/app/data/models/message_receiver.dart';
 import 'package:digi_care_pro/app/data/models/paging_model.dart';
-import 'package:digi_care_pro/app/data/remote_data_sources/employee_remote_data_source.dart';
 import 'package:digi_care_pro/app/data/remote_data_sources/notification_remote_data_source.dart';
 
 class NotificationRepository {
@@ -21,17 +19,34 @@ class NotificationRepository {
   Future<Either<ApiError, AppResponse<int>>> getUnreadMessagesCount() =>
       NotificationRemoteDataSource.get().getUnreadMessagesCount();
 
-  Future<Either<ApiError, AppResponse<GetMessagesResponse>>> getMessages({
+  Future<Either<ApiError, AppResponse<GetMessagesResponse>>> getInboxMessages({
     required PagingModel pagingModel,
     String? loadingMessage,
-  }) => NotificationRemoteDataSource.get().getMessages(pagingModel: pagingModel, loadingMessage: loadingMessage);
+  }) => NotificationRemoteDataSource.get().getInboxMessages(
+    pagingModel: pagingModel,
+    loadingMessage: loadingMessage,
+  );
+
+  Future<Either<ApiError, AppResponse<GetMessagesResponse>>> getSentMessages({
+    required PagingModel pagingModel,
+    String? loadingMessage,
+  }) => NotificationRemoteDataSource.get().getSentMessages(
+    pagingModel: pagingModel,
+    loadingMessage: loadingMessage,
+  );
 
   Future<Either<ApiError, AppResponse<List<MessageReceiver>>>> getReceivers() =>
       NotificationRemoteDataSource.get().getReceivers();
 
-  Future<Either<ApiError, AppResponse>> markAsRead({required String messageId}) =>
-      NotificationRemoteDataSource.get().markAsRead(messageId: messageId);
+  Future<Either<ApiError, AppResponse>> markAsRead({
+    required String messageId,
+  }) => NotificationRemoteDataSource.get().markAsRead(messageId: messageId);
 
-  Future<Either<ApiError, AppResponse>> sendMessage(SendMessageRequest request, {String? loadingMessage}) =>
-      NotificationRemoteDataSource.get().sendMessage(request, loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse>> sendMessage(
+    SendMessageRequest request, {
+    String? loadingMessage,
+  }) => NotificationRemoteDataSource.get().sendMessage(
+    request,
+    loadingMessage: loadingMessage,
+  );
 }

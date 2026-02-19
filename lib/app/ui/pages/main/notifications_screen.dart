@@ -14,14 +14,23 @@ class NotificationsScreen extends StatefulWidget {
   State<NotificationsScreen> createState() => _NotificationsScreenState();
 }
 
-class _NotificationsScreenState extends State<NotificationsScreen> {
+class _NotificationsScreenState extends State<NotificationsScreen>
+    with SingleTickerProviderStateMixin {
   NotificationsLogic logic = NotificationsLogic();
+  late final TabController tabController;
 
   @override
   void initState() {
     Get.put(logic);
+    tabController = TabController(length: 2, vsync: this);
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -34,7 +43,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             actions: [
               InkWell(
                 customBorder: CircleBorder(),
-                onTap: () => Get.toNamed(Routes.SUPPORT),
+                onTap: () async {
+                  bool result = await Get.toNamed(Routes.SUPPORT);
+
+                  if (result) {
+                    logic.refreshCurrentTab();
+                  }
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SvgPicture.asset('assets/icons/message-edit.svg'),
@@ -42,19 +57,39 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               ),
               SizedBox(width: 12),
             ],
+            bottom: TabBar(
+              controller: tabController,
+              dividerColor: Colors.transparent,
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicatorColor: Theme.of(context).primaryColor,
+              indicatorWeight: 3,
+              labelStyle: TextStyle(fontSize: 18),
+              onTap: (index) {
+                final tab = index == 0 ? MessagesTab.inbox : MessagesTab.sent;
+                logic.changeTab(tab);
+              },
+              tabs: [
+                Tab(text: 'inbox_messages'.tr),
+                Tab(text: 'sent_messages'.tr),
+              ],
+            ),
           ),
           body: Stack(
             children: [
-              if (logic.pageStatus == PageStatus.loading) Center(child: CircularProgressIndicator()),
+              if (logic.pageStatus == PageStatus.loading)
+                Center(child: CircularProgressIndicator()),
               if (logic.pageStatus == PageStatus.empty)
-                Center(child: Text('empty_message'.tr, style: Theme.of(context).textTheme.titleMedium)),
+                Center(
+                  child: Text(
+                    'empty_message'.tr,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
               if (logic.pageStatus == PageStatus.loaded)
                 ListView.builder(
                   itemCount: logic.messages.length,
                   itemBuilder: (ctx, index) {
                     if (index == logic.messages.length - 1) {
-                      logic.paging.page++;
-
                       logic.getMessages();
                     }
 
@@ -78,7 +113,11 @@ class MessageItem extends StatefulWidget {
   final Message message;
   final Function(String messageId) readCallback;
 
-  const MessageItem({super.key, required this.message, required this.readCallback});
+  const MessageItem({
+    super.key,
+    required this.message,
+    required this.readCallback,
+  });
 
   @override
   State<MessageItem> createState() => _MessageItemState();
@@ -114,23 +153,38 @@ class _MessageItemState extends State<MessageItem> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.message.subject, style: Theme.of(context).textTheme.headlineMedium),
+                  Text(
+                    widget.message.subject,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
                   const SizedBox(height: 12),
                   AnimatedCrossFade(
                     firstChild: Text(
-                      widget.message.body!.length > 200 ? widget.message.body!.substring(0, 200) : widget.message.body!,
+                      widget.message.body!.length > 200
+                          ? widget.message.body!.substring(0, 200)
+                          : widget.message.body!,
                       style: Theme.of(context).textTheme.bodyMedium,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    secondChild: Text(widget.message.body!, style: Theme.of(context).textTheme.bodyMedium),
-                    crossFadeState: isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                    secondChild: Text(
+                      widget.message.body!,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    crossFadeState: isExpanded
+                        ? CrossFadeState.showSecond
+                        : CrossFadeState.showFirst,
                     duration: const Duration(milliseconds: 300),
                   ),
                   const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [Text(widget.message.sentAt, style: Theme.of(context).textTheme.titleSmall)],
+                    children: [
+                      Text(
+                        widget.message.sentAt,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    ],
                   ),
                 ],
               ),

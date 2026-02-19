@@ -45,7 +45,7 @@ class SupportLogic extends GetxController {
       },
       (response) {
         Future.delayed(Duration(milliseconds: 200), () {
-          Get.back();
+          Get.back(result: true);
           snackSuccess(message: response.message ?? 'message_send_success'.tr);
         });
       },

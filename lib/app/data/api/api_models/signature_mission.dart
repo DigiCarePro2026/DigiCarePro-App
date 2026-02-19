@@ -1,6 +1,7 @@
 class SignatureMissionRequest {
   final String missionId;
-  final List<int> imageData;
+  final bool completeWithoutSignature;
+  final List<int>? imageData;
 
-  SignatureMissionRequest({required this.missionId, required this.imageData});
+  SignatureMissionRequest({required this.missionId, required this.completeWithoutSignature, this.imageData});
 }

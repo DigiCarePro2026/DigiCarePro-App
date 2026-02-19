@@ -4,9 +4,13 @@ import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:get/get.dart';
 
 class MissionSignatureLogic extends GetxController {
-  upload(String missionId, List<int> byteData) async {
+  upload(String missionId, bool completeWithoutSignature, List<int>? byteData) async {
     var result = await MissionRepository.get().uploadSignature(
-      SignatureMissionRequest(missionId: missionId, imageData: byteData),
+      SignatureMissionRequest(
+        missionId: missionId,
+        completeWithoutSignature: completeWithoutSignature,
+        imageData: byteData,
+      ),
       loadingMessage: 'Uploading signature',
     );
 

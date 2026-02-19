@@ -72,7 +72,11 @@ class TimeSheetLogic extends GetxController {
 
     result.fold(
       (error) {
-        snackError(message: error.message);
+        // snackError(message: error.message);
+
+        signatures = null;
+
+        update();
       },
       (response) {
         signatures = response.data!;

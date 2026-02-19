@@ -74,7 +74,7 @@ class _SignatureScreenState extends State<SignatureScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(bodyPadding),
+                  padding: const EdgeInsets.symmetric(horizontal: bodyPadding),
                   child: Column(
                     children: [
                       _button(
@@ -87,10 +87,20 @@ class _SignatureScreenState extends State<SignatureScreen> {
                           final image = await signature.toImage();
                           final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
                           final Uint8List pngBytes = byteData!.buffer.asUint8List();
-                          logic.upload(widget.missionId, pngBytes.toList());
+                          logic.upload(widget.missionId, false, pngBytes.toList());
                         },
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 8),
+                      _button(
+                        context,
+                        color: AppColors.blue,
+                        icon: 'assets/icons/forward.svg',
+                        label: 'without_sign'.tr,
+                        onTap: () async {
+                          logic.upload(widget.missionId, true, null);
+                        },
+                      ),
+                      const SizedBox(height: 8),
                       _button(
                         context,
                         color: AppColors.yellow,
@@ -100,7 +110,7 @@ class _SignatureScreenState extends State<SignatureScreen> {
                           signatureGlobalKey.currentState!.clear();
                         },
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 8),
                       _button(
                         context,
                         color: AppColors.red,
@@ -134,7 +144,7 @@ class _SignatureScreenState extends State<SignatureScreen> {
         onTap: onTap,
         borderRadius: BorderRadius.circular(cardRadius),
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 12),
+          padding: EdgeInsets.symmetric(vertical: 4),
           width: 100,
           decoration: BoxDecoration(
             color: color,

@@ -66,8 +66,9 @@ class MissionRemoteDataSource extends BaseRemoteDataSource {
     String? loadingMessage,
   }) async {
     FormData formData = FormData.fromMap({
-      "signatureFile": MultipartFile.fromBytes(
-        request.imageData,
+      'CompleteWithoutSignature': request.completeWithoutSignature,
+      "signatureFile": request.imageData == null ? null : MultipartFile.fromBytes(
+        request.imageData!,
         filename: "signature.jpg",
         contentType: DioMediaType("image", "jpeg"),
       ),

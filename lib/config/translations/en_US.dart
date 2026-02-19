@@ -195,4 +195,6 @@ const Map<String, String> enUS = {
   'pause': 'Pause',
   'work': 'Work',
   'vacation': 'Vacation',
+
+  'without_sign': 'Without Sign',
 };

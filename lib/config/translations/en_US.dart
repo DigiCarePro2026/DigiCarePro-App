@@ -67,6 +67,7 @@ const Map<String, String> enUS = {
   'minutes': 'Minutes',
   'mission_report': 'Mission Report',
   'support': 'Support',
+  'send_message': 'Send message',
   'subject': 'Subject',
   'send': 'Send',
   'remind_mission': 'Remind mission',
@@ -181,6 +182,7 @@ const Map<String, String> enUS = {
       'Are you sure you want to delete your account?\nThis action is permanent and cannot be undone. All your data will be permanently removed.',
   'customer_comment_empty_message': 'There are no additional comments',
   'data_protection': 'Data protection',
+  'sender': 'Sender',
   'receiver': 'Receiver',
   'receiver_required': 'Receiver required',
   'support_body_length_validation': 'Minimum body length is 5 characters',
@@ -199,7 +201,7 @@ const Map<String, String> enUS = {
   'date': 'Date',
   'pause': 'Pause',
   'work': 'Work',
-  'vacation': 'Vacation',
+  'vacation': '*',
 
   'without_sign': 'Without Sign',
 };

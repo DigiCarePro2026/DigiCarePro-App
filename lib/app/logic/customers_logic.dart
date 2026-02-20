@@ -41,6 +41,7 @@ class CustomersLogic extends GetxController {
       (error) {
         pageStatus = PageStatus.error;
         snackError(message: error.message);
+        update();
       },
       (response) {
         // paging = response.data!.pagingModel;

@@ -4,6 +4,7 @@ import 'package:digi_care_pro/app/logic/support_logic.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:digi_care_pro/app/ui/widgets/app_dropdown_field.dart';
 import 'package:digi_care_pro/app/ui/widgets/app_text_area_field.dart';
+import 'package:digi_care_pro/app/ui/widgets/app_text_field.dart';
 import 'package:digi_care_pro/app/ui/widgets/primary_button.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:flutter/material.dart';
@@ -19,13 +20,20 @@ class SupportScreen extends StatefulWidget {
 class _SupportScreenState extends State<SupportScreen> {
   SupportLogic logic = SupportLogic();
 
+  bool isSupportMode = true;
   String? selectedSubject;
   String? selectedReceiver;
+  TextEditingController subjectController = TextEditingController();
   TextEditingController bodyController = TextEditingController();
 
   @override
   void initState() {
     Get.put(logic);
+    final args = Get.arguments;
+    if (args is Map && args['mode'] == 'message') {
+      isSupportMode = false;
+      logic.getReceivers();
+    }
 
     super.initState();
   }
@@ -35,7 +43,7 @@ class _SupportScreenState extends State<SupportScreen> {
     return GetBuilder<SupportLogic>(
       builder: (logic) {
         return Scaffold(
-          appBar: AppBar(title: Text('support'.tr)),
+          appBar: AppBar(title: Text(isSupportMode ? 'support'.tr : 'send_message'.tr)),
           body: GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
@@ -45,32 +53,40 @@ class _SupportScreenState extends State<SupportScreen> {
               padding: const EdgeInsets.all(bodyPadding),
               child: Column(
                 children: [
-                  AppDropdownField<SupportType>(
-                    title: 'subject'.tr,
-                    onChanged: (item) {
-                      selectedSubject = item!.title;
-                    },
-                    items: SupportType.values.map((st) {
-                      return DropdownMenuItem<SupportType>(
-                        value: st,
-                        child: Text(st.title, style: Theme.of(context).textTheme.labelMedium),
-                      );
-                    }).toList(),
-                  ),
+                  if (isSupportMode)
+                    AppTextField(
+                      title: 'subject'.tr,
+                      controller: subjectController,
+                    )
+                  else
+                    AppDropdownField<SupportType>(
+                      title: 'subject'.tr,
+                      onChanged: (item) {
+                        selectedSubject = item!.title;
+                      },
+                      items: SupportType.values.map((st) {
+                        return DropdownMenuItem<SupportType>(
+                          value: st,
+                          child: Text(st.title, style: Theme.of(context).textTheme.labelMedium),
+                        );
+                      }).toList(),
+                    ),
                   SizedBox(height: fieldSpace),
-                  AppDropdownField<MessageReceiver>(
-                    title: 'receiver'.tr,
-                    onChanged: (item) {
-                      selectedReceiver = item!.id;
-                    },
-                    items: logic.receivers.map((st) {
-                      return DropdownMenuItem<MessageReceiver>(
-                        value: st,
-                        child: Text(st.fullName, style: Theme.of(context).textTheme.labelMedium),
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(height: fieldSpace),
+                  if (!isSupportMode) ...[
+                    AppDropdownField<MessageReceiver>(
+                      title: 'receiver'.tr,
+                      onChanged: (item) {
+                        selectedReceiver = item!.id;
+                      },
+                      items: logic.receivers.map((st) {
+                        return DropdownMenuItem<MessageReceiver>(
+                          value: st,
+                          child: Text(st.fullName, style: Theme.of(context).textTheme.labelMedium),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(height: fieldSpace),
+                  ],
                   AppTextAreaField(title: 'description'.tr, controller: bodyController),
                 ],
               ),
@@ -85,17 +101,17 @@ class _SupportScreenState extends State<SupportScreen> {
             child: PrimaryButton(
               label: 'send'.tr,
               onPressed: () {
-                if (selectedSubject == null) {
+                if (isSupportMode && subjectController.text.trim().isEmpty) {
                   snackError(message: 'subject_required'.tr);
 
                   return;
                 }
 
-              /*  if (selectedReceiver == null) {
-                  snackError(message: 'receiver_required'.tr);
+                if (!isSupportMode && selectedSubject == null) {
+                  snackError(message: 'subject_required'.tr);
 
                   return;
-                }*/
+                }
 
                 if (bodyController.text.length < 5) {
                   snackError(message: 'support_body_length_validation'.tr);
@@ -103,7 +119,11 @@ class _SupportScreenState extends State<SupportScreen> {
                   return;
                 }
 
-                logic.sendMessage(subject: selectedSubject!, receiverId: selectedReceiver, body: bodyController.text);
+                logic.sendMessage(
+                  subject: isSupportMode ? subjectController.text.trim() : selectedSubject!,
+                  receiverId: isSupportMode ? null : selectedReceiver,
+                  body: bodyController.text,
+                );
               },
             ),
           ),

@@ -13,6 +13,7 @@ class NotificationsLogic extends GetxController {
   List<Message> messages = [];
   MessagesTab selectedTab = MessagesTab.inbox;
   bool isLoadingMore = false;
+  bool hasMore = true;
 
   @override
   void onReady() {
@@ -26,10 +27,11 @@ class NotificationsLogic extends GetxController {
   }
 
   Future<void> getMessages({bool reset = false}) async {
-    if (!reset && isLoadingMore) return;
+    if (!reset && (isLoadingMore || !hasMore)) return;
 
     if (reset) {
       isLoadingMore = false;
+      hasMore = true;
       paging = PagingModel(page: 1, pageSize: 50);
       messages.clear();
       pageStatus = PageStatus.loading;
@@ -56,8 +58,25 @@ class NotificationsLogic extends GetxController {
         snackError(message: error.message);
       },
       (response) {
+        final newItems = response.data!.messages;
+        final existingIds = messages.map((m) => m.id).toSet();
+
+        paging.totalCount = response.data!.pagingModel.totalCount;
+
+        final uniqueNewItems = newItems.where((m) => !existingIds.contains(m.id)).toList();
+
         pageStatus = PageStatus.loaded;
-        messages.addAll(response.data!.messages);
+        messages.addAll(uniqueNewItems);
+
+        if (paging.totalCount != null) {
+          hasMore = messages.length < paging.totalCount!;
+        } else {
+          hasMore = uniqueNewItems.isNotEmpty;
+        }
+
+        if (newItems.isNotEmpty && uniqueNewItems.isEmpty) {
+          hasMore = false;
+        }
 
         if (messages.isEmpty) {
           pageStatus = PageStatus.empty;

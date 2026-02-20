@@ -67,6 +67,7 @@ const Map<String, String> deDE = {
   "minutes": "Minuten",
   "mission_report": "Einsatzbericht",
   "support": "Unterstützung",
+  "send_message": "Nachricht senden",
   "subject": "Betreff",
   "send": "Senden",
   "remind_mission": "Einsatz erinnern",
@@ -186,6 +187,7 @@ const Map<String, String> deDE = {
       'Möchten Sie Ihr Konto wirklich löschen?\nDiese Aktion ist dauerhaft und kann nicht rückgängig gemacht werden. Alle Ihre Daten werden dauerhaft gelöscht.',
   'customer_comment_empty_message': 'Es gibt keine zusätzlichen Kommentare',
   'data_protection': 'Datenschutz',
+  "sender": "Absender",
   "receiver": "Empfänger",
   "receiver_required": "Empfänger erforderlich",
   "chose_company": "Unternehmen auswählen",
@@ -203,6 +205,6 @@ const Map<String, String> deDE = {
   'date': 'Datum',
   'pause': 'Pause',
   'work': 'Arbeit',
-  'vacation': 'Urlaub',
+  'vacation': '*',
   'without_sign': 'Ohne Unterschrift',
 };

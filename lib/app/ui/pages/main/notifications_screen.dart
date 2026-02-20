@@ -44,7 +44,10 @@ class _NotificationsScreenState extends State<NotificationsScreen>
               InkWell(
                 customBorder: CircleBorder(),
                 onTap: () async {
-                  bool result = await Get.toNamed(Routes.SUPPORT);
+                  bool result = await Get.toNamed(
+                    Routes.SUPPORT,
+                    arguments: {'mode': 'message'},
+                  );
 
                   if (result) {
                     logic.refreshCurrentTab();
@@ -95,6 +98,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
 
                     return MessageItem(
                       message: logic.messages[index],
+                      isInbox: logic.selectedTab == MessagesTab.inbox,
                       readCallback: (String messageId) {
                         logic.markAsRead(messageId: messageId);
                       },
@@ -111,11 +115,13 @@ class _NotificationsScreenState extends State<NotificationsScreen>
 
 class MessageItem extends StatefulWidget {
   final Message message;
+  final bool isInbox;
   final Function(String messageId) readCallback;
 
   const MessageItem({
     super.key,
     required this.message,
+    required this.isInbox,
     required this.readCallback,
   });
 
@@ -153,6 +159,13 @@ class _MessageItemState extends State<MessageItem> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(
+                    widget.isInbox
+                        ? '${'sender'.tr}: ${widget.message.senderName ?? '-'}'
+                        : '${'receiver'.tr}: ${widget.message.receiverName ?? '-'}',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: 8),
                   Text(
                     widget.message.subject,
                     style: Theme.of(context).textTheme.headlineMedium,

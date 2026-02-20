@@ -43,6 +43,17 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                     if (logic.pageStatus == PageStatus.loading) Center(child: CircularProgressIndicator()),
                     if (logic.pageStatus == PageStatus.empty)
                       Center(child: Text('empty_message'.tr, style: Theme.of(context).textTheme.titleMedium)),
+                    if (logic.pageStatus == PageStatus.error)
+                      Center(
+                        child: TextButton(
+                          onPressed: () {
+                            logic.pageStatus = PageStatus.loading;
+                            logic.update();
+                            logic.getCustomers();
+                          },
+                          child: Text('try_again'.tr, style: Theme.of(context).textTheme.titleMedium),
+                        ),
+                      ),
                     ListView.builder(
                       itemCount: logic.customers.length,
                       itemBuilder: (ctx, index) {

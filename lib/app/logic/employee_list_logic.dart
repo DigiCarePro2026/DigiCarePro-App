@@ -22,6 +22,7 @@ class EmployeeListLogic extends GetxController {
       (error) {
         pageStatus = PageStatus.error;
         snackError(message: error.message);
+        update();
       },
       (response) {
         employees = response.data!;

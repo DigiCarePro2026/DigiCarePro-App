@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
       ],
       translations: AppTranslations(),
       supportedLocales: [Locale('en', 'US'), Locale('fr', 'FR'), Locale('de', 'DE')],
-      locale: Locale(Pref.getString(PrefKey.locale) ?? 'en'),
+      locale: Locale(Pref.getString(PrefKey.locale) ?? 'de'),
       themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

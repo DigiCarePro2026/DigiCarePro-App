@@ -8,6 +8,7 @@ import 'package:digi_care_pro/app/ui/widgets/primary_button.dart';
 import 'package:digi_care_pro/app/ui/widgets/secondary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 class TimesheetScreen extends StatefulWidget {
@@ -165,7 +166,7 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
         _HeaderCell('pause'.tr),
         _HeaderCell('end'.tr),
         _HeaderCell('work'.tr),
-        _HeaderCell('vacation'.tr),
+        _HeaderCell('*'),
       ],
     );
   }
@@ -174,7 +175,7 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
   TableRow _buildDataRow(TimesheetRecord r) {
     return TableRow(
       children: [
-        _Cell(r.date.substring(0, 10)),
+        _Cell(_formatGermanShortDate(r.date)),
         _Cell(r.startTime == null ? '-' : r.startTime!.substring(r.startTime!.indexOf('T') + 1, r.startTime!.indexOf('T') + 6)),
         _Cell(r.pauseTimeDisplay),
         _Cell(r.endTime == null ? '-' : r.endTime!.substring(r.endTime!.indexOf('T') + 1, r.endTime!.indexOf('T') + 6)),
@@ -182,6 +183,15 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
         _Cell(r.vacation ? '*' : ''),
       ],
     );
+  }
+
+  String _formatGermanShortDate(String rawDate) {
+    final parsed = DateTime.tryParse(rawDate) ?? DateTime.tryParse(rawDate.split('T').first);
+    if (parsed == null) {
+      return rawDate.length >= 10 ? rawDate.substring(0, 10) : rawDate;
+    }
+
+    return DateFormat('dd.MM.yy', 'de_DE').format(parsed);
   }
 
   Future<List<int>?> showSignatureSheet(BuildContext context) {

@@ -67,6 +67,7 @@ const Map<String, String> frFR = {
   "minutes": "Minutes",
   "mission_report": "Rapport de mission",
   "support": "Support",
+  "send_message": "Envoyer un message",
   "subject": "Sujet",
   "send": "Envoyer",
   "remind_mission": "Rappeler la mission",
@@ -185,6 +186,7 @@ const Map<String, String> frFR = {
   'customer_comment_empty_message':
       'Il n’y a pas de commentaires supplémentaires',
   'data_protection': 'Protection des données',
+  "sender": "Expéditeur",
   "receiver": "Destinataire",
   "receiver_required": "Le destinataire est requis",
   "chose_company": "Choisir une entreprise",

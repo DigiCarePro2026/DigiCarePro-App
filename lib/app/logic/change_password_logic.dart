@@ -19,9 +19,11 @@ class ChangePasswordLogic extends GetxController {
         snackError(message: 'password_validation_message'.tr);
       },
       (response) {
-        Get.back();
-
-        snackSuccess(message: response.message);
+        // hideLoading() closes asynchronously; delay page pop so we close this screen, not the loading dialog.
+        Future.delayed(const Duration(milliseconds: 200), () {
+          Get.back(result: true);
+          snackSuccess(message: response.message);
+        });
       },
     );
   }

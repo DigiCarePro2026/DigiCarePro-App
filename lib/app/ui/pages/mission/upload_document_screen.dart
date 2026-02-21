@@ -24,6 +24,11 @@ class UploadDocumentScreen extends StatefulWidget {
 }
 
 class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
+  static const int _cameraImageQuality = 60;
+  static const int _compressQuality = 35;
+  static const int _maxImageDimension = 1600;
+  static const int _pdfImageDimension = 1000;
+
   final UploadDocumentLogic logic = UploadDocumentLogic();
   final ImagePicker _picker = ImagePicker();
 
@@ -40,7 +45,9 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
   Future<void> _takePhoto() async {
     final XFile? photo = await _picker.pickImage(
       source: ImageSource.camera,
-      imageQuality: 85,
+      imageQuality: _cameraImageQuality,
+      maxWidth: _maxImageDimension.toDouble(),
+      maxHeight: _maxImageDimension.toDouble(),
       preferredCameraDevice: CameraDevice.rear,
     );
 
@@ -63,16 +70,18 @@ class _UploadDocumentScreenState extends State<UploadDocumentScreen> {
     final result = await FlutterImageCompress.compressAndGetFile(
       file.path,
       targetPath,
-      quality: 50,
-      minWidth: 1280,
-      minHeight: 1280,
+      quality: _compressQuality,
+      minWidth: _pdfImageDimension,
+      minHeight: _pdfImageDimension,
+      format: CompressFormat.jpeg,
+      keepExif: false,
     );
 
-    return XFile(result!.path);
+    return XFile(result?.path ?? file.path);
   }
 
   Future<File> _createPdfFromImages(List<XFile> images) async {
-    final pdf = pw.Document();
+    final pdf = pw.Document(compress: true);
 
     for (final image in images) {
       final bytes = await image.readAsBytes();

@@ -13,6 +13,7 @@ class Mission {
   final String? signaturePath;
   final String? reportComment;
   final String? comment;
+  final String? notes;
   final bool? endedByAdmin;
   final bool? endedManually;
   final int? status;
@@ -38,6 +39,7 @@ class Mission {
     this.signaturePath,
     this.reportComment,
     this.comment,
+    this.notes,
     this.endedByAdmin,
     this.endedManually,
     this.status,
@@ -64,6 +66,7 @@ class Mission {
     signaturePath: json['signaturePath']?.toString() ?? '',
     reportComment: json['reportComment']?.toString() ?? '',
     comment: json['comment']?.toString() ?? '',
+    notes: json['notes']?.toString() ?? json['Notes']?.toString() ?? '',
     endedByAdmin: json['endedByAdmin'] ?? false,
     endedManually: json['endedManually'] ?? false,
     status: (json['status'] != null) ? int.tryParse(json['status'].toString()) : null,

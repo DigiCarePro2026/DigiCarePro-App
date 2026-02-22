@@ -225,9 +225,9 @@ class MissionDetailsLogic extends GetxController {
                   Text('comment'.tr, style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 16),
                   Text(
-                    mission.comment == null || mission.comment!.isEmpty
+                    mission.notes == null || mission.notes!.isEmpty
                         ? 'customer_comment_empty_message'.tr
-                        : mission.comment!,
+                        : mission.notes!,
                   ),
                   const SizedBox(height: 24),
                   SecondaryButton(label: 'close'.tr, onPressed: () => Navigator.pop(context, null)),

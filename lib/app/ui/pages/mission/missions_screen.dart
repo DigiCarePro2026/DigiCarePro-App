@@ -33,49 +33,62 @@ class _MissionsScreenState extends State<MissionsScreen> {
     return GetBuilder<MissionsLogic>(
       builder: (logic) {
         return Scaffold(
-          body: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: CalendarWidget(
-                        selectionMode: CalendarSelectionMode.single,
-                        // initialDate: DateTime.now(),
-                        activeMinMaxMonth: 2,
-                        onDateSelected: (date, isChangedMonth) {
-                          if (isChangedMonth) {
-                            logic.changeMonth(date!);
-                          } else {
-                            logic.innerFilterMissions(day: date?.day, missionType: logic.selectedMissionType);
-                          }
-                        },
-                        events: logic.groupMissionsByDate(),
+          body: RefreshIndicator(
+            onRefresh: () => logic.getMissions(showLoading: false),
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: CalendarWidget(
+                          selectionMode: CalendarSelectionMode.single,
+                          // initialDate: DateTime.now(),
+                          activeMinMaxMonth: 2,
+                          onDateSelected: (date, isChangedMonth) {
+                            if (isChangedMonth) {
+                              logic.changeMonth(date!);
+                            } else {
+                              logic.innerFilterMissions(
+                                day: date?.day,
+                                missionType: logic.selectedMissionType,
+                              );
+                            }
+                          },
+                          events: logic.groupMissionsByDate(),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: _ChipsHeaderDelegate(
-                  selectedMissionType: logic.selectedMissionType,
-                  count: logic.missionCountInDateFilter,
-                  onMissionTypeSelected: (missionType) {
-                    setState(() {
-                      logic.innerFilterMissions(day: logic.selectedDay, missionType: missionType);
-                    });
-                  },
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: _ChipsHeaderDelegate(
+                    selectedMissionType: logic.selectedMissionType,
+                    count: logic.missionCountInDateFilter,
+                    onMissionTypeSelected: (missionType) {
+                      setState(() {
+                        logic.innerFilterMissions(
+                          day: logic.selectedDay,
+                          missionType: missionType,
+                        );
+                      });
+                    },
+                  ),
                 ),
-              ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  childCount: logic.filteredMissions.length,
-                  (ctx, index) => _buildMissionItem(logic.filteredMissions[index]),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    childCount: logic.filteredMissions.length,
+                    (ctx, index) =>
+                        _buildMissionItem(logic.filteredMissions[index]),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -104,7 +117,10 @@ class _MissionsScreenState extends State<MissionsScreen> {
             child: InkWell(
               borderRadius: BorderRadius.circular(cardRadius),
               onTap: () async {
-                bool needRefresh = await Get.toNamed(Routes.MISSION_DETAILS, arguments: mission);
+                bool needRefresh = await Get.toNamed(
+                  Routes.MISSION_DETAILS,
+                  arguments: mission,
+                );
 
                 if (needRefresh) {
                   logic.getMissions();
@@ -125,15 +141,25 @@ class _MissionsScreenState extends State<MissionsScreen> {
                                 height: 32,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: MissionStatus.fromCode(mission.status!).color,
+                                  color: MissionStatus.fromCode(
+                                    mission.status!,
+                                  ).color,
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: SvgPicture.asset(MissionStatus.fromCode(mission.status!).icon, color: Colors.white,),
+                                  child: SvgPicture.asset(
+                                    MissionStatus.fromCode(
+                                      mission.status!,
+                                    ).icon,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                               SizedBox(width: 12),
-                              Text(mission.customerName ?? '', style: Theme.of(context).textTheme.labelLarge),
+                              Text(
+                                mission.customerName ?? '',
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
                             ],
                           ),
                         ),
@@ -141,21 +167,33 @@ class _MissionsScreenState extends State<MissionsScreen> {
                           items: [
                             AppPopupMenuItem(
                               title: 'call'.tr,
-                              icon: SvgPicture.asset('assets/icons/call.svg', color: Colors.white),
+                              icon: SvgPicture.asset(
+                                'assets/icons/call.svg',
+                                color: Colors.white,
+                              ),
                               onTap: () {
                                 makeCall(mission.customerPhone ?? '');
                               },
                             ),
                             AppPopupMenuItem(
                               title: 'routing'.tr,
-                              icon: SvgPicture.asset('assets/icons/navigation.svg', color: Colors.white),
+                              icon: SvgPicture.asset(
+                                'assets/icons/navigation.svg',
+                                color: Colors.white,
+                              ),
                               onTap: () {
-                                openNavigation(mission.customerLatitude ?? 0, mission.customerLongitude ?? 0);
+                                openNavigation(
+                                  mission.customerLatitude ?? 0,
+                                  mission.customerLongitude ?? 0,
+                                );
                               },
                             ),
                             AppPopupMenuItem(
                               title: 'add_mission'.tr,
-                              icon: SvgPicture.asset('assets/icons/calendar-add.svg', color: Colors.white),
+                              icon: SvgPicture.asset(
+                                'assets/icons/calendar-add.svg',
+                                color: Colors.white,
+                              ),
                               onTap: () async {
                                 bool result = await Get.toNamed(
                                   Routes.CREATE_MISSION,
@@ -182,7 +220,12 @@ class _MissionsScreenState extends State<MissionsScreen> {
                           width: 16,
                         ),
                         SizedBox(width: 8),
-                        Expanded(child: Text(mission.customerAddress ?? '' , style: Theme.of(context).textTheme.titleMedium)),
+                        Expanded(
+                          child: Text(
+                            mission.customerAddress ?? '',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(height: 8),
@@ -232,7 +275,10 @@ class _MissionsScreenState extends State<MissionsScreen> {
                               color: Theme.of(context).cardTheme.color,
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            child: SvgPicture.asset('assets/icons/pen.svg', color: Theme.of(context).colorScheme.primary,),
+                            child: SvgPicture.asset(
+                              'assets/icons/pen.svg',
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
                         ),
                       ],
@@ -270,10 +316,18 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Function(MissionStatus) onMissionTypeSelected;
   final int count;
 
-  _ChipsHeaderDelegate({required this.selectedMissionType, required this.onMissionTypeSelected, required this.count});
+  _ChipsHeaderDelegate({
+    required this.selectedMissionType,
+    required this.onMissionTypeSelected,
+    required this.count,
+  });
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return Container(
       color: Theme.of(context).colorScheme.surface,
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: bodyPadding),
@@ -282,7 +336,11 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
         physics: BouncingScrollPhysics(),
         child: Row(
           children: [
-            _buildChipsItem(context, missionType: MissionStatus.all, count: count),
+            _buildChipsItem(
+              context,
+              missionType: MissionStatus.all,
+              count: count,
+            ),
             _buildChipsItem(context, missionType: MissionStatus.draft),
             _buildChipsItem(context, missionType: MissionStatus.inProgress),
             // _buildChipsItem(context, missionType: MissionStatus.completed),
@@ -292,7 +350,11 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
     );
   }
 
-  Widget _buildChipsItem(BuildContext context, {required MissionStatus missionType, int? count}) {
+  Widget _buildChipsItem(
+    BuildContext context, {
+    required MissionStatus missionType,
+    int? count,
+  }) {
     return Padding(
       padding: EdgeInsetsDirectional.only(end: 10.0),
       child: InkWell(
@@ -304,24 +366,40 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
           constraints: BoxConstraints(minWidth: 75),
           decoration: BoxDecoration(
             border: Border.all(
-              color: selectedMissionType == missionType ? missionType.color : Theme.of(context).colorScheme.outline,
+              color: selectedMissionType == missionType
+                  ? missionType.color
+                  : Theme.of(context).colorScheme.outline,
               width: 1,
             ),
             borderRadius: BorderRadius.circular(12),
-            color: selectedMissionType == missionType ? missionType.color.withAlpha(25) : Colors.transparent,
+            color: selectedMissionType == missionType
+                ? missionType.color.withAlpha(25)
+                : Colors.transparent,
           ),
           child: Padding(
-            padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8, left: 8),
+            padding: const EdgeInsets.only(
+              top: 8,
+              bottom: 8,
+              right: 8,
+              left: 8,
+            ),
             child: Column(
               children: [
                 if (missionType == MissionStatus.all)
                   Container(
-                    decoration: BoxDecoration(color: AppColors.red, shape: BoxShape.circle),
+                    decoration: BoxDecoration(
+                      color: AppColors.red,
+                      shape: BoxShape.circle,
+                    ),
                     constraints: BoxConstraints(minWidth: 20, minHeight: 20),
                     child: Center(
                       child: Text(
                         count.toString(),
-                        style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -350,7 +428,7 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => /*Get.width < 400 ? 79 : */79; // Adjust based on chip height + padding
+  double get maxExtent => /*Get.width < 400 ? 79 : */ 79; // Adjust based on chip height + padding
 
   @override
   double get minExtent => /*Get.width < 400 ? 79 :*/ 79; // Same as maxExtent to prevent shrinking
@@ -358,6 +436,7 @@ class _ChipsHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
     return oldDelegate is _ChipsHeaderDelegate &&
-        (oldDelegate.selectedMissionType != selectedMissionType || oldDelegate.count != count);
+        (oldDelegate.selectedMissionType != selectedMissionType ||
+            oldDelegate.count != count);
   }
 }

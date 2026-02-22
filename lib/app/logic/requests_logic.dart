@@ -25,10 +25,10 @@ class RequestsLogic extends GetxController {
     var result = await EmployeeRepository.get().getDayOffMonths();
 
     result.fold(
-          (error) {
+      (error) {
         snackError(message: error.message);
       },
-          (response) async {
+      (response) async {
         months = response.data ?? [];
 
         if (months.isNotEmpty) {
@@ -44,18 +44,28 @@ class RequestsLogic extends GetxController {
     );
   }
 
-  getRequests() async {
-    DialogHandler.showLoading('loading_get_requests'.tr);
+  Future<void> getRequests({bool showLoading = true}) async {
+    if (selectedMonth == null) {
+      return;
+    }
 
-    var result = await EmployeeRepository.get().getDayOffs(GetDayOffRequest(month: selectedMonth!));
+    if (showLoading) {
+      DialogHandler.showLoading('loading_get_requests'.tr);
+    }
 
-    DialogHandler.hideLoading();
+    var result = await EmployeeRepository.get().getDayOffs(
+      GetDayOffRequest(month: selectedMonth!),
+    );
+
+    if (showLoading) {
+      DialogHandler.hideLoading();
+    }
 
     result.fold(
-          (error) {
+      (error) {
         snackError(message: error.message);
       },
-          (response) {
+      (response) {
         requests = response.data!;
 
         update();
@@ -66,15 +76,17 @@ class RequestsLogic extends GetxController {
   cancelRequest(String id) async {
     DialogHandler.showLoading('loading_cancel_request'.tr);
 
-    var result = await EmployeeRepository.get().cancelDayOff(CancelDayOffRequest(id: id));
+    var result = await EmployeeRepository.get().cancelDayOff(
+      CancelDayOffRequest(id: id),
+    );
 
     DialogHandler.hideLoading();
 
     result.fold(
-          (error) {
+      (error) {
         snackError(message: error.message);
       },
-          (response) {
+      (response) {
         snackSuccess(message: response.message);
 
         getRequests();

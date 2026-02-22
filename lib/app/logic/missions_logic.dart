@@ -51,8 +51,10 @@ class MissionsLogic extends GetxController {
     getMissions();
   }
 
-  getMissions() async {
-    DialogHandler.showLoading('loading_missions'.tr);
+  Future<void> getMissions({bool showLoading = true}) async {
+    if (showLoading) {
+      DialogHandler.showLoading('loading_missions'.tr);
+    }
 
     var result = await MissionRepository.get().getMissions(
       GetMissionsRequest(
@@ -62,7 +64,9 @@ class MissionsLogic extends GetxController {
       ),
     );
 
-    DialogHandler.hideLoading();
+    if (showLoading) {
+      DialogHandler.hideLoading();
+    }
 
     result.fold(
       (error) {

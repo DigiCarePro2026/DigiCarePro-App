@@ -1,7 +1,6 @@
 import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:digi_care_pro/app/data/repositories/employee_repository.dart';
 import 'package:digi_care_pro/app/data/repositories/notification_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MainLogic extends GetxController{
@@ -38,5 +37,19 @@ class MainLogic extends GetxController{
 
       update();
     });
+  }
+
+  void decrementUnreadMessageCount() {
+    if (unSeenMessageCount <= 0) {
+      return;
+    }
+
+    unSeenMessageCount--;
+    update();
+  }
+
+  void incrementUnreadMessageCount() {
+    unSeenMessageCount++;
+    update();
   }
 }

@@ -86,6 +86,7 @@ const Map<String, String> deDE = {
   "subject_required": "Betreff erforderlich",
   "loading_send_message": "Nachricht wird gesendet",
   "message_send_success": "Nachricht erfolgreich gesendet",
+  "message_marked_as_read": "Nachricht als gelesen markiert",
   "employee_profile": "Mitarbeiterprofil",
   "loading_profile": "Informationen werden geladen",
   "firstname": "Vorname",

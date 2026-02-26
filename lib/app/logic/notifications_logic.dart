@@ -2,6 +2,7 @@ import 'package:digi_care_pro/app/data/enum/page_status.dart';
 import 'package:digi_care_pro/app/data/models/message.dart';
 import 'package:digi_care_pro/app/data/models/paging_model.dart';
 import 'package:digi_care_pro/app/data/repositories/notification_repository.dart';
+import 'package:digi_care_pro/app/logic/main_logic.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:get/get.dart';
 
@@ -94,7 +95,23 @@ class NotificationsLogic extends GetxController {
     await getMessages(reset: true);
   }
 
-  markAsRead({required String messageId}) {
-    NotificationRepository.get().markAsRead(messageId: messageId);
+  Future<bool> markAsRead({required String messageId}) async {
+    final result = await NotificationRepository.get().markAsRead(messageId: messageId);
+
+    return result.fold(
+      (error) {
+        snackError(message: error.message);
+        return false;
+      },
+      (_) {
+        if (Get.isRegistered<MainLogic>()) {
+          final mainLogic = Get.find<MainLogic>();
+          mainLogic.decrementUnreadMessageCount();
+        }
+
+        snackSuccess(message: 'message_marked_as_read'.tr);
+        return true;
+      },
+    );
   }
 }

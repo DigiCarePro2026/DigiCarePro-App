@@ -85,6 +85,7 @@ const Map<String, String> enUS = {
   'subject_required': 'Subject required',
   'loading_send_message': 'Sending message',
   'message_send_success': 'Message sent successfully',
+  'message_marked_as_read': 'Message marked as read',
   'employee_profile': 'Employee profile',
   'loading_profile': 'Getting info',
   'firstname': 'Firstname',

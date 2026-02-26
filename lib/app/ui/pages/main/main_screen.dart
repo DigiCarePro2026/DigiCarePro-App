@@ -48,7 +48,10 @@ class _MainScreenState extends State<MainScreen> {
             actions: [
               InkWell(
                 borderRadius: BorderRadius.circular(16),
-                onTap: () => Get.toNamed(Routes.NOTIFICATIONS),
+                onTap: () async {
+                  await Get.toNamed(Routes.NOTIFICATIONS);
+                  logic.getUnreadMessagesCount();
+                },
                 child: Container(
                   height: 32,
                   decoration: BoxDecoration(

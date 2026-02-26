@@ -99,8 +99,8 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                     return MessageItem(
                       message: logic.messages[index],
                       isInbox: logic.selectedTab == MessagesTab.inbox,
-                      readCallback: (String messageId) {
-                        logic.markAsRead(messageId: messageId);
+                      readCallback: (String messageId) async {
+                        return logic.markAsRead(messageId: messageId);
                       },
                     );
                   },
@@ -116,7 +116,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
 class MessageItem extends StatefulWidget {
   final Message message;
   final bool isInbox;
-  final Function(String messageId) readCallback;
+  final Future<bool> Function(String messageId) readCallback;
 
   const MessageItem({
     super.key,
@@ -132,79 +132,179 @@ class MessageItem extends StatefulWidget {
 class _MessageItemState extends State<MessageItem> {
   bool isExpanded = false;
   static const double cardPadding = 16.0;
+  static const Color unreadAccent = Color(0xFF1B5E20);
 
   @override
   Widget build(BuildContext context) {
+    final isUnread = !widget.message.isRead;
+
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
-        child: Card(
-          child: InkWell(
-            borderRadius: BorderRadius.circular(cardRadius),
-            onTap: () {
-              if (!widget.message.isRead) {
-                widget.readCallback.call(widget.message.id);
+        child: Stack(
+          children: [
+            Card(
+              color: isUnread
+                  ? unreadAccent.withValues(alpha: 0.08)
+                  : Theme.of(context).colorScheme.surface,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(cardRadius),
+                side: BorderSide(
+                  color: isUnread
+                      ? unreadAccent.withValues(alpha: 0.35)
+                      : Theme.of(context).dividerColor,
+                ),
+              ),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(cardRadius),
+                onTap: () async {
+                  if (isUnread) {
+                    final marked = await widget.readCallback.call(widget.message.id);
+                    if (marked) {
+                      widget.message.isRead = true;
+                    }
+                  }
 
-                widget.message.isRead = true;
-              }
-
-              setState(() {
-                isExpanded = !isExpanded;
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(cardPadding),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.isInbox
-                        ? '${'sender'.tr}: ${widget.message.senderName ?? '-'}'
-                        : '${'receiver'.tr}: ${widget.message.receiverName ?? '-'}',
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.message.subject,
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  const SizedBox(height: 12),
-                  AnimatedCrossFade(
-                    firstChild: Text(
-                      widget.message.body!.length > 200
-                          ? widget.message.body!.substring(0, 200)
-                          : widget.message.body!,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    secondChild: Text(
-                      widget.message.body!,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    crossFadeState: isExpanded
-                        ? CrossFadeState.showSecond
-                        : CrossFadeState.showFirst,
-                    duration: const Duration(milliseconds: 300),
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  setState(() {
+                    isExpanded = !isExpanded;
+                  });
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(cardPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        children: [
+                          if (isUnread) ...[
+                            Container(
+                              width: 10,
+                              height: 10,
+                              decoration: const BoxDecoration(
+                                color: unreadAccent,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                          ],
+                          Expanded(
+                            child: Text(
+                              widget.isInbox
+                                  ? '${'sender'.tr}: ${widget.message.senderName ?? '-'}'
+                                  : '${'receiver'.tr}: ${widget.message.receiverName ?? '-'}',
+                              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                fontWeight: isUnread ? FontWeight.w700 : FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
                       Text(
-                        widget.message.sentAt,
-                        style: Theme.of(context).textTheme.titleSmall,
+                        widget.message.subject,
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: isUnread ? FontWeight.w800 : FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      AnimatedCrossFade(
+                        firstChild: Text(
+                          widget.message.body!.length > 200
+                              ? widget.message.body!.substring(0, 200)
+                              : widget.message.body!,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        secondChild: Text(
+                          widget.message.body!,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        crossFadeState: isExpanded
+                            ? CrossFadeState.showSecond
+                            : CrossFadeState.showFirst,
+                        duration: const Duration(milliseconds: 300),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            widget.message.sentAt,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+            if (isUnread)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: CustomPaint(
+                    painter: _DottedRoundedBorderPainter(
+                      color: unreadAccent,
+                      strokeWidth: 2.2,
+                      radius: cardRadius,
+                      dashWidth: 7,
+                      dashGap: 4,
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
+  }
+}
+
+class _DottedRoundedBorderPainter extends CustomPainter {
+  final Color color;
+  final double strokeWidth;
+  final double radius;
+  final double dashWidth;
+  final double dashGap;
+
+  const _DottedRoundedBorderPainter({
+    required this.color,
+    required this.strokeWidth,
+    required this.radius,
+    required this.dashWidth,
+    required this.dashGap,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth;
+
+    final rect = Offset.zero & size;
+    final rrect = RRect.fromRectAndRadius(rect, Radius.circular(radius));
+    final path = Path()..addRRect(rrect);
+
+    for (final metric in path.computeMetrics()) {
+      double distance = 0;
+      while (distance < metric.length) {
+        final next = (distance + dashWidth).clamp(0, metric.length).toDouble();
+        canvas.drawPath(metric.extractPath(distance, next), paint);
+        distance += dashWidth + dashGap;
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _DottedRoundedBorderPainter oldDelegate) {
+    return oldDelegate.color != color ||
+        oldDelegate.strokeWidth != strokeWidth ||
+        oldDelegate.radius != radius ||
+        oldDelegate.dashWidth != dashWidth ||
+        oldDelegate.dashGap != dashGap;
   }
 }

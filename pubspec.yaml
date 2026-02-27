@@ -1,6 +1,6 @@
 name: digi_care_pro
 description: "A new Flutter project."
-version: 1.0.11+11 # change profile version
+version: 3.0.0+14 # change profile version
 
 environment:
   sdk: ^3.9.2

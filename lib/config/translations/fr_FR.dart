@@ -85,6 +85,7 @@ const Map<String, String> frFR = {
   "subject_required": "Sujet requis",
   "loading_send_message": "Envoi du message ...",
   "message_send_success": "Message envoyé avec succès",
+  "message_marked_as_read": "Message marqué comme lu",
   "employee_profile": "Profil de l'employé",
   "loading_profile": "Chargement des informations ...",
   "firstname": "Prénom",

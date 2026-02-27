@@ -1,12 +1,12 @@
 import 'package:digi_care_pro/app/data/constants/pref_key.dart';
 import 'package:digi_care_pro/app/ui/theme/app_theme.dart';
 import 'package:digi_care_pro/config/translations/app_translations.dart';
+import 'package:digi_care_pro/app/logic/main_logic.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'app/data/pref.dart';
@@ -27,12 +27,30 @@ Future<void> main() async {
   await NotificationService.init();
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    _handleIncomingMessageCount(message);
     NotificationService.show(message);
   });
 
   Get.put(MissionEventBus());
 
   runApp(const MyApp());
+}
+
+void _handleIncomingMessageCount(RemoteMessage message) {
+  final data = message.data;
+  final type = (data['type'] ?? data['eventType'] ?? '').toString().toLowerCase();
+  final route = (data['route'] ?? '').toString().toLowerCase();
+
+  final isMessagePush =
+      type.contains('message') ||
+      route.contains('message') ||
+      data.containsKey('messageId');
+
+  if (!isMessagePush) return;
+
+  if (Get.isRegistered<MainLogic>()) {
+    Get.find<MainLogic>().incrementUnreadMessageCount();
+  }
 }
 
 _initFirebaseServices() async {
@@ -42,7 +60,7 @@ _initFirebaseServices() async {
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  NotificationSettings settings = await messaging.requestPermission(
+  await messaging.requestPermission(
     alert: true,
     announcement: false,
     badge: true,

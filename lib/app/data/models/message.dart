@@ -27,7 +27,7 @@ class Message {
     subject: json['subject'],
     body: json['body'],
     sentAt: json['sentAt'],
-    isRead: json['isRead'],
+    isRead: _readBool(json),
   );
 
   static String? _readString(Map<String, dynamic> json, List<String> keys) {
@@ -38,5 +38,29 @@ class Message {
       }
     }
     return null;
+  }
+
+  static bool _readBool(Map<String, dynamic> json) {
+    final value = json['isRead'] ?? json['isSeen'] ?? json['read'] ?? json['seen'];
+
+    if (value is bool) {
+      return value;
+    }
+
+    if (value is num) {
+      return value != 0;
+    }
+
+    if (value is String) {
+      final v = value.trim().toLowerCase();
+      return v == 'true' || v == '1' || v == 'yes';
+    }
+
+    final seenAt = json['seenAt'] ?? json['readAt'];
+    if (seenAt is String && seenAt.trim().isNotEmpty) {
+      return true;
+    }
+
+    return false;
   }
 }

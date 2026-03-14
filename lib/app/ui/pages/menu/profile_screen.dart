@@ -1,5 +1,4 @@
 import 'package:digi_care_pro/app/logic/profile_logic.dart';
-import 'package:digi_care_pro/app/routes/app_pages.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
 import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
@@ -513,7 +512,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   SizedBox(height: 12),
-                  Center(child: Text('v3.0.0', style: Theme.of(context).textTheme.titleSmall,))
+                  Center(child: Text('v3.0.1', style: Theme.of(context).textTheme.titleSmall,))
                 ],
               ),
             ),

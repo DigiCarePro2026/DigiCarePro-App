@@ -62,7 +62,9 @@ class ApiProvider {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          logger.t('onRequest: url: ${options.path}\n ${options.data.toString()}');
+          logger.t(
+            'onRequest: url: ${options.path}\n ${options.data.toString()}',
+          );
 
           /*_requestCount++;
 
@@ -90,14 +92,16 @@ class ApiProvider {
 
           return handler.next(response);
         },
-        onError: (error, handler) async{
+        onError: (error, handler) async {
           if (error.response?.statusCode == 401) {
             return _handle401(error, handler);
           }
 
           logger.e('Error occurred: ${error.message}');
 
-          return handler.next(error); // Continue to the next interceptor or error
+          return handler.next(
+            error,
+          ); // Continue to the next interceptor or error
         },
       ),
     );
@@ -198,7 +202,10 @@ class ApiProvider {
     this.loadingMessage = loadingMessage;
 
     try {
-      Response response = await dio.delete(path, options: Options(headers: headers));
+      Response response = await dio.delete(
+        path,
+        options: Options(headers: headers),
+      );
 
       return _handleResponse(response, fromJson);
     } catch (e) {
@@ -206,11 +213,16 @@ class ApiProvider {
     }
   }
 
-  Future<Either<ApiError, AppResponse<T>>> _handleResponse<T>(Response response, T Function(dynamic)? fromJson) async {
+  Future<Either<ApiError, AppResponse<T>>> _handleResponse<T>(
+    Response response,
+    T Function(dynamic)? fromJson,
+  ) async {
     // _hideLoading();
 
     if (!response.data['isSuccess']) {
-      return Left(ApiError(code: response.statusCode!, message: response.data['message']));
+      return Left(
+        ApiError(code: response.statusCode!, message: response.data['message']),
+      );
     }
 
     T? data;
@@ -229,13 +241,16 @@ class ApiProvider {
   Future<Either<ApiError, T>> _handleError<T>(dynamic e) async {
     // _hideLoading();
 
-    if (e is DioError && e.response != null) {
+    if (e is DioException && e.response != null) {
       switch (e.response!.statusCode) {
         case 400:
-          ApiError error = ApiError(code: e.response!.statusCode!, message: e.response!.data['message'] ?? '');
+          ApiError error = ApiError(
+            code: e.response!.statusCode!,
+            message: e.response!.data['message'] ?? '',
+          );
           return Left(error);
 
-       /* case 401:
+        /* case 401:
           logger.e('Unauthorized error, call refreshToken...');
 
           _handle401(error, handler);
@@ -247,7 +262,10 @@ class ApiProvider {
           break;
 
         case 500:
-          ApiError error = ApiError(code: e.response!.statusCode!, message: 'Server error 500');
+          ApiError error = ApiError(
+            code: e.response!.statusCode!,
+            message: 'Server error 500',
+          );
           return Left(error);
 
         case 503:
@@ -257,11 +275,35 @@ class ApiProvider {
           break;
       }
 
-      ApiError error = ApiError(code: e.response!.statusCode!, message: e.response!.data['message']);
+      ApiError error = ApiError(
+        code: e.response!.statusCode!,
+        message: e.response!.data['message'],
+      );
       return Left(error);
+    } else if (e is DioException) {
+      return Left(ApiError(code: 0, message: _mapDioExceptionMessage(e)));
     } else {
       // Handle other types of errors if needed
-      return Left(ApiError(code: 0, message: 'Failed to complete request: $e'));
+      return Left(ApiError(code: 0, message: 'request_failed_message'.tr));
+    }
+  }
+
+  String _mapDioExceptionMessage(DioException error) {
+    switch (error.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
+        return 'request_timeout_message'.tr;
+      case DioExceptionType.connectionError:
+        return 'request_connection_error_message'.tr;
+      case DioExceptionType.badCertificate:
+        return 'request_connection_error_message'.tr;
+      case DioExceptionType.cancel:
+        return 'request_cancelled_message'.tr;
+      case DioExceptionType.badResponse:
+        return error.response?.data?['message'] ?? 'request_failed_message'.tr;
+      case DioExceptionType.unknown:
+        return 'request_failed_message'.tr;
     }
   }
 
@@ -292,7 +334,10 @@ class ApiProvider {
     );
   }
 
-  Future<void> _handle401(DioError error, ErrorInterceptorHandler handler) async {
+  Future<void> _handle401(
+    DioError error,
+    ErrorInterceptorHandler handler,
+  ) async {
     final requestOptions = error.requestOptions;
 
     if (_isRefreshing) {
@@ -356,7 +401,6 @@ class ApiProvider {
     }
   }
 
-
   bool _isBottomSheetOpen = false;
 
   Future<void> showOfflineBottomSheet() async {
@@ -368,11 +412,15 @@ class ApiProvider {
       context: getX.Get.context!,
       isScrollControlled: true,
       useSafeArea: true,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
+            bottom:
+                MediaQuery.of(context).viewInsets.bottom +
+                MediaQuery.of(context).padding.bottom,
             left: 16,
             right: 16,
             top: 20,
@@ -382,7 +430,10 @@ class ApiProvider {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('offline'.tr, style: Theme.of(context).textTheme.headlineMedium),
+                  Text(
+                    'offline'.tr,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
                   const SizedBox(height: 16),
                   Text(
                     'You are offline, please check device connection'.tr,

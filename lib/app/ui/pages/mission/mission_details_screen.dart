@@ -60,7 +60,10 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                             onTap: () => Get.back(),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Icon(Icons.arrow_back_ios, color: Theme.of(context).colorScheme.onPrimary),
+                              child: Icon(
+                                Icons.arrow_back_ios,
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
                             ),
                           ),
                         ],
@@ -70,9 +73,12 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                         children: [
                           Text(
                             'mission_details'.tr,
-                            style: Theme.of(
-                              context,
-                            ).appBarTheme.titleTextStyle!.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                            style: Theme.of(context).appBarTheme.titleTextStyle!
+                                .copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
+                                ),
                           ),
                         ],
                       ),
@@ -108,12 +114,16 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                       height: 42,
                                       padding: EdgeInsets.all(8),
                                       decoration: BoxDecoration(
-                                        color: Theme.of(context).colorScheme.outline,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.outline,
                                         borderRadius: BorderRadius.circular(50),
                                       ),
                                       child: SvgPicture.asset(
                                         'assets/icons/info.svg',
-                                        color: Theme.of(context).colorScheme.primary,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
                                       ),
                                     ),
                                   ),
@@ -121,19 +131,26 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                   Expanded(
                                     child: Text(
                                       logic.mission.customerName ?? '',
-                                      style: Theme.of(context).textTheme.headlineLarge,
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.headlineLarge,
                                     ),
                                   ),
                                   SizedBox(width: 12),
                                   Container(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      border: BoxBorder.all(color: Theme.of(context).dividerColor, width: 1),
+                                      border: BoxBorder.all(
+                                        color: Theme.of(context).dividerColor,
+                                        width: 1,
+                                      ),
                                     ),
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(30),
                                       onTap: () {
-                                        makeCall(logic.mission.customerPhone ?? '');
+                                        makeCall(
+                                          logic.mission.customerPhone ?? '',
+                                        );
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
@@ -141,7 +158,10 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                           'assets/icons/call.svg',
                                           width: 16,
                                           height: 16,
-                                          colorFilter: ColorFilter.mode(AppColors.callColor, BlendMode.srcIn),
+                                          colorFilter: ColorFilter.mode(
+                                            AppColors.callColor,
+                                            BlendMode.srcIn,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -150,7 +170,10 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                   Container(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      border: BoxBorder.all(color: Theme.of(context).dividerColor, width: 1),
+                                      border: BoxBorder.all(
+                                        color: Theme.of(context).dividerColor,
+                                        width: 1,
+                                      ),
                                     ),
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(30),
@@ -166,7 +189,10 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                           'assets/icons/navigation.svg',
                                           width: 16,
                                           height: 16,
-                                          colorFilter: ColorFilter.mode(AppColors.routingColor, BlendMode.srcIn),
+                                          colorFilter: ColorFilter.mode(
+                                            AppColors.routingColor,
+                                            BlendMode.srcIn,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -186,7 +212,9 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                   Expanded(
                                     child: Text(
                                       logic.mission.customerAddress ?? '',
-                                      style: Theme.of(context).textTheme.titleMedium,
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.titleMedium,
                                     ),
                                   ),
                                 ],
@@ -195,7 +223,9 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                               Container(
                                 padding: const EdgeInsets.all(8.0),
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).dividerColor.withAlpha(100),
+                                  color: Theme.of(
+                                    context,
+                                  ).dividerColor.withAlpha(100),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Row(
@@ -207,8 +237,11 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                     ),
                                     SizedBox(width: 2),
                                     Text(
-                                      logic.mission.plannedStartDateTime!.substring(0, 10),
-                                      style: Theme.of(context).textTheme.titleMedium,
+                                      logic.mission.plannedStartDateTime!
+                                          .substring(0, 10),
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.titleMedium,
                                     ),
                                     SizedBox(width: 16),
                                     SvgPicture.asset(
@@ -218,8 +251,11 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                     ),
                                     SizedBox(width: 2),
                                     Text(
-                                      logic.mission.plannedStartDateTime!.substring(11, 16),
-                                      style: Theme.of(context).textTheme.titleMedium,
+                                      logic.mission.plannedStartDateTime!
+                                          .substring(11, 16),
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.titleMedium,
                                     ),
                                     SvgPicture.asset(
                                       'assets/icons/arrow-long-right.svg',
@@ -227,26 +263,36 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        logic.mission.plannedEndDateTime!.substring(11, 16),
-                                        style: Theme.of(context).textTheme.titleMedium,
+                                        logic.mission.plannedEndDateTime!
+                                            .substring(11, 16),
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.titleMedium,
                                       ),
                                     ),
                                     InkWell(
                                       borderRadius: BorderRadius.circular(8),
                                       onTap: () {
-                                        logic.showChangeDateAndTimeBottomSheet();
+                                        logic
+                                            .showChangeDateAndTimeBottomSheet();
                                       },
                                       child: Container(
                                         width: 28,
                                         height: 28,
                                         padding: EdgeInsets.all(6),
                                         decoration: BoxDecoration(
-                                          color: Theme.of(context).cardTheme.color,
-                                          borderRadius: BorderRadius.circular(4),
+                                          color: Theme.of(
+                                            context,
+                                          ).cardTheme.color,
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
                                         ),
                                         child: SvgPicture.asset(
                                           'assets/icons/pen.svg',
-                                          color: Theme.of(context).colorScheme.primary,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
                                         ),
                                       ),
                                     ),
@@ -292,89 +338,148 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 24, right: 24),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              if (logic.actionType != null && logic.actionType == MissionActionType.done)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 24),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(cardRadius),
-                                      border: BoxBorder.all(color: Theme.of(context).colorScheme.primary, width: 2),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          SvgPicture.asset('assets/icons/check.svg', width: 22),
-                                          SizedBox(width: 8),
-                                          Text(logic.actionType!.title, style: Theme.of(context).textTheme.labelLarge),
-                                        ],
+                        child: RefreshIndicator(
+                          onRefresh: () =>
+                              logic.refreshMissionStatus(refreshLocation: true),
+                          child: SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(
+                              parent: BouncingScrollPhysics(),
+                            ),
+                            child: Column(
+                              children: [
+                                if (logic.actionType != null &&
+                                    logic.actionType == MissionActionType.done)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 24),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          cardRadius,
+                                        ),
+                                        border: BoxBorder.all(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                          width: 2,
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                              if (logic.actionType != null && logic.actionType == MissionActionType.canceled)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 24),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(cardRadius),
-                                      border: BoxBorder.all(color: Theme.of(context).colorScheme.primary, width: 2),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          SvgPicture.asset('assets/icons/cancel.svg', color: AppColors.red, width: 22),
-                                          SizedBox(width: 8),
-                                          Text(logic.actionType!.title, style: Theme.of(context).textTheme.labelLarge),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              if (logic.actionType != null && logic.actionType != MissionActionType.done)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 24),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(cardRadius),
-                                      border: BoxBorder.all(color: Theme.of(context).colorScheme.primary, width: 2),
-                                    ),
-                                    child: InkWell(
-                                      onTap: () => logic.handleActionTap(),
                                       child: Padding(
                                         padding: const EdgeInsets.all(16.0),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
+                                            SvgPicture.asset(
+                                              'assets/icons/check.svg',
+                                              width: 22,
+                                            ),
+                                            SizedBox(width: 8),
                                             Text(
                                               logic.actionType!.title,
-                                              style: Theme.of(context).textTheme.labelLarge,
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.labelLarge,
                                             ),
                                           ],
                                         ),
                                       ),
                                     ),
                                   ),
+                                if (logic.actionType != null &&
+                                    logic.actionType ==
+                                        MissionActionType.canceled)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 24),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          cardRadius,
+                                        ),
+                                        border: BoxBorder.all(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/icons/cancel.svg',
+                                              color: AppColors.red,
+                                              width: 22,
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              logic.actionType!.title,
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.labelLarge,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                if (logic.actionType != null &&
+                                    logic.actionType != MissionActionType.done)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 24),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          cardRadius,
+                                        ),
+                                        border: BoxBorder.all(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: InkWell(
+                                        onTap: () => logic.handleActionTap(),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                logic.actionType!.title,
+                                                style: Theme.of(
+                                                  context,
+                                                ).textTheme.labelLarge,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                GridView.builder(
+                                  itemCount: logic.menuItems.length,
+                                  shrinkWrap: true,
+                                  physics: BouncingScrollPhysics(),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2, // 👈 سه ستون
+                                        mainAxisSpacing:
+                                            16, // فاصله عمودی بین آیتم‌ها
+                                        crossAxisSpacing:
+                                            16, // فاصله افقی بین آیتم‌ها
+                                        childAspectRatio:
+                                            1.2, // نسبت عرض به ارتفاع آیتم‌ها
+                                      ),
+                                  itemBuilder: (ctx, index) =>
+                                      _buildItem(logic.menuItems[index]),
                                 ),
-                              GridView.builder(
-                                itemCount: logic.menuItems.length,
-                                shrinkWrap: true,
-                                physics: BouncingScrollPhysics(),
-                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2, // 👈 سه ستون
-                                  mainAxisSpacing: 16, // فاصله عمودی بین آیتم‌ها
-                                  crossAxisSpacing: 16, // فاصله افقی بین آیتم‌ها
-                                  childAspectRatio: 1.2, // نسبت عرض به ارتفاع آیتم‌ها
-                                ),
-                                itemBuilder: (ctx, index) => _buildItem(logic.menuItems[index]),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -390,7 +495,10 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
 
   _buildItem(MenuModel menu) {
     return Container(
-      decoration: BoxDecoration(color: menu.color.withAlpha(30), borderRadius: BorderRadius.circular(cardRadius)),
+      decoration: BoxDecoration(
+        color: menu.color.withAlpha(30),
+        borderRadius: BorderRadius.circular(cardRadius),
+      ),
       child: InkWell(
         borderRadius: BorderRadius.circular(cardRadius),
         onTap: menu.callback,
@@ -425,5 +533,10 @@ class MenuModel {
   final Color color;
   final VoidCallback? callback;
 
-  MenuModel({required this.title, required this.icon, required this.color, this.callback});
+  MenuModel({
+    required this.title,
+    required this.icon,
+    required this.color,
+    this.callback,
+  });
 }

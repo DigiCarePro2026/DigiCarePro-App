@@ -207,5 +207,12 @@ const Map<String, String> deDE = {
   'pause': 'Pause',
   'work': 'Arbeit',
   'vacation': '*',
+  'request_timeout_message':
+      'Die Anfrage dauert laenger als erwartet. Bitte versuchen Sie es erneut.',
+  'request_connection_error_message':
+      'Verbindungsfehler. Bitte ueberpruefen Sie Ihre Internetverbindung und versuchen Sie es erneut.',
+  'request_cancelled_message': 'Die Anfrage wurde abgebrochen.',
+  'request_failed_message':
+      'Die Anfrage konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut.',
   'without_sign': 'Ohne Unterschrift',
 };

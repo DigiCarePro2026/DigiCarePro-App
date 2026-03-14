@@ -203,6 +203,13 @@ const Map<String, String> enUS = {
   'pause': 'Pause',
   'work': 'Work',
   'vacation': '*',
+  'request_timeout_message':
+      'The request is taking longer than expected. Please try again.',
+  'request_connection_error_message':
+      'Connection error. Please check your internet connection and try again.',
+  'request_cancelled_message': 'The request was cancelled.',
+  'request_failed_message':
+      'The request could not be completed. Please try again.',
 
   'without_sign': 'Without Sign',
 };

@@ -210,6 +210,8 @@ const Map<String, String> enUS = {
   'request_cancelled_message': 'The request was cancelled.',
   'request_failed_message':
       'The request could not be completed. Please try again.',
+  'uploading_signature': 'Uploading signature...',
+  'signature_submitted_verified': 'The signature was submitted successfully.',
 
   'without_sign': 'Without Sign',
 };

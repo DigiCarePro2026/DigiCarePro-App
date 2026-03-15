@@ -281,11 +281,23 @@ class ApiProvider {
       );
       return Left(error);
     } else if (e is DioException) {
-      return Left(ApiError(code: 0, message: _mapDioExceptionMessage(e)));
+      return Left(
+        ApiError(
+          code: 0,
+          message: _mapDioExceptionMessage(e),
+          isTimeout: _isTimeoutException(e),
+        ),
+      );
     } else {
       // Handle other types of errors if needed
       return Left(ApiError(code: 0, message: 'request_failed_message'.tr));
     }
+  }
+
+  bool _isTimeoutException(DioException error) {
+    return error.type == DioExceptionType.connectionTimeout ||
+        error.type == DioExceptionType.sendTimeout ||
+        error.type == DioExceptionType.receiveTimeout;
   }
 
   String _mapDioExceptionMessage(DioException error) {

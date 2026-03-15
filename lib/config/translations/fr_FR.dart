@@ -206,5 +206,14 @@ const Map<String, String> frFR = {
   'pause': 'Pause',
   'work': 'Travail',
   'vacation': 'Vacances',
+  'request_timeout_message':
+      'La requete prend plus de temps que prevu. Veuillez reessayer.',
+  'request_connection_error_message':
+      'Erreur de connexion. Verifiez votre connexion Internet et reessayez.',
+  'request_cancelled_message': 'La requete a ete annulee.',
+  'request_failed_message':
+      'La requete n a pas pu etre terminee. Veuillez reessayer.',
+  'uploading_signature': 'Televersement de la signature...',
+  'signature_submitted_verified': 'La signature a ete transmise avec succes.',
   'without_sign': 'Sans signature',
 };

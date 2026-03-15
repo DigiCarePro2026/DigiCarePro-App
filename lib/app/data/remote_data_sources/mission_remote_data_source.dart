@@ -27,30 +27,60 @@ class MissionRemoteDataSource extends BaseRemoteDataSource {
     return _instance!;
   }
 
-  Future<Either<ApiError, AppResponse<List<Mission>>>> getMissions(GetMissionsRequest request) async =>
-      api.get<List<Mission>>(
-        path: '/mission/employee/${request.year}/${request.month}',
-        queryParameters: request.toJson(),
-        loadingMessage: 'loading_missions'.tr,
-        fromJson: (json) => (json as List).map((json) => Mission.fromJson(json)).toList(),
-      );
+  Future<Either<ApiError, AppResponse<List<Mission>>>> getMissions(
+    GetMissionsRequest request,
+  ) async => api.get<List<Mission>>(
+    path: '/mission/employee/${request.year}/${request.month}',
+    queryParameters: request.toJson(),
+    loadingMessage: 'loading_missions'.tr,
+    fromJson: (json) =>
+        (json as List).map((json) => Mission.fromJson(json)).toList(),
+  );
 
-  Future<Either<ApiError, AppResponse>> cancel(CancelMissionRequest request, {String? loadingMessage}) =>
-      api.post(path: '/mission/${request.missionId}/cancel', body: request.toJson(), loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse<Mission>>> getMissionDetails(
+    String missionId, {
+    String? loadingMessage,
+  }) => api.get<Mission>(
+    path: '/mission/$missionId/details',
+    loadingMessage: loadingMessage,
+    fromJson: (json) => Mission.fromJson(json),
+  );
 
-  Future<Either<ApiError, AppResponse<Mission>>> delayReport(DelayMissionRequest request, {String? loadingMessage}) =>
-      api.post(
-        path: '/mission/${request.missionId}/delay',
-        body: request.toJson(),
-        fromJson: (json) => Mission.fromJson(json),
-        loadingMessage: loadingMessage,
-      );
+  Future<Either<ApiError, AppResponse>> cancel(
+    CancelMissionRequest request, {
+    String? loadingMessage,
+  }) => api.post(
+    path: '/mission/${request.missionId}/cancel',
+    body: request.toJson(),
+    loadingMessage: loadingMessage,
+  );
 
-  Future<Either<ApiError, AppResponse>> reportMission(ReportMissionRequest request, {String? loadingMessage}) =>
-      api.post(path: '/mission/${request.missionId}/report', body: request.toJson(), loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse<Mission>>> delayReport(
+    DelayMissionRequest request, {
+    String? loadingMessage,
+  }) => api.post(
+    path: '/mission/${request.missionId}/delay',
+    body: request.toJson(),
+    fromJson: (json) => Mission.fromJson(json),
+    loadingMessage: loadingMessage,
+  );
 
-  Future<Either<ApiError, AppResponse>> createMission(CreateMissionRequest request, {String? loadingMessage}) =>
-      api.post(path: '/mission/${request.customerId}/add', body: request.toJson());
+  Future<Either<ApiError, AppResponse>> reportMission(
+    ReportMissionRequest request, {
+    String? loadingMessage,
+  }) => api.post(
+    path: '/mission/${request.missionId}/report',
+    body: request.toJson(),
+    loadingMessage: loadingMessage,
+  );
+
+  Future<Either<ApiError, AppResponse>> createMission(
+    CreateMissionRequest request, {
+    String? loadingMessage,
+  }) => api.post(
+    path: '/mission/${request.customerId}/add',
+    body: request.toJson(),
+  );
 
   Future<Either<ApiError, AppResponse>> changeMissionDatetime(
     ChangeMissionDatetimeRequest request, {
@@ -67,11 +97,13 @@ class MissionRemoteDataSource extends BaseRemoteDataSource {
   }) async {
     FormData formData = FormData.fromMap({
       'CompleteWithoutSignature': request.completeWithoutSignature,
-      "signatureFile": request.imageData == null ? null : MultipartFile.fromBytes(
-        request.imageData!,
-        filename: "signature.jpg",
-        contentType: DioMediaType("image", "jpeg"),
-      ),
+      "signatureFile": request.imageData == null
+          ? null
+          : MultipartFile.fromBytes(
+              request.imageData!,
+              filename: "signature.jpg",
+              contentType: DioMediaType("image", "jpeg"),
+            ),
     });
 
     return api.post(
@@ -114,10 +146,19 @@ class MissionRemoteDataSource extends BaseRemoteDataSource {
     fromJson: (actionType) => MissionActionType.values[actionType],
   );
 
-  Future<Either<ApiError, AppResponse>> startMission(StartMissionRequest request, {String? loadingMessage}) =>
-      api.post(path: '/mission/${request.missionId}/start', body: request.toJson(), loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse>> startMission(
+    StartMissionRequest request, {
+    String? loadingMessage,
+  }) => api.post(
+    path: '/mission/${request.missionId}/start',
+    body: request.toJson(),
+    loadingMessage: loadingMessage,
+  );
 
-  Future<Either<ApiError, AppResponse>> manualEnd(ManualEndRequest request, {String? loadingMessage}) => api.post(
+  Future<Either<ApiError, AppResponse>> manualEnd(
+    ManualEndRequest request, {
+    String? loadingMessage,
+  }) => api.post(
     path: '/mission/${request.missionId}/manual-end',
     body: request.toJson(),
     loadingMessage: loadingMessage,

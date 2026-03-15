@@ -214,5 +214,8 @@ const Map<String, String> deDE = {
   'request_cancelled_message': 'Die Anfrage wurde abgebrochen.',
   'request_failed_message':
       'Die Anfrage konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut.',
+  'uploading_signature': 'Unterschrift wird hochgeladen...',
+  'signature_submitted_verified':
+      'Die Unterschrift wurde erfolgreich uebermittelt.',
   'without_sign': 'Ohne Unterschrift',
 };

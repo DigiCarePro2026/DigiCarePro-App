@@ -27,38 +27,95 @@ class MissionRepository {
     return _instance!;
   }
 
-  Future<Either<ApiError, AppResponse<List<Mission>>>> getMissions(GetMissionsRequest request) async =>
-      MissionRemoteDataSource.get().getMissions(request);
+  Future<Either<ApiError, AppResponse<List<Mission>>>> getMissions(
+    GetMissionsRequest request,
+  ) async => MissionRemoteDataSource.get().getMissions(request);
 
-  Future<Either<ApiError, AppResponse>> cancelMission(CancelMissionRequest request, {String? loadingMessage}) =>
-      MissionRemoteDataSource.get().cancel(request, loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse<Mission>>> getMissionDetails(
+    String missionId, {
+    String? loadingMessage,
+  }) => MissionRemoteDataSource.get().getMissionDetails(
+    missionId,
+    loadingMessage: loadingMessage,
+  );
 
-  Future<Either<ApiError, AppResponse<Mission>>> delayReport(DelayMissionRequest request, {String? loadingMessage}) =>
-      MissionRemoteDataSource.get().delayReport(request, loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse>> cancelMission(
+    CancelMissionRequest request, {
+    String? loadingMessage,
+  }) => MissionRemoteDataSource.get().cancel(
+    request,
+    loadingMessage: loadingMessage,
+  );
 
-  Future<Either<ApiError, AppResponse>> reportMission(ReportMissionRequest request, {String? loadingMessage}) =>
-      MissionRemoteDataSource.get().reportMission(request, loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse<Mission>>> delayReport(
+    DelayMissionRequest request, {
+    String? loadingMessage,
+  }) => MissionRemoteDataSource.get().delayReport(
+    request,
+    loadingMessage: loadingMessage,
+  );
 
-  Future<Either<ApiError, AppResponse>> createMission(CreateMissionRequest request, {String? loadingMessage}) =>
-      MissionRemoteDataSource.get().createMission(request, loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse>> reportMission(
+    ReportMissionRequest request, {
+    String? loadingMessage,
+  }) => MissionRemoteDataSource.get().reportMission(
+    request,
+    loadingMessage: loadingMessage,
+  );
+
+  Future<Either<ApiError, AppResponse>> createMission(
+    CreateMissionRequest request, {
+    String? loadingMessage,
+  }) => MissionRemoteDataSource.get().createMission(
+    request,
+    loadingMessage: loadingMessage,
+  );
 
   Future<Either<ApiError, AppResponse>> changeMissionDatetime(
     ChangeMissionDatetimeRequest request, {
     String? loadingMessage,
-  }) => MissionRemoteDataSource.get().changeMissionDatetime(request, loadingMessage: loadingMessage);
+  }) => MissionRemoteDataSource.get().changeMissionDatetime(
+    request,
+    loadingMessage: loadingMessage,
+  );
 
-  Future<Either<ApiError, AppResponse>> uploadSignature(SignatureMissionRequest request, {String? loadingMessage}) =>
-      MissionRemoteDataSource.get().uploadSignature(request, loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse>> uploadSignature(
+    SignatureMissionRequest request, {
+    String? loadingMessage,
+  }) => MissionRemoteDataSource.get().uploadSignature(
+    request,
+    loadingMessage: loadingMessage,
+  );
 
-  Future<Either<ApiError, AppResponse>> uploadDocument(UploadDocMissionRequest request, {String? loadingMessage}) =>
-      MissionRemoteDataSource.get().uploadDocument(request, loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse>> uploadDocument(
+    UploadDocMissionRequest request, {
+    String? loadingMessage,
+  }) => MissionRemoteDataSource.get().uploadDocument(
+    request,
+    loadingMessage: loadingMessage,
+  );
 
-  Future<Either<ApiError, AppResponse<MissionActionType>>> checkMissionStatus(CheckMissionStatusRequest request, {String? loadingMessage}) =>
-      MissionRemoteDataSource.get().checkMissionStatus(request, loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse<MissionActionType>>> checkMissionStatus(
+    CheckMissionStatusRequest request, {
+    String? loadingMessage,
+  }) => MissionRemoteDataSource.get().checkMissionStatus(
+    request,
+    loadingMessage: loadingMessage,
+  );
 
-  Future<Either<ApiError, AppResponse>> startMission(StartMissionRequest request, {String? loadingMessage}) =>
-      MissionRemoteDataSource.get().startMission(request, loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse>> startMission(
+    StartMissionRequest request, {
+    String? loadingMessage,
+  }) => MissionRemoteDataSource.get().startMission(
+    request,
+    loadingMessage: loadingMessage,
+  );
 
-  Future<Either<ApiError, AppResponse>> manualEnd(ManualEndRequest request, {String? loadingMessage}) =>
-      MissionRemoteDataSource.get().manualEnd(request, loadingMessage: loadingMessage);
+  Future<Either<ApiError, AppResponse>> manualEnd(
+    ManualEndRequest request, {
+    String? loadingMessage,
+  }) => MissionRemoteDataSource.get().manualEnd(
+    request,
+    loadingMessage: loadingMessage,
+  );
 }

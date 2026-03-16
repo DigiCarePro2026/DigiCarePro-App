@@ -31,12 +31,14 @@ import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class MissionDetailsLogic extends GetxController {
+  static const Duration _locationCacheTtl = Duration(minutes: 2);
+
   late Mission mission;
   bool isLocationServiceOk = false;
   Position? userLocation;
+  DateTime? _locationExpiresAt;
   MissionActionType? actionType;
   bool isRefreshing = false;
   bool isFetchingLocation = false;
@@ -55,7 +57,7 @@ class MissionDetailsLogic extends GetxController {
       checkMissionStatus(false);
     });*/
 
-    checkMissionStatus(true);
+    checkMissionStatus(false);
 
     super.onReady();
   }
@@ -69,8 +71,20 @@ class MissionDetailsLogic extends GetxController {
   Future<bool> findUserLocation({
     LocationAccuracy accuracy = LocationAccuracy.best,
     Duration? timeLimit,
+    bool forceRefresh = false,
   }) async {
-    if (isFetchingLocation) return false;
+    final now = DateTime.now();
+    final hasValidCachedLocation =
+        userLocation != null &&
+        _locationExpiresAt != null &&
+        now.isBefore(_locationExpiresAt!);
+
+    if (!forceRefresh && hasValidCachedLocation) {
+      isLocationServiceOk = true;
+      return true;
+    }
+
+    if (isFetchingLocation) return hasValidCachedLocation;
 
     isFetchingLocation = true;
     try {
@@ -80,31 +94,37 @@ class MissionDetailsLogic extends GetxController {
       update();
 
       if (!isLocationServiceOk) {
-        return false;
+        return hasValidCachedLocation;
       }
 
-      userLocation = await LocationService.instance.getCurrentLocation(
+      final location = await LocationService.instance.getCurrentLocation(
         context: Get.context!,
         accuracy: accuracy,
         timeLimit: timeLimit,
       );
 
-      if (userLocation == null) {
+      if (location == null) {
+        if (hasValidCachedLocation) {
+          isLocationServiceOk = true;
+          return true;
+        }
         isLocationServiceOk = false;
-        update();
         return false;
       }
 
+      userLocation = location;
+      _locationExpiresAt = now.add(_locationCacheTtl);
       return true;
     } finally {
       isFetchingLocation = false;
+      update();
     }
   }
 
   Future<void> checkMissionStatus(bool hasLoadingForLocation) async {
     await refreshMissionStatus(
       refreshLocation: hasLoadingForLocation,
-      showLoading: true,
+      showLoading: false,
     );
   }
 
@@ -123,16 +143,23 @@ class MissionDetailsLogic extends GetxController {
     }
 
     try {
-      if (refreshLocation || userLocation == null) {
+      final shouldRefreshLocation =
+          refreshLocation ||
+          userLocation == null ||
+          _locationExpiresAt == null ||
+          DateTime.now().isAfter(_locationExpiresAt!);
+
+      if (shouldRefreshLocation) {
         await findUserLocation(
-          accuracy: refreshLocation
-              ? LocationAccuracy.medium
-              : LocationAccuracy.best,
+          accuracy: LocationAccuracy.medium,
           timeLimit: const Duration(seconds: 8),
+          forceRefresh: refreshLocation,
         );
       }
 
-      if (!isLocationServiceOk) {
+      if (!isLocationServiceOk || userLocation == null) {
+        actionType ??= MissionActionType.manualStart;
+        _prepareMenuItems();
         return;
       }
 
@@ -178,7 +205,7 @@ class MissionDetailsLogic extends GetxController {
         return;
       }
 
-      await refreshMissionStatus(refreshLocation: true);
+      await refreshMissionStatus(refreshLocation: false);
     });
   }
 
@@ -363,8 +390,11 @@ class MissionDetailsLogic extends GetxController {
     );
   }
 
-  handleActionTap() async {
-    switch (actionType!) {
+  handleActionTap({MissionActionType? fallbackActionType}) async {
+    final currentActionType = actionType ?? fallbackActionType;
+    if (currentActionType == null) return;
+
+    switch (currentActionType) {
       case MissionActionType.autoStart:
         startMission();
         break;

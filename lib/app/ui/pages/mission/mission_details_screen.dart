@@ -1,20 +1,17 @@
-import 'dart:developer';
-
 import 'package:digi_care_pro/app/data/enum/mission_action_type.dart';
 import 'package:digi_care_pro/app/data/models/mission.dart';
 import 'package:digi_care_pro/app/logic/mission_details_logic.dart';
 import 'package:digi_care_pro/app/ui/theme/app_colors.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
-import 'package:digi_care_pro/app/ui/widgets/secondary_button.dart';
 import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class MissionDetailsScreen extends StatefulWidget {
-  MissionDetailsScreen({super.key, required this.mission});
+  const MissionDetailsScreen({super.key, required this.mission});
 
-  Mission mission;
+  final Mission mission;
 
   @override
   State<MissionDetailsScreen> createState() => _MissionDetailsScreenState();
@@ -31,6 +28,13 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
   Widget build(BuildContext context) {
     return GetBuilder<MissionDetailsLogic>(
       builder: (logic) {
+        final displayedActionType =
+            logic.actionType ?? MissionActionType.manualStart;
+        final isActionable =
+            displayedActionType == MissionActionType.autoStart ||
+            displayedActionType == MissionActionType.manualStart ||
+            displayedActionType == MissionActionType.sign;
+
         return Scaffold(
           body: Stack(
             children: [
@@ -319,23 +323,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                     ),
                   ),
 
-                  if (!logic.isLocationServiceOk)
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: bodyPadding,
-                        bottom: bodyPadding,
-                        left: bodyPadding * 2,
-                        right: bodyPadding * 2,
-                      ),
-                      child: SecondaryButton(
-                        label: 'Location access',
-                        onPressed: () {
-                          logic.checkMissionStatus(true);
-                        },
-                      ),
-                    )
-                  else
-                    Expanded(
+                  Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 24, right: 24),
                         child: RefreshIndicator(
@@ -347,8 +335,8 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                             ),
                             child: Column(
                               children: [
-                                if (logic.actionType != null &&
-                                    logic.actionType == MissionActionType.done)
+                                if (displayedActionType ==
+                                    MissionActionType.done)
                                   Padding(
                                     padding: const EdgeInsets.only(top: 24),
                                     child: Container(
@@ -375,7 +363,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                             ),
                                             SizedBox(width: 8),
                                             Text(
-                                              logic.actionType!.title,
+                                              displayedActionType.title,
                                               style: Theme.of(
                                                 context,
                                               ).textTheme.labelLarge,
@@ -385,9 +373,8 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                       ),
                                     ),
                                   ),
-                                if (logic.actionType != null &&
-                                    logic.actionType ==
-                                        MissionActionType.canceled)
+                                if (displayedActionType ==
+                                    MissionActionType.canceled)
                                   Padding(
                                     padding: const EdgeInsets.only(top: 24),
                                     child: Container(
@@ -415,7 +402,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                             ),
                                             SizedBox(width: 8),
                                             Text(
-                                              logic.actionType!.title,
+                                              displayedActionType.title,
                                               style: Theme.of(
                                                 context,
                                               ).textTheme.labelLarge,
@@ -425,8 +412,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                       ),
                                     ),
                                   ),
-                                if (logic.actionType != null &&
-                                    logic.actionType != MissionActionType.done)
+                                if (isActionable)
                                   Padding(
                                     padding: const EdgeInsets.only(top: 24),
                                     child: Container(
@@ -442,7 +428,10 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                         ),
                                       ),
                                       child: InkWell(
-                                        onTap: () => logic.handleActionTap(),
+                                        onTap: () => logic.handleActionTap(
+                                          fallbackActionType:
+                                              displayedActionType,
+                                        ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(16.0),
                                           child: Row(
@@ -450,7 +439,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                logic.actionType!.title,
+                                                displayedActionType.title,
                                                 style: Theme.of(
                                                   context,
                                                 ).textTheme.labelLarge,

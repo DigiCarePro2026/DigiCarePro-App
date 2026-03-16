@@ -10,6 +10,10 @@ class LocationService {
   LocationService._privateConstructor();
 
   static final LocationService instance = LocationService._privateConstructor();
+  static const Duration _defaultCacheTtl = Duration(minutes: 2);
+  Position? _cachedLocation;
+  DateTime? _cachedLocationExpiresAt;
+  bool _isWarmingUp = false;
 
   /// --- INTERNAL HELPERS ---
 
@@ -110,21 +114,77 @@ class LocationService {
     BuildContext? context,
     LocationAccuracy accuracy = LocationAccuracy.best,
     Duration? timeLimit,
+    bool forceRefresh = false,
+    bool allowCached = true,
+    Duration cacheTtl = _defaultCacheTtl,
   }) async {
+    final cached = getCachedLocation();
+    if (!forceRefresh && allowCached && cached != null) {
+      return cached;
+    }
+
     final ready = await ensurePermissionAndService(context: context);
     if (!ready) return null;
 
     try {
+      Position? position;
       if (timeLimit != null) {
-        return await Geolocator.getCurrentPosition(desiredAccuracy: accuracy).timeout(timeLimit);
+        position = await Geolocator
+            .getCurrentPosition(desiredAccuracy: accuracy)
+            .timeout(timeLimit);
       } else {
-        return await Geolocator.getCurrentPosition(desiredAccuracy: accuracy);
+        position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: accuracy,
+        );
       }
+
+      _cacheLocation(position, ttl: cacheTtl);
+      return position;
     } on TimeoutException {
-      return null;
+      return allowCached ? cached : null;
     } catch (e) {
       // handle other errors if needed
+      return allowCached ? cached : null;
+    }
+  }
+
+  Position? getCachedLocation() {
+    if (_cachedLocation == null || _cachedLocationExpiresAt == null) {
       return null;
+    }
+    if (DateTime.now().isAfter(_cachedLocationExpiresAt!)) {
+      return null;
+    }
+    return _cachedLocation;
+  }
+
+  void _cacheLocation(Position position, {Duration ttl = _defaultCacheTtl}) {
+    _cachedLocation = position;
+    _cachedLocationExpiresAt = DateTime.now().add(ttl);
+  }
+
+  Future<void> warmUpLocationCache({
+    Duration ttl = const Duration(minutes: 5),
+  }) async {
+    if (_isWarmingUp) return;
+
+    final hasValidCache = getCachedLocation() != null;
+    if (hasValidCache) return;
+
+    _isWarmingUp = true;
+    try {
+      final position = await getCurrentLocation(
+        context: null,
+        accuracy: LocationAccuracy.medium,
+        timeLimit: const Duration(seconds: 5),
+        allowCached: false,
+        cacheTtl: ttl,
+      );
+      if (position != null) {
+        _cacheLocation(position, ttl: ttl);
+      }
+    } finally {
+      _isWarmingUp = false;
     }
   }
 }

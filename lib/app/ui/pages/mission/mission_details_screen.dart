@@ -28,6 +28,7 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
   Widget build(BuildContext context) {
     return GetBuilder<MissionDetailsLogic>(
       builder: (logic) {
+        final hasResolvedInitialAction = logic.hasResolvedInitialAction;
         final displayedActionType =
             logic.actionType ?? MissionActionType.manualStart;
         final isActionable =
@@ -335,7 +336,8 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                             ),
                             child: Column(
                               children: [
-                                if (displayedActionType ==
+                                if (hasResolvedInitialAction &&
+                                    displayedActionType ==
                                     MissionActionType.done)
                                   Padding(
                                     padding: const EdgeInsets.only(top: 24),
@@ -373,7 +375,8 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                       ),
                                     ),
                                   ),
-                                if (displayedActionType ==
+                                if (hasResolvedInitialAction &&
+                                    displayedActionType ==
                                     MissionActionType.canceled)
                                   Padding(
                                     padding: const EdgeInsets.only(top: 24),
@@ -412,7 +415,54 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                       ),
                                     ),
                                   ),
-                                if (isActionable)
+                                if (!hasResolvedInitialAction)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 24),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          cardRadius,
+                                        ),
+                                        border: BoxBorder.all(
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.primary,
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 18,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              width: 18,
+                                              height: 18,
+                                              child:
+                                                  CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                    color: Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary,
+                                                  ),
+                                            ),
+                                            SizedBox(width: 10),
+                                            Text(
+                                              'loading_check_mission_status'.tr,
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.labelLarge,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                if (hasResolvedInitialAction && isActionable)
                                   Padding(
                                     padding: const EdgeInsets.only(top: 24),
                                     child: Container(

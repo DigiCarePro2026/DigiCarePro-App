@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:digi_care_pro/app/data/api/api_models/change_mission_datetime.dart';
@@ -6,6 +7,7 @@ import 'package:digi_care_pro/app/data/enum/mission_status.dart';
 import 'package:digi_care_pro/app/data/models/customer.dart';
 import 'package:digi_care_pro/app/data/models/mission.dart';
 import 'package:digi_care_pro/app/data/repositories/mission_repository.dart';
+import 'package:digi_care_pro/app/logic/main_logic.dart';
 import 'package:digi_care_pro/app/ui/widgets/app_text_area_field.dart';
 import 'package:digi_care_pro/app/ui/widgets/calendar_widget.dart';
 import 'package:digi_care_pro/app/ui/widgets/primary_button.dart';
@@ -13,14 +15,18 @@ import 'package:digi_care_pro/app/ui/widgets/secondary_button.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:digi_care_pro/app/ui/widgets/time_picker.dart';
 import 'package:digi_care_pro/app/utils/dialog_handler.dart';
+import 'package:digi_care_pro/app/utils/location_service.dart';
 import 'package:digi_care_pro/app/utils/mission_event_bus.dart';
 import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MissionsLogic extends GetxController {
+  static const Duration _locationWarmupInterval = Duration(minutes: 5);
+
   DateTime _selectedDateTime = DateTime.now();
   Customer? selectedCustomer;
+  Timer? _locationWarmupTimer;
 
   int? selectedDay;
   List<Mission> allMissions = [], filteredMissions = [];
@@ -31,6 +37,7 @@ class MissionsLogic extends GetxController {
   @override
   void onReady() {
     getMissions();
+    _startLocationWarmup();
 
     MissionEventBus eventBus = Get.find();
 
@@ -43,6 +50,29 @@ class MissionsLogic extends GetxController {
     });
 
     super.onReady();
+  }
+
+  @override
+  void onClose() {
+    _locationWarmupTimer?.cancel();
+    super.onClose();
+  }
+
+  void _startLocationWarmup() {
+    _locationWarmupTimer?.cancel();
+    _warmUpLocationCache();
+    _locationWarmupTimer = Timer.periodic(_locationWarmupInterval, (_) {
+      _warmUpLocationCache();
+    });
+  }
+
+  Future<void> _warmUpLocationCache() async {
+    if (!Get.isRegistered<MainLogic>()) return;
+    if (Get.find<MainLogic>().selectedPage != 1) return;
+
+    await LocationService.instance.warmUpLocationCache(
+      ttl: _locationWarmupInterval,
+    );
   }
 
   void onCustomerSelected(customer) {

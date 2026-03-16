@@ -7,6 +7,7 @@ class MainLogic extends GetxController{
 
   List<Customer> employeeCustomers = [];
   int unSeenMessageCount = 0;
+  int selectedPage = 1;
 
   @override
   Future<void> onReady() async {
@@ -50,6 +51,12 @@ class MainLogic extends GetxController{
 
   void incrementUnreadMessageCount() {
     unSeenMessageCount++;
+    update();
+  }
+
+  void setSelectedPage(int index) {
+    if (selectedPage == index) return;
+    selectedPage = index;
     update();
   }
 }

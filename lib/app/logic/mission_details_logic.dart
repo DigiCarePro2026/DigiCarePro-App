@@ -33,13 +33,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 class MissionDetailsLogic extends GetxController {
-  static const Duration _locationCacheTtl = Duration(minutes: 2);
-
   late Mission mission;
   bool isLocationServiceOk = false;
   Position? userLocation;
-  DateTime? _locationExpiresAt;
   MissionActionType? actionType;
+  bool hasResolvedInitialAction = false;
   bool isRefreshing = false;
   bool isFetchingLocation = false;
   bool isCheckingMissionStatus = false;
@@ -73,11 +71,11 @@ class MissionDetailsLogic extends GetxController {
     Duration? timeLimit,
     bool forceRefresh = false,
   }) async {
-    final now = DateTime.now();
-    final hasValidCachedLocation =
-        userLocation != null &&
-        _locationExpiresAt != null &&
-        now.isBefore(_locationExpiresAt!);
+    final cachedLocation = LocationService.instance.getCachedLocation();
+    final hasValidCachedLocation = cachedLocation != null;
+    if (hasValidCachedLocation) {
+      userLocation = cachedLocation;
+    }
 
     if (!forceRefresh && hasValidCachedLocation) {
       isLocationServiceOk = true;
@@ -98,9 +96,11 @@ class MissionDetailsLogic extends GetxController {
       }
 
       final location = await LocationService.instance.getCurrentLocation(
-        context: Get.context!,
+        context: null,
         accuracy: accuracy,
         timeLimit: timeLimit,
+        forceRefresh: forceRefresh,
+        allowCached: true,
       );
 
       if (location == null) {
@@ -113,7 +113,6 @@ class MissionDetailsLogic extends GetxController {
       }
 
       userLocation = location;
-      _locationExpiresAt = now.add(_locationCacheTtl);
       return true;
     } finally {
       isFetchingLocation = false;
@@ -143,11 +142,15 @@ class MissionDetailsLogic extends GetxController {
     }
 
     try {
+      final cachedLocation = LocationService.instance.getCachedLocation();
+      if (!refreshLocation && cachedLocation != null) {
+        userLocation = cachedLocation;
+        isLocationServiceOk = true;
+      }
+
       final shouldRefreshLocation =
           refreshLocation ||
-          userLocation == null ||
-          _locationExpiresAt == null ||
-          DateTime.now().isAfter(_locationExpiresAt!);
+          userLocation == null;
 
       if (shouldRefreshLocation) {
         await findUserLocation(
@@ -186,9 +189,22 @@ class MissionDetailsLogic extends GetxController {
       if (showLoading) {
         DialogHandler.hideLoading();
       }
+      _resolveInitialAction();
       _scheduleNextAutoRefresh();
       isCheckingMissionStatus = false;
       isRefreshing = false;
+    }
+  }
+
+  void _resolveInitialAction() {
+    if (hasResolvedInitialAction) return;
+
+    hasResolvedInitialAction = true;
+    actionType ??= MissionActionType.manualStart;
+    if (menuItems.isEmpty) {
+      _prepareMenuItems();
+    } else {
+      update();
     }
   }
 

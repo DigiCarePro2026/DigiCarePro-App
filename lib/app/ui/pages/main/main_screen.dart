@@ -29,6 +29,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     Get.put(logic);
+    logic.setSelectedPage(widget.currentPage);
 
     widget._pages = [CustomerListScreen(), MissionsScreen(), ProfileScreen()];
 
@@ -121,6 +122,7 @@ class _MainScreenState extends State<MainScreen> {
               setState(() {
                 widget.currentPage = index;
               });
+              logic.setSelectedPage(index);
             },
             destinations: [
               NavigationDestination(

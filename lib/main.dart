@@ -46,10 +46,20 @@ void _handleIncomingMessageCount(RemoteMessage message) {
       route.contains('message') ||
       data.containsKey('messageId');
 
-  if (!isMessagePush) return;
+  if (isMessagePush) {
+    if (Get.isRegistered<MainLogic>()) {
+      Get.find<MainLogic>().incrementUnreadMessageCount();
+    }
+    return;
+  }
 
-  if (Get.isRegistered<MainLogic>()) {
-    Get.find<MainLogic>().incrementUnreadMessageCount();
+  if (!Get.isRegistered<MainLogic>() || !Get.isRegistered<MissionEventBus>()) {
+    return;
+  }
+
+  final isMissionTabActive = Get.find<MainLogic>().selectedPage == 1;
+  if (isMissionTabActive) {
+    Get.find<MissionEventBus>().sendUpdate(true);
   }
 }
 

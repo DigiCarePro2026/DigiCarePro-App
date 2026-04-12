@@ -7,12 +7,12 @@ workflows:
       xcode: latest
       cocoapods: default
 
-    integrations:
-      app_store_connect: Codemagic   # 👈 MUST match your integration name exactly
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: de.digicarepro.employee
 
-    ios_signing:
-      distribution_type: app_store
-      bundle_identifier: de.digicarepro.employee
+    integrations:
+      app_store_connect: Codemagic   # must match your integration name
 
     triggering:
       events:
@@ -38,4 +38,4 @@ workflows:
     publishing:
       app_store_connect:
         auth: integration
-        submit_to_testflight: true   # 👈 THIS sends it to TestFlight
+        submit_to_testflight: true

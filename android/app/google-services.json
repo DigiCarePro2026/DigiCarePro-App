@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "52634179125",
+    "project_id": "digicarepro-ec445",
+    "storage_bucket": "digicarepro-ec445.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52634179125:android:af7492e9337fb6cff1837c",
+        "android_client_info": {
+          "package_name": "com.sb1392.DigiApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIWqyOMXKPBz6zed42ZasYuDsSeL7Ns04"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52634179125:android:a3e68ee4c4264624f1837c",
+        "android_client_info": {
+          "package_name": "de.digicarepro.employee"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIWqyOMXKPBz6zed42ZasYuDsSeL7Ns04"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

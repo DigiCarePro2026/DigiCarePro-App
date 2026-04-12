@@ -1,0 +1,1 @@
+const defaultServerUrl = 'https://appapi.digicarepro.de/api';

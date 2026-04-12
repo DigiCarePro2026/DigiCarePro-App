@@ -1,0 +1,75 @@
+name: digi_care_pro
+description: "A new Flutter project."
+version: 3.2.0+16 # change profile version
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_localizations:
+    sdk: flutter
+
+  intl:
+  get: ^4.7.3
+  flutter_svg:
+  shared_preferences:
+  dio:
+  dartz:
+  internet_connection_checker:
+  logger: ^2.6.1
+  dropdown_search: ^6.0.2
+  url_launcher: ^6.3.2
+  syncfusion_flutter_signaturepad: ^31.2.2
+#  camera: ^0.11.3
+  firebase_core: ^4.2.0
+  firebase_messaging: ^16.0.3
+  geolocator: 14.0.2
+  device_info_plus: 11.5.0
+  hardware_button_listener: 0.0.1
+  popup_menu_plus: 0.0.6
+  pdf: ^3.11.3
+  path_provider: ^2.1.5
+  image_picker: 1.0.7
+  flutter_image_compress: 2.4.0
+  flutter_local_notifications: 19.5.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+    android: "launcher_icon"
+    ios: true
+    image_path: "assets/images/logo.png"
+    min_sdk_android: 21
+
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/icons/
+    - assets/images/
+
+  fonts:
+    - family: NotoSans
+      fonts:
+        - asset: assets/fonts/NotoSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/NotoSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/NotoSans-Bold.ttf
+          weight: 700

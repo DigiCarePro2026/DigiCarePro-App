@@ -1,11 +1,18 @@
 workflows:
   ios-workflow:
-    name: iOS Build (IPA)
+    name: iOS Build (IPA + TestFlight)
 
     environment:
       flutter: stable
       xcode: latest
       cocoapods: default
+
+    integrations:
+      app_store_connect: Codemagic   # 👈 MUST match your integration name exactly
+
+    ios_signing:
+      distribution_type: app_store
+      bundle_identifier: de.digicarepro.employee
 
     triggering:
       events:
@@ -13,8 +20,7 @@ workflows:
 
     scripts:
       - name: Get Flutter packages
-        script: |
-          flutter pub get
+        script: flutter pub get
 
       - name: Clean iOS build
         script: |
@@ -24,8 +30,12 @@ workflows:
           cd ..
 
       - name: Build IPA
-        script: |
-          flutter build ipa
+        script: flutter build ipa
 
     artifacts:
       - build/ios/ipa/*.ipa
+
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true   # 👈 THIS sends it to TestFlight

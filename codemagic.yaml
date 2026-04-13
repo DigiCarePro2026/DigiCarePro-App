@@ -12,7 +12,7 @@ workflows:
         bundle_identifier: de.digicarepro.employee
 
     integrations:
-      app_store_connect: Codemagic   # must match your integration name
+      app_store_connect: DigiCarePro   # must match your integration name
 
     triggering:
       events:

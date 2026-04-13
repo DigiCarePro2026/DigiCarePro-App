@@ -8,7 +8,7 @@ workflows:
       cocoapods: default
 
       groups:
-        - certificate_credentials   # 👈 THIS IS THE FIX
+        - certificate_credentials
 
       ios_signing:
         distribution_type: app_store
@@ -21,38 +21,38 @@ workflows:
       events:
         - push
 
-scripts:
-  - name: Get Flutter packages
-    script: flutter pub get
+    scripts:
+      - name: Get Flutter packages
+        script: flutter pub get
 
-  - name: Clean iOS build
-    script: |
-      cd ios
-      rm -rf Pods Podfile.lock
-      pod repo update
-      cd ..
+      - name: Clean iOS build
+        script: |
+          cd ios
+          rm -rf Pods Podfile.lock
+          pod repo update
+          cd ..
 
-  - name: Create export options
-    script: |
-      cat > /Users/builder/exportOptions.plist <<EOF
-      <?xml version="1.0" encoding="UTF-8"?>
-      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
-      "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-      <plist version="1.0">
-      <dict>
-          <key>method</key>
-          <string>app-store</string>
-          <key>signingStyle</key>
-          <string>automatic</string>
-      </dict>
-      </plist>
-      EOF
+      - name: Create export options
+        script: |
+          cat > /Users/builder/exportOptions.plist <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+          "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>app-store</string>
+              <key>signingStyle</key>
+              <string>automatic</string>
+          </dict>
+          </plist>
+          EOF
 
-  - name: Build IPA
-    script: |
-      flutter build ipa \
-        --release \
-        --export-options-plist=/Users/builder/exportOptions.plist
+      - name: Build IPA
+        script: |
+          flutter build ipa \
+            --release \
+            --export-options-plist=/Users/builder/exportOptions.plist
 
     artifacts:
       - build/ios/ipa/*.ipa

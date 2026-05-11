@@ -66,10 +66,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDfUMxPQ-AOnUHcZoucnpbUThsunDR_RPs',
-    appId: '1:52634179125:ios:2e4ddd43145c392df1837c',
+    appId: '1:52634179125:ios:e1475c010b34f0aaf1837c',
     messagingSenderId: '52634179125',
     projectId: 'digicarepro-ec445',
     storageBucket: 'digicarepro-ec445.firebasestorage.app',
-    iosBundleId: 'com.sb1392.DigiApp',
+    iosBundleId: 'de.digicarepro.employee',
   );
 }

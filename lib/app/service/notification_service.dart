@@ -3,16 +3,16 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 class NotificationService {
   static final FlutterLocalNotificationsPlugin _notifications =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   static Future<void> init() async {
     const androidSettings =
-    AndroidInitializationSettings('@mipmap/launcher_icon');
+        AndroidInitializationSettings('@mipmap/launcher_icon');
 
     const iosSettings = DarwinInitializationSettings();
 
     const settings =
-    InitializationSettings(android: androidSettings, iOS: iosSettings);
+        InitializationSettings(android: androidSettings, iOS: iosSettings);
 
     await _notifications.initialize(settings);
   }
@@ -25,8 +25,14 @@ class NotificationService {
       priority: Priority.high,
     );
 
+    const iosDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+
     const notificationDetails =
-    NotificationDetails(android: androidDetails);
+        NotificationDetails(android: androidDetails, iOS: iosDetails);
 
     await _notifications.show(
       DateTime.now().millisecondsSinceEpoch ~/ 1000,

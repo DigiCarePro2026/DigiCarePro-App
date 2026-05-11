@@ -111,8 +111,16 @@ class LoginLogic extends GetxController {
     );
   }
 
-  login({required String email, required String password, required String companyId}) async {
-    LoginRequest request = LoginRequest(email: email, password: password, companyId: companyId);
+  login({
+    required String email,
+    required String password,
+    required String companyId,
+  }) async {
+    LoginRequest request = LoginRequest(
+      email: email,
+      password: password,
+      companyId: companyId,
+    );
 
     DialogHandler.showLoading('loading_message_login'.tr);
 
@@ -145,18 +153,34 @@ class LoginLogic extends GetxController {
   }
 
   _registerDevice() async {
-    String? deviceId = await getDeviceUniqueId();
+    try {
+      String? deviceId = await getDeviceUniqueId();
 
-    if (Platform.isAndroid) {
-      final String? fbToken = await FirebaseMessaging.instance.getToken();
+      if (Platform.isAndroid || Platform.isIOS) {
+        if (Platform.isIOS) {
+          final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+          debugPrint('apns token : $apnsToken');
+        }
 
-      debugPrint('firebase token : $fbToken');
+        final String? fbToken = await FirebaseMessaging.instance.getToken();
 
-      var result = await AccountRepository.get().registerDevice(
-        RegisterDeviceRequest(deviceId: deviceId, deviceType: Platform.isAndroid ? 'Android' : 'Ios', token: fbToken),
-      );
+        debugPrint('firebase token : $fbToken');
 
-      result.fold((error) {}, (response) {});
+        var result = await AccountRepository.get().registerDevice(
+          RegisterDeviceRequest(
+            deviceId: deviceId,
+            deviceType: Platform.isAndroid ? 'Android' : 'Ios',
+            token: fbToken,
+          ),
+        );
+
+        result.fold(
+          (error) => debugPrint('register device failed : ${error.message}'),
+          (response) => debugPrint('register device succeeded'),
+        );
+      }
+    } catch (error) {
+      debugPrint('register device error : $error');
     }
   }
 

@@ -24,8 +24,12 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
   LoginLogic logic = LoginLogic();
   bool _isKeyboardVisible = false;
 
-  final _emailController = TextEditingController(text: kDebugMode ? 'ahmad.ab1993@gmail.com' : '');
-  final _passwordController = TextEditingController(text: kDebugMode ? '123456' : '');
+  final _emailController = TextEditingController(
+    text: kDebugMode ? 'ahmad.ab1993@gmail.com' : '',
+  );
+  final _passwordController = TextEditingController(
+    text: kDebugMode ? '123456' : '',
+  );
 
   @override
   void initState() {
@@ -70,7 +74,12 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                         if (!_isKeyboardVisible)
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [Image.asset('assets/images/logo2.png', height: 50)],
+                            children: [
+                              Image.asset(
+                                'assets/images/logo2.png',
+                                height: 50,
+                              ),
+                            ],
                           ),
                         SizedBox(height: 50),
                         Text(
@@ -81,7 +90,10 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
-                        Text('login_caption'.tr, style: Theme.of(context).textTheme.bodyMedium),
+                        Text(
+                          'login_caption'.tr,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
                         SizedBox(height: 32),
                         AutofillGroup(
                           child: Column(
@@ -115,10 +127,13 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   'forget_pass'.tr,
-                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    color: Theme.of(context).colorScheme.primary,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyMedium!
+                                      .copyWith(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                 ),
                               ),
                             ),
@@ -134,6 +149,54 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                             );
                           },
                         ),
+
+                        SizedBox(height: 16),
+
+                        OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: const Size(double.infinity, 52),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: () async {
+                            await launchUrl(
+                              Uri.parse(
+                                'https://panel.digicarepro.de/auth/sign-up',
+                              ),
+                              mode: LaunchMode.externalApplication,
+                            );
+                          },
+                          child: const Text('Jetzt kostenlos testen'),
+                        ),
+
+                        SizedBox(height: 12),
+
+                        OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: const Size(double.infinity, 52),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: () async {
+                            await launchUrl(
+                              Uri.parse(
+                                'https://calendly.com/digicarepro-info',
+                              ),
+                              mode: LaunchMode.externalApplication,
+                            );
+                          },
+                          child: const Text('Live-Demo vereinbaren'),
+                        ),
+
+                        SizedBox(height: 16),
+
+                        Text(
+                          'DigiCarePro ist eine digitale Plattform für ambulante Pflegedienste und Betreuungsdienste.',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
                       ],
                     ),
                   ),
@@ -144,7 +207,9 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                         InkWell(
                           borderRadius: BorderRadius.circular(8),
                           onTap: () => launchUrl(
-                            Uri.parse('https://www.instagram.com/digicarepro?igsh=MWpueGV5Z3FrOXlibQ=='),
+                            Uri.parse(
+                              'https://www.instagram.com/digicarepro?igsh=MWpueGV5Z3FrOXlibQ==',
+                            ),
                             mode: LaunchMode.externalApplication,
                           ),
                           child: Padding(
@@ -159,7 +224,9 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                         InkWell(
                           borderRadius: BorderRadius.circular(8),
                           onTap: () => launchUrl(
-                            Uri.parse('https://www.facebook.com/share/16gba7n8fi/?mibextid=wwXIfr'),
+                            Uri.parse(
+                              'https://www.facebook.com/share/16gba7n8fi/?mibextid=wwXIfr',
+                            ),
                             mode: LaunchMode.externalApplication,
                           ),
                           child: Padding(

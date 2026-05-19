@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:digi_care_pro/app/data/constants/pref_key.dart';
 import 'package:digi_care_pro/app/ui/theme/app_theme.dart';
 import 'package:digi_care_pro/config/translations/app_translations.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app/data/pref.dart';
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
+import 'app/service/device_registration_service.dart';
 import 'app/service/notification_service.dart';
 import 'app/utils/hardware_button_combo_listener.dart';
 import 'app/utils/mission_event_bus.dart';
@@ -30,6 +33,8 @@ Future<void> main() async {
   await Pref.init();
   HardwareButtonComboListener().startListening();
   await _initFirebaseServices();
+  DeviceRegistrationService.start();
+  unawaited(DeviceRegistrationService.registerCurrentDevice());
 
   await NotificationService.init();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);

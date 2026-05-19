@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:digi_care_pro/app/data/constants/pref_key.dart';
 import 'package:digi_care_pro/app/ui/theme/app_theme.dart';
 import 'package:digi_care_pro/config/translations/app_translations.dart';
@@ -12,19 +14,30 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app/data/pref.dart';
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
+import 'app/service/device_registration_service.dart';
 import 'app/service/notification_service.dart';
 import 'app/utils/hardware_button_combo_listener.dart';
 import 'app/utils/mission_event_bus.dart';
 import 'firebase_options.dart';
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Pref.init();
   HardwareButtonComboListener().startListening();
-  _initFirebaseServices();
+  await _initFirebaseServices();
+  DeviceRegistrationService.start();
+  unawaited(DeviceRegistrationService.registerCurrentDevice());
 
   await NotificationService.init();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     _handleIncomingMessageCount(message);
@@ -38,11 +51,12 @@ Future<void> main() async {
 
 void _handleIncomingMessageCount(RemoteMessage message) {
   final data = message.data;
-  final type = (data['type'] ?? data['eventType'] ?? '').toString().toLowerCase();
+  final type = (data['type'] ?? data['eventType'] ?? '')
+      .toString()
+      .toLowerCase();
   final route = (data['route'] ?? '').toString().toLowerCase();
 
-  final isMessagePush =
-      type.contains('message') ||
+  final isMessagePush = type.contains('message') ||
       route.contains('message') ||
       data.containsKey('messageId');
 
@@ -63,7 +77,7 @@ void _handleIncomingMessageCount(RemoteMessage message) {
   }
 }
 
-_initFirebaseServices() async {
+Future<void> _initFirebaseServices() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -77,6 +91,12 @@ _initFirebaseServices() async {
     carPlay: false,
     criticalAlert: false,
     provisional: false,
+    sound: true,
+  );
+
+  await messaging.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
     sound: true,
   );
 }
@@ -95,14 +115,19 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       translations: AppTranslations(),
-      supportedLocales: [Locale('en', 'US'), Locale('fr', 'FR'), Locale('de', 'DE')],
+      supportedLocales: [
+        Locale('en', 'US'),
+        Locale('fr', 'FR'),
+        Locale('de', 'DE'),
+      ],
       locale: Locale(Pref.getString(PrefKey.locale) ?? 'de'),
       themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       builder: (context, child) {
         final bg = Theme.of(context).scaffoldBackgroundColor;
-        final onLightBg = ThemeData.estimateBrightnessForColor(bg) == Brightness.light;
+        final onLightBg =
+            ThemeData.estimateBrightnessForColor(bg) == Brightness.light;
 
         SystemChrome.setSystemUIOverlayStyle(
           SystemUiOverlayStyle(

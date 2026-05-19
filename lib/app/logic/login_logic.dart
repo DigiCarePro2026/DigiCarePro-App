@@ -1,18 +1,16 @@
-import 'dart:io';
+import 'dart:async';
 
 import 'package:digi_care_pro/app/data/api/api_models/login.dart';
 import 'package:digi_care_pro/app/data/api/api_models/pre_login.dart';
-import 'package:digi_care_pro/app/data/api/api_models/register_device.dart';
 import 'package:digi_care_pro/app/data/api/api_provider.dart';
 import 'package:digi_care_pro/app/data/models/company.dart';
 import 'package:digi_care_pro/app/data/repositories/account_repository.dart';
 import 'package:digi_care_pro/app/routes/app_routes.dart';
+import 'package:digi_care_pro/app/service/device_registration_service.dart';
 import 'package:digi_care_pro/app/ui/theme/app_dimens.dart';
 import 'package:digi_care_pro/app/ui/widgets/primary_button.dart';
 import 'package:digi_care_pro/app/ui/widgets/snack.dart';
 import 'package:digi_care_pro/app/utils/dialog_handler.dart';
-import 'package:digi_care_pro/app/utils/utils.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -111,8 +109,16 @@ class LoginLogic extends GetxController {
     );
   }
 
-  login({required String email, required String password, required String companyId}) async {
-    LoginRequest request = LoginRequest(email: email, password: password, companyId: companyId);
+  login({
+    required String email,
+    required String password,
+    required String companyId,
+  }) async {
+    LoginRequest request = LoginRequest(
+      email: email,
+      password: password,
+      companyId: companyId,
+    );
 
     DialogHandler.showLoading('loading_message_login'.tr);
 
@@ -134,7 +140,7 @@ class LoginLogic extends GetxController {
         TextInput.finishAutofillContext();
 
         if (!kIsWeb) {
-          await _registerDevice();
+          unawaited(DeviceRegistrationService.registerCurrentDevice());
         }
 
         await _getProfile();
@@ -142,22 +148,6 @@ class LoginLogic extends GetxController {
         // snackSuccess(message: response.message);
       },
     );
-  }
-
-  _registerDevice() async {
-    String? deviceId = await getDeviceUniqueId();
-
-    if (Platform.isAndroid) {
-      final String? fbToken = await FirebaseMessaging.instance.getToken();
-
-      debugPrint('firebase token : $fbToken');
-
-      var result = await AccountRepository.get().registerDevice(
-        RegisterDeviceRequest(deviceId: deviceId, deviceType: Platform.isAndroid ? 'Android' : 'Ios', token: fbToken),
-      );
-
-      result.fold((error) {}, (response) {});
-    }
   }
 
   _getProfile() async {

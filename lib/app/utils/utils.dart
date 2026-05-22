@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-Future<bool> isNetworkAvailable() => InternetConnectionChecker.instance.hasConnection;
+Future<bool> isNetworkAvailable() =>
+    InternetConnectionChecker.instance.hasConnection;
 
 makeCall(String phoneNumber) async {
   final Uri launchUri = Uri(scheme: 'tel', path: phoneNumber);
@@ -14,14 +15,29 @@ makeCall(String phoneNumber) async {
 }
 
 openNavigation(double lat, double lng) async {
-  final Uri googleMapsUri = Uri.parse('https://www.google.com/maps/dir/?api=1&destination=$lat,$lng');
+  final Uri googleMapsUri = Uri.parse(
+    'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng',
+  );
   await launchUrl(googleMapsUri, mode: LaunchMode.externalApplication);
 }
 
 String formatDateShort(String dateString) {
   final date = DateTime.parse(dateString);
 
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const months = [
+    'Jan',
+    'Feb',
+    'März',
+    'Apr',
+    'Mai',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sept',
+    'Okt',
+    'Nov',
+    'Dez',
+  ];
 
   final month = months[date.month - 1];
   final day = date.day.toString();
@@ -50,7 +66,6 @@ Future<String?> getDeviceUniqueId() async {
 
   return null;
 }
-
 
 TimeOfDay? parseTime(String? isoString) {
   if (isoString == null) return null;

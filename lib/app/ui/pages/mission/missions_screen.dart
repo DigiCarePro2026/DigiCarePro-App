@@ -10,6 +10,7 @@ import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class MissionsScreen extends StatefulWidget {
   MissionsScreen({super.key});
@@ -238,7 +239,7 @@ class _MissionsScreenState extends State<MissionsScreen> {
                         ),
                         SizedBox(width: 2),
                         Text(
-                          mission.plannedStartDateTime!.substring(0, 10),
+                          _formatGermanDate(mission.plannedStartDateTime),
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         SizedBox(width: 16),
@@ -308,6 +309,17 @@ class _MissionsScreenState extends State<MissionsScreen> {
         ],
       ),
     );
+  }
+
+  String _formatGermanDate(String? rawDate) {
+    final parsed = DateTime.tryParse(rawDate ?? '');
+    if (parsed == null) {
+      return rawDate != null && rawDate.length >= 10
+          ? rawDate.substring(0, 10)
+          : rawDate ?? '';
+    }
+
+    return DateFormat('dd.MM.yyyy', 'de_DE').format(parsed);
   }
 }
 

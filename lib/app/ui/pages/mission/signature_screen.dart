@@ -69,7 +69,10 @@ class _SignatureScreenState extends State<SignatureScreen> {
                       ),Positioned(
                           left: 50,
                           bottom: 50,
-                          child: Text('x.........'))
+                          child: Text(
+                            'X.........................',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ))
                     ],
                   ),
                 ),
@@ -162,6 +165,7 @@ class _SignatureScreenState extends State<SignatureScreen> {
               const SizedBox(height: 4),
               Text(
                 label,
+                textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
                     .labelSmall!

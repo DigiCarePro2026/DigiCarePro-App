@@ -7,6 +7,7 @@ import 'package:digi_care_pro/app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class MissionDetailsScreen extends StatefulWidget {
   const MissionDetailsScreen({super.key, required this.mission});
@@ -242,8 +243,9 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                                     ),
                                     SizedBox(width: 2),
                                     Text(
-                                      logic.mission.plannedStartDateTime!
-                                          .substring(0, 10),
+                                      _formatGermanDate(
+                                        logic.mission.plannedStartDateTime,
+                                      ),
                                       style: Theme.of(
                                         context,
                                       ).textTheme.titleMedium,
@@ -325,204 +327,201 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
                   ),
 
                   Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 24, right: 24),
-                        child: RefreshIndicator(
-                          onRefresh: () =>
-                              logic.refreshMissionStatus(refreshLocation: true),
-                          child: SingleChildScrollView(
-                            physics: const AlwaysScrollableScrollPhysics(
-                              parent: BouncingScrollPhysics(),
-                            ),
-                            child: Column(
-                              children: [
-                                if (hasResolvedInitialAction &&
-                                    displayedActionType ==
-                                    MissionActionType.done)
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 24),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                          cardRadius,
-                                        ),
-                                        border: BoxBorder.all(
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
-                                          width: 2,
-                                        ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 24, right: 24),
+                      child: RefreshIndicator(
+                        onRefresh: () =>
+                            logic.refreshMissionStatus(refreshLocation: true),
+                        child: SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(
+                            parent: BouncingScrollPhysics(),
+                          ),
+                          child: Column(
+                            children: [
+                              if (hasResolvedInitialAction &&
+                                  displayedActionType == MissionActionType.done)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 24),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                        cardRadius,
                                       ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(16.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SvgPicture.asset(
-                                              'assets/icons/check.svg',
-                                              width: 22,
-                                            ),
-                                            SizedBox(width: 8),
-                                            Text(
-                                              displayedActionType.title,
-                                              style: Theme.of(
-                                                context,
-                                              ).textTheme.labelLarge,
-                                            ),
-                                          ],
-                                        ),
+                                      border: BoxBorder.all(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                        width: 2,
                                       ),
                                     ),
-                                  ),
-                                if (hasResolvedInitialAction &&
-                                    displayedActionType ==
-                                    MissionActionType.canceled)
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 24),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                          cardRadius,
-                                        ),
-                                        border: BoxBorder.all(
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
-                                          width: 2,
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(16.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SvgPicture.asset(
-                                              'assets/icons/cancel.svg',
-                                              color: AppColors.red,
-                                              width: 22,
-                                            ),
-                                            SizedBox(width: 8),
-                                            Text(
-                                              displayedActionType.title,
-                                              style: Theme.of(
-                                                context,
-                                              ).textTheme.labelLarge,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                if (!hasResolvedInitialAction)
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 24),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                          cardRadius,
-                                        ),
-                                        border: BoxBorder.all(
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
-                                          width: 2,
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                          vertical: 18,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SizedBox(
-                                              width: 18,
-                                              height: 18,
-                                              child:
-                                                  CircularProgressIndicator(
-                                                    strokeWidth: 2,
-                                                    color: Theme.of(
-                                                      context,
-                                                    ).colorScheme.primary,
-                                                  ),
-                                            ),
-                                            SizedBox(width: 10),
-                                            Text(
-                                              'loading_check_mission_status'.tr,
-                                              style: Theme.of(
-                                                context,
-                                              ).textTheme.labelLarge,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                if (hasResolvedInitialAction && isActionable)
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 24),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                          cardRadius,
-                                        ),
-                                        border: BoxBorder.all(
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
-                                          width: 2,
-                                        ),
-                                      ),
-                                      child: InkWell(
-                                        onTap: () => logic.handleActionTap(
-                                          fallbackActionType:
-                                              displayedActionType,
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(16.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                displayedActionType.title,
-                                                style: Theme.of(
-                                                  context,
-                                                ).textTheme.labelLarge,
-                                              ),
-                                            ],
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/icons/check.svg',
+                                            width: 22,
                                           ),
+                                          SizedBox(width: 8),
+                                          Text(
+                                            displayedActionType.title,
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.labelLarge,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              if (hasResolvedInitialAction &&
+                                  displayedActionType ==
+                                      MissionActionType.canceled)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 24),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                        cardRadius,
+                                      ),
+                                      border: BoxBorder.all(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/icons/cancel.svg',
+                                            color: AppColors.red,
+                                            width: 22,
+                                          ),
+                                          SizedBox(width: 8),
+                                          Text(
+                                            displayedActionType.title,
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.labelLarge,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              if (!hasResolvedInitialAction)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 24),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                        cardRadius,
+                                      ),
+                                      border: BoxBorder.all(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 18,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            width: 18,
+                                            height: 18,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.primary,
+                                            ),
+                                          ),
+                                          SizedBox(width: 10),
+                                          Text(
+                                            'loading_check_mission_status'.tr,
+                                            style: Theme.of(
+                                              context,
+                                            ).textTheme.labelLarge,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              if (hasResolvedInitialAction && isActionable)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 24),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                        cardRadius,
+                                      ),
+                                      border: BoxBorder.all(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: InkWell(
+                                      onTap: () => logic.handleActionTap(
+                                        fallbackActionType: displayedActionType,
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              displayedActionType.title,
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.labelLarge,
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
                                   ),
-                                GridView.builder(
-                                  itemCount: logic.menuItems.length,
-                                  shrinkWrap: true,
-                                  physics: BouncingScrollPhysics(),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2, // 👈 سه ستون
-                                        mainAxisSpacing:
-                                            16, // فاصله عمودی بین آیتم‌ها
-                                        crossAxisSpacing:
-                                            16, // فاصله افقی بین آیتم‌ها
-                                        childAspectRatio:
-                                            1.2, // نسبت عرض به ارتفاع آیتم‌ها
-                                      ),
-                                  itemBuilder: (ctx, index) =>
-                                      _buildItem(logic.menuItems[index]),
                                 ),
-                              ],
-                            ),
+                              GridView.builder(
+                                itemCount: logic.menuItems.length,
+                                shrinkWrap: true,
+                                physics: BouncingScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2, // 👈 سه ستون
+                                      mainAxisSpacing:
+                                          16, // فاصله عمودی بین آیتم‌ها
+                                      crossAxisSpacing:
+                                          16, // فاصله افقی بین آیتم‌ها
+                                      childAspectRatio:
+                                          1.2, // نسبت عرض به ارتفاع آیتم‌ها
+                                    ),
+                                itemBuilder: (ctx, index) =>
+                                    _buildItem(logic.menuItems[index]),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
+                  ),
                 ],
               ),
             ],
@@ -563,6 +562,17 @@ class _MissionDetailsScreenState extends State<MissionDetailsScreen> {
         ),
       ),
     );
+  }
+
+  String _formatGermanDate(String? rawDate) {
+    final parsed = DateTime.tryParse(rawDate ?? '');
+    if (parsed == null) {
+      return rawDate != null && rawDate.length >= 10
+          ? rawDate.substring(0, 10)
+          : rawDate ?? '';
+    }
+
+    return DateFormat('dd.MM.yyyy', 'de_DE').format(parsed);
   }
 }
 

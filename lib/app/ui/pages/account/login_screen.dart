@@ -190,13 +190,6 @@ class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
                           child: const Text('Live-Demo vereinbaren'),
                         ),
 
-                        SizedBox(height: 16),
-
-                        Text(
-                          'DigiCarePro ist eine digitale Plattform für ambulante Pflegedienste und Betreuungsdienste.',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
                       ],
                     ),
                   ),

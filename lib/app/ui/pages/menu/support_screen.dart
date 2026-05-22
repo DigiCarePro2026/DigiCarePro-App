@@ -64,7 +64,9 @@ class _SupportScreenState extends State<SupportScreen> {
                       onChanged: (item) {
                         selectedSubject = item!.title;
                       },
-                      items: SupportType.values.map((st) {
+                      items: SupportType.values
+                          .where((st) => st != SupportType.payment)
+                          .map((st) {
                         return DropdownMenuItem<SupportType>(
                           value: st,
                           child: Text(st.title, style: Theme.of(context).textTheme.labelMedium),

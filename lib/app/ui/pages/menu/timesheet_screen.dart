@@ -115,17 +115,31 @@ class _TimesheetScreenState extends State<TimesheetScreen> {
                                         return SizedBox(
                                           width: 150,
                                           height: 150,
-                                          /*color: Theme
-                                          .of(context)
-                                          .dividerColor,*/
-                                          child: SecondaryButton(
-                                            label: 'submit_sign'.tr,
-                                            onPressed: () async {
-                                              final signatureBytes = await showSignatureSheet(context);
-                                              if (signatureBytes != null) {
-                                                logic.uploadSign(signatureBytes);
-                                              }
-                                            },
+                                          child: Material(
+                                            color: Theme.of(context).colorScheme.primary,
+                                            borderRadius: BorderRadius.circular(12),
+                                            child: InkWell(
+                                              borderRadius: BorderRadius.circular(12),
+                                              onTap: () async {
+                                                final signatureBytes = await showSignatureSheet(context);
+                                                if (signatureBytes != null) {
+                                                  logic.uploadSign(signatureBytes);
+                                                }
+                                              },
+                                              child: Center(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(12),
+                                                  child: Text(
+                                                    'submit_sign'.tr,
+                                                    textAlign: TextAlign.center,
+                                                    style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                                                      color: Theme.of(context).colorScheme.onPrimary,
+                                                      fontWeight: FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         );
                                       },

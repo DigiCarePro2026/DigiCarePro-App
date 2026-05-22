@@ -82,7 +82,7 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField> {
                         showSearchBox: true,
                         searchFieldProps: TextFieldProps(
                           decoration: InputDecoration(
-                            hintText: 'Search...',
+                            hintText: 'customer_list_search_hint'.tr,
                             icon: SvgPicture.asset('assets/icons/search.svg',width:16,color: Theme.of(context).disabledColor,),
                             border: InputBorder.none,
                             hintStyle: Theme.of(context).textTheme.titleMedium,
@@ -92,7 +92,7 @@ class _AnimatedSearchFieldState extends State<AnimatedSearchField> {
                       decoratorProps: DropDownDecoratorProps(
                         textAlignVertical: TextAlignVertical(y: 0),
                         decoration: InputDecoration(
-                          hintText: "Select customer",
+                          hintText: 'customer_list_search_hint'.tr,
                           hintStyle: Theme.of(context).textTheme.labelMedium,
                           border: InputBorder.none,
                           isDense: true,

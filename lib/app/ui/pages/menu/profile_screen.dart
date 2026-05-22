@@ -50,20 +50,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: Theme.of(context).colorScheme.outline,
                           borderRadius: BorderRadius.circular(50),
                         ),
-                        child: SvgPicture.asset('assets/icons/user.svg', color: Theme.of(context).colorScheme.primary),
+                        child: SvgPicture.asset(
+                          'assets/icons/user.svg',
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                       SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(logic.profile.fullName, style: Theme.of(context).textTheme.labelLarge),
+                            Text(
+                              logic.profile.fullName,
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
                             SizedBox(height: 6),
                             Text(
                               logic.profile.email,
-                              style: Theme.of(
-                                context,
-                              ).textTheme.labelMedium!.copyWith(color: Theme.of(context).colorScheme.primary),
+                              style: Theme.of(context).textTheme.labelMedium!
+                                  .copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                  ),
                             ),
                           ],
                         ),
@@ -82,11 +91,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   SizedBox(height: 32),
-                  Text('DigiCare'.tr, style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    'DigiCare'.tr,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   SizedBox(height: 8),
                   Container(
                     decoration: BoxDecoration(
-                      border: BoxBorder.all(color: Theme.of(context).dividerColor, width: 1),
+                      border: BoxBorder.all(
+                        color: Theme.of(context).dividerColor,
+                        width: 1,
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
@@ -98,10 +113,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.all(profileItemPadding),
                             child: Row(
                               children: [
-                                SvgPicture.asset('assets/icons/employee.svg', color: Color(0xFF56B8E4)),
+                                SvgPicture.asset(
+                                  'assets/icons/employee.svg',
+                                  color: Color(0xFF56B8E4),
+                                ),
                                 SizedBox(width: 12),
                                 Expanded(
-                                  child: Text('employee_list'.tr, style: Theme.of(context).textTheme.labelMedium),
+                                  child: Text(
+                                    'employee_list'.tr,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelMedium,
+                                  ),
                                 ),
                                 SvgPicture.asset(
                                   'assets/icons/arrow-right.svg',
@@ -124,9 +147,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.all(profileItemPadding),
                             child: Row(
                               children: [
-                                SvgPicture.asset('assets/icons/calendar.svg', color: Color(0xFFF99234)),
+                                SvgPicture.asset(
+                                  'assets/icons/calendar.svg',
+                                  color: Color(0xFFF99234),
+                                ),
                                 SizedBox(width: 12),
-                                Expanded(child: Text('requests'.tr, style: Theme.of(context).textTheme.labelMedium)),
+                                Expanded(
+                                  child: Text(
+                                    'requests'.tr,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelMedium,
+                                  ),
+                                ),
                                 SvgPicture.asset(
                                   'assets/icons/arrow-right.svg',
                                   color: Theme.of(context).disabledColor,
@@ -148,9 +181,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.all(profileItemPadding),
                             child: Row(
                               children: [
-                                SvgPicture.asset('assets/icons/time-square.svg', color: Color(0xFF59BBB4)),
+                                SvgPicture.asset(
+                                  'assets/icons/time-square.svg',
+                                  color: Color(0xFF59BBB4),
+                                ),
                                 SizedBox(width: 12),
-                                Expanded(child: Text('timesheet'.tr, style: Theme.of(context).textTheme.labelMedium)),
+                                Expanded(
+                                  child: Text(
+                                    'timesheet'.tr,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelMedium,
+                                  ),
+                                ),
                                 SvgPicture.asset(
                                   'assets/icons/arrow-right.svg',
                                   color: Theme.of(context).disabledColor,
@@ -172,14 +215,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.all(profileItemPadding),
                             child: Row(
                               children: [
-                                SvgPicture.asset('assets/icons/money-send.svg', color: Theme.of(context).disabledColor),
+                                SvgPicture.asset(
+                                  'assets/icons/money-send.svg',
+                                  color: Theme.of(context).disabledColor,
+                                ),
                                 SizedBox(width: 12),
                                 Expanded(
                                   child: Text(
                                     'payroll'.tr,
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.labelMedium!.copyWith(color: Theme.of(context).disabledColor),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium!
+                                        .copyWith(
+                                          color: Theme.of(
+                                            context,
+                                          ).disabledColor,
+                                        ),
                                   ),
                                 ),
                                 SvgPicture.asset(
@@ -203,9 +254,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.all(profileItemPadding),
                             child: Row(
                               children: [
-                                SvgPicture.asset('assets/icons/support.svg', color: Color(0xFFA685DB)),
+                                SvgPicture.asset(
+                                  'assets/icons/support.svg',
+                                  color: Color(0xFFA685DB),
+                                ),
                                 SizedBox(width: 12),
-                                Expanded(child: Text('support'.tr, style: Theme.of(context).textTheme.labelMedium)),
+                                Expanded(
+                                  child: Text(
+                                    'support'.tr,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelMedium,
+                                  ),
+                                ),
                                 SvgPicture.asset(
                                   'assets/icons/arrow-right.svg',
                                   color: Theme.of(context).disabledColor,
@@ -241,9 +302,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.all(profileItemPadding),
                             child: Row(
                               children: [
-                                SvgPicture.asset('assets/icons/user-remove.svg', color: AppColors.red),
+                                SvgPicture.asset(
+                                  'assets/icons/user-remove.svg',
+                                  color: AppColors.red,
+                                ),
                                 SizedBox(width: 12),
-                                Expanded(child: Text('delete_account'.tr, style: Theme.of(context).textTheme.labelMedium)),
+                                Expanded(
+                                  child: Text(
+                                    'delete_account'.tr,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelMedium,
+                                  ),
+                                ),
                                 SvgPicture.asset(
                                   'assets/icons/arrow-right.svg',
                                   color: Theme.of(context).disabledColor,
@@ -256,11 +327,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   SizedBox(height: 24),
-                  Text('account'.tr, style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    'account'.tr,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   SizedBox(height: 8),
                   Container(
                     decoration: BoxDecoration(
-                      border: BoxBorder.all(color: Theme.of(context).dividerColor, width: 1),
+                      border: BoxBorder.all(
+                        color: Theme.of(context).dividerColor,
+                        width: 1,
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
@@ -272,10 +349,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.all(profileItemPadding),
                             child: Row(
                               children: [
-                                SvgPicture.asset('assets/icons/lock.svg', color: Color(0xFFF6353D)),
+                                SvgPicture.asset(
+                                  'assets/icons/lock.svg',
+                                  color: Color(0xFFF6353D),
+                                ),
                                 SizedBox(width: 12),
                                 Expanded(
-                                  child: Text('change_password'.tr, style: Theme.of(context).textTheme.labelMedium),
+                                  child: Text(
+                                    'change_password'.tr,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelMedium,
+                                  ),
                                 ),
                                 SvgPicture.asset(
                                   'assets/icons/arrow-right.svg',
@@ -295,13 +380,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           onTap: () {},
                           borderRadius: BorderRadius.circular(12),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: profileItemPadding),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 4,
+                              horizontal: profileItemPadding,
+                            ),
                             child: Row(
                               children: [
-                                SvgPicture.asset('assets/icons/notif.svg', color: Color(0xFF45B19D)),
+                                SvgPicture.asset(
+                                  'assets/icons/notif.svg',
+                                  color: Color(0xFF45B19D),
+                                ),
                                 SizedBox(width: 12),
                                 Expanded(
-                                  child: Text('remind_mission'.tr, style: Theme.of(context).textTheme.labelMedium),
+                                  child: Text(
+                                    'remind_mission'.tr,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelMedium,
+                                  ),
                                 ),
                                 Switch(
                                   value: logic.profile.receiveNotifications,
@@ -317,28 +413,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   SizedBox(height: 24),
-                  Text('data_protection'.tr, style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    'data_protection'.tr,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   SizedBox(height: 8),
                   Container(
                     decoration: BoxDecoration(
-                      border: BoxBorder.all(color: Theme.of(context).dividerColor, width: 1),
+                      border: BoxBorder.all(
+                        color: Theme.of(context).dividerColor,
+                        width: 1,
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
                       children: [
                         InkWell(
                           onTap: () {
-                            launchUrl(Uri.parse('https://digicarepro.de/Impressum'),mode: LaunchMode.inAppWebView);
+                            launchUrl(
+                              Uri.parse('https://digicarepro.de/Impressum'),
+                              mode: LaunchMode.inAppWebView,
+                            );
                           },
                           borderRadius: BorderRadius.circular(12),
                           child: Padding(
                             padding: const EdgeInsets.all(profileItemPadding),
                             child: Row(
                               children: [
-                                SvgPicture.asset('assets/icons/legal.svg', color: AppColors.reportColor),
+                                SvgPicture.asset(
+                                  'assets/icons/legal.svg',
+                                  color: AppColors.reportColor,
+                                ),
                                 SizedBox(width: 12),
                                 Expanded(
-                                  child: Text('legal_notice'.tr, style: Theme.of(context).textTheme.labelMedium),
+                                  child: Text(
+                                    'legal_notice'.tr,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelMedium,
+                                  ),
                                 ),
                                 SvgPicture.asset(
                                   'assets/icons/arrow-right.svg',
@@ -356,17 +469,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            launchUrl(Uri.parse('https://digicarepro.de/AGB'),mode: LaunchMode.inAppWebView);
+                            launchUrl(
+                              Uri.parse('https://digicarepro.de/AGB'),
+                              mode: LaunchMode.inAppWebView,
+                            );
                           },
                           borderRadius: BorderRadius.circular(12),
                           child: Padding(
                             padding: const EdgeInsets.all(profileItemPadding),
                             child: Row(
                               children: [
-                                SvgPicture.asset('assets/icons/contract.svg', color: Theme.of(context).colorScheme.primary),
+                                SvgPicture.asset(
+                                  'assets/icons/contract.svg',
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
                                 SizedBox(width: 12),
                                 Expanded(
-                                  child: Text('terms_and_conditions'.tr, style: Theme.of(context).textTheme.labelMedium),
+                                  child: Text(
+                                    'terms_and_conditions'.tr,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelMedium,
+                                  ),
                                 ),
                                 SvgPicture.asset(
                                   'assets/icons/arrow-right.svg',
@@ -384,17 +508,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            launchUrl(Uri.parse('https://digicarepro.de/Datenschutz'),mode: LaunchMode.inAppWebView);
+                            launchUrl(
+                              Uri.parse('https://digicarepro.de/Datenschutz'),
+                              mode: LaunchMode.inAppWebView,
+                            );
                           },
                           borderRadius: BorderRadius.circular(12),
                           child: Padding(
                             padding: const EdgeInsets.all(profileItemPadding),
                             child: Row(
                               children: [
-                                SvgPicture.asset('assets/icons/shield.svg', color: AppColors.signatureColor),
+                                SvgPicture.asset(
+                                  'assets/icons/shield.svg',
+                                  color: AppColors.signatureColor,
+                                ),
                                 SizedBox(width: 12),
                                 Expanded(
-                                  child: Text('privacy_policy'.tr, style: Theme.of(context).textTheme.labelMedium),
+                                  child: Text(
+                                    'privacy_policy'.tr,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelMedium,
+                                  ),
                                 ),
                                 SvgPicture.asset(
                                   'assets/icons/arrow-right.svg',
@@ -415,11 +550,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   SizedBox(height: 8),
                   SizedBox(height: 24),
-                  Text('more'.tr, style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    'more'.tr,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   SizedBox(height: 8),
                   Container(
                     decoration: BoxDecoration(
-                      border: BoxBorder.all(color: Theme.of(context).dividerColor, width: 1),
+                      border: BoxBorder.all(
+                        color: Theme.of(context).dividerColor,
+                        width: 1,
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
@@ -431,10 +572,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.all(profileItemPadding),
                             child: Row(
                               children: [
-                                SvgPicture.asset('assets/icons/language.svg', color: Color(0xFF4798F0)),
+                                SvgPicture.asset(
+                                  'assets/icons/language.svg',
+                                  color: Color(0xFF4798F0),
+                                ),
                                 SizedBox(width: 12),
                                 Expanded(
-                                  child: Text('change_language'.tr, style: Theme.of(context).textTheme.labelMedium),
+                                  child: Text(
+                                    'change_language'.tr,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelMedium,
+                                  ),
                                 ),
                                 SvgPicture.asset(
                                   'assets/icons/arrow-right.svg',
@@ -459,9 +608,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             padding: const EdgeInsets.all(profileItemPadding),
                             child: Row(
                               children: [
-                                SvgPicture.asset('assets/icons/calendar.svg', color: Color(0xFFB744D4)),
+                                SvgPicture.asset(
+                                  'assets/icons/calendar.svg',
+                                  color: Color(0xFFB744D4),
+                                ),
                                 SizedBox(width: 12),
-                                Expanded(child: Text('sos'.tr, style: Theme.of(context).textTheme.labelMedium)),
+                                Expanded(
+                                  child: Text(
+                                    'sos'.tr,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelMedium,
+                                  ),
+                                ),
                                 SvgPicture.asset(
                                   'assets/icons/arrow-right.svg',
                                   color: Theme.of(context).disabledColor,
@@ -495,15 +654,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           );
                         },
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 32, right: 32, top: 12.0, bottom: 12),
+                          padding: const EdgeInsets.only(
+                            left: 32,
+                            right: 32,
+                            top: 12.0,
+                            bottom: 12,
+                          ),
                           child: Wrap(
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
-                              SvgPicture.asset('assets/icons/logout.svg', color: AppColors.red),
+                              SvgPicture.asset(
+                                'assets/icons/logout.svg',
+                                color: AppColors.red,
+                              ),
                               SizedBox(width: 16),
                               Text(
                                 'logout'.tr,
-                                style: Theme.of(context).textTheme.labelMedium!.copyWith(color: AppColors.red),
+                                style: Theme.of(context).textTheme.labelMedium!
+                                    .copyWith(color: AppColors.red),
                               ),
                             ],
                           ),
@@ -512,7 +680,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   SizedBox(height: 12),
-                  Center(child: Text('v3.2.5', style: Theme.of(context).textTheme.titleSmall,))
+                  Center(
+                    child: Text(
+                      'v3.4.2',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -527,11 +700,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: Get.context!,
       isScrollControlled: true,
       useSafeArea: true,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom,
+            bottom:
+                MediaQuery.of(context).viewInsets.bottom +
+                MediaQuery.of(context).padding.bottom,
             left: 16,
             right: 16,
             top: 20,
@@ -541,13 +718,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('sos'.tr, style: Theme.of(context).textTheme.headlineMedium),
+                  Text(
+                    'sos'.tr,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
                   const SizedBox(height: 16),
-                  _sosItem(icon: 'assets/icons/police.svg', title: 'police'.tr, callNumber: '110'),
-                  _sosItem(icon: 'assets/icons/ambulance.svg', title: 'ambulance'.tr, callNumber: '112'),
-                  _sosItem(icon: 'assets/icons/doctor.svg', title: 'doctor'.tr, callNumber: '116117'),
-                  _sosItem(icon: 'assets/icons/company.svg', title: 'company'.tr, callNumber: '022824066802'),
-                  SecondaryButton(label: 'cancel'.tr, onPressed: () => Navigator.pop(context, null)),
+                  _sosItem(
+                    icon: 'assets/icons/police.svg',
+                    title: 'police'.tr,
+                    callNumber: '110',
+                  ),
+                  _sosItem(
+                    icon: 'assets/icons/ambulance.svg',
+                    title: 'ambulance'.tr,
+                    callNumber: '112',
+                  ),
+                  _sosItem(
+                    icon: 'assets/icons/doctor.svg',
+                    title: 'doctor'.tr,
+                    callNumber: '116117',
+                  ),
+                  _sosItem(
+                    icon: 'assets/icons/company.svg',
+                    title: 'company'.tr,
+                    callNumber: '022824066802',
+                  ),
+                  SecondaryButton(
+                    label: 'cancel'.tr,
+                    onPressed: () => Navigator.pop(context, null),
+                  ),
                   const SizedBox(height: 20),
                 ],
               );
@@ -558,7 +757,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _sosItem({required String icon, required String title, required String callNumber}) {
+  Widget _sosItem({
+    required String icon,
+    required String title,
+    required String callNumber,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Card.filled(

@@ -113,7 +113,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                     ),
                     SizedBox(width: 12),
                     Text(
-                      'New Request',
+                      'submit_request'.tr,
                       style: Theme.of(context).textTheme.labelMedium!.copyWith(
                         color: Theme.of(context).colorScheme.onPrimary,
                         fontWeight: FontWeight.bold,
@@ -186,7 +186,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
               Row(
                 children: [
                   Text(
-                    'Reason:',
+                    '${'reason'.tr}:',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   SizedBox(width: 12),

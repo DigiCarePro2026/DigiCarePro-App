@@ -30,7 +30,7 @@ const Map<String, String> deDE = {
   "mission_details": "Einsatzdetails",
   "customer_list_search_hint": "Kunden suchen",
   "call": "Anruf",
-  "add_mission": "Einsatz planen",
+  "add_mission": "Einsatz",
   "employee_list_search_hint": "Mitarbeiter suchen ...",
   "routing": "Route",
   "upload_document": "Dokument hochladen",

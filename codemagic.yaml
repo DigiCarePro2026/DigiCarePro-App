@@ -1,0 +1,51 @@
+workflows:
+  ios-workflow:
+    name: iOS Build (IPA + TestFlight)
+
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+
+      groups:
+        - certificate_credentials
+
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: de.digicarepro.employee
+
+    integrations:
+      app_store_connect: DigiCarePro
+
+    triggering:
+      events:
+        - push
+
+    scripts:
+      - name: Get Flutter packages
+        script: flutter pub get
+
+      - name: Clean iOS build
+        script: |
+          cd ios
+          rm -rf Pods Podfile.lock
+          pod repo update
+          cd ..
+
+      - name: Build iOS (no signing)
+        script: flutter build ios --release --no-codesign
+
+      - name: Code signing & IPA
+        script: |
+          xcode-project use-profiles
+          xcode-project build-ipa \
+            --workspace ios/Runner.xcworkspace \
+            --scheme Runner
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
